@@ -1,0 +1,7 @@
+django
+django-jazzmin
+whitenoise
+dj-database-uri
+requests
+googlemaps
+python-dotenv
