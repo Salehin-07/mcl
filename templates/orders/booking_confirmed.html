@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e; --ink-soft: #3d3d5c; --ink-muted: #8888aa;
+    --cream: #faf9f6; --white: #ffffff;
+    --gold: #c9a84c; --gold-bg: #fdf8ec; --gold-light: #e8d08a;
+    --border: #e4e0d8; --green: #2e7d52; --green-bg: #f0faf5; --green-light: #a8d5be;
+    --shadow-card: 0 2px 24px rgba(26,26,46,0.07);
+    --shadow-hover: 0 8px 40px rgba(26,26,46,0.13);
+    --radius: 14px; --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+  /* Hero */
+  .page-hero {
+    background: var(--ink); padding: 48px 32px 0;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(46,125,82,0.22) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; position: relative; z-index: 1; }
+  .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(24px,5vw,40px); font-weight: 700; color: #fff; line-height: 1.18; position: relative; z-index: 1; }
+  .page-hero p  { margin-top: 10px; color: rgba(255,255,255,0.5); font-size: 15px; font-weight: 300; position: relative; z-index: 1; }
+
+  /* Progress */
+  .progress-wrap { display: flex; align-items: center; justify-content: center; margin-top: 28px; padding-bottom: 24px; position: relative; z-index: 1; }
+  .p-step { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .p-line { width: 56px; height: 1px; background: var(--gold); margin-bottom: 20px; flex-shrink: 0; }
+  .p-circle { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--gold); background: var(--gold); color: var(--ink); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .p-lbl { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+
+  /* Confetti check */
+  .success-ring {
+    display: flex; align-items: center; justify-content: center;
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--green-bg); border: 2px solid var(--green-light);
+    margin: 40px auto 20px;
+    animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes popIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+  .success-ring svg { animation: checkDraw 0.6s ease 0.3s both; }
+  @keyframes checkDraw { from{stroke-dashoffset:40} to{stroke-dashoffset:0} }
+
+  .success-heading {
+    text-align: center; font-family: 'Playfair Display', serif;
+    font-size: clamp(22px,4vw,32px); font-weight: 700; color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .success-sub { text-align: center; color: var(--ink-muted); font-size: 15px; margin-bottom: 40px; }
+
+  /* Reference badge */
+  .ref-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--ink); color: var(--gold);
+    font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600;
+    padding: 12px 24px; border-radius: var(--radius-sm);
+    letter-spacing: 2px; margin: 0 auto 40px; display: block; text-align: center;
+    width: fit-content;
+  }
+  .ref-badge span { font-size: 11px; font-weight: 400; letter-spacing: 1px; opacity: 0.6; display: block; font-family: 'DM Sans', sans-serif; }
+
+  /* Wrap */
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* Cards */
+  .card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-card);
+    padding: 28px 28px 24px; margin-bottom: 20px;
+    animation: fadeUp 0.45s ease both; transition: box-shadow 0.25s;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); }
+  .card:nth-child(1){animation-delay:.1s}
+  .card:nth-child(2){animation-delay:.18s}
+  .card:nth-child(3){animation-delay:.26s}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+  .card-title {
+    font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600;
+    margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  /* Detail rows */
+  .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #f5f3ee; font-size: 14px; }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label { color: var(--ink-muted); font-weight: 400; margin-right: 16px; flex-shrink: 0; }
+  .detail-value { color: var(--ink); font-weight: 500; text-align: right; }
+
+  /* Price summary */
+  .price-summary {
+    background: linear-gradient(135deg, var(--ink) 0%, #2a2a4a 100%);
+    border-radius: var(--radius); padding: 28px;
+    position: relative; overflow: hidden;
+    animation: fadeUp 0.45s ease 0.3s both;
+  }
+  .price-summary::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 110% 110%, rgba(201,168,76,0.25) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .ps-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; position: relative; }
+  .ps-amount { font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: #fff; position: relative; }
+  .ps-amount .aud { font-size: 20px; font-weight: 400; opacity: 0.55; margin-right: 4px; vertical-align: top; line-height: 2.1; }
+  .ps-breakdown { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; display: flex; flex-wrap: wrap; gap: 8px; }
+  .ps-tag { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.65); font-size: 12px; padding: 4px 12px; border-radius: 20px; }
+
+  /* Tags */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .tag { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: var(--gold-bg); color: #7a5f00; border: 1px solid var(--gold-light); display: flex; align-items: center; gap: 5px; }
+  .tag.green { background: var(--green-bg); color: var(--green); border-color: var(--green-light); }
+
+  /* What's next */
+  .next-steps { background: var(--gold-bg); border: 1px solid var(--gold-light); border-radius: var(--radius); padding: 24px 28px; animation: fadeUp 0.45s ease 0.38s both; }
+  .next-steps h3 { font-family: 'Playfair Display', serif; font-size: 16px; margin-bottom: 16px; color: var(--ink); }
+  .step-item { display: flex; align-items: flex-start; gap: 14px; padding: 10px 0; border-bottom: 1px solid rgba(201,168,76,0.3); }
+  .step-item:last-child { border-bottom: none; }
+  .step-num { width: 26px; height: 26px; background: var(--gold); color: var(--ink); border-radius: 50%; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-text strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .step-text span { font-size: 13px; color: var(--ink-soft); }
+
+  @media(max-width:620px){
+    .card, .price-summary, .next-steps { padding: 20px 18px; }
+    .ps-amount { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-hero">
+  <p class="eyebrow">Melbourne Chauffeur Service</p>
+  <h1>You're All Booked!</h1>
+  <p>A confirmation has been sent to {{ order.passenger_email }}</p>
+
+  <div class="progress-wrap">
+    <div class="p-step">
+      <div class="p-circle">✓</div>
+      <div class="p-lbl">Details</div>
+    </div>
+    <div class="p-line"></div>
+    <div class="p-step">
+      <div class="p-circle">✓</div>
+      <div class="p-lbl">Price</div>
+    </div>
+    <div class="p-line"></div>
+    <div class="p-step">
+      <div class="p-circle">✓</div>
+      <div class="p-lbl">Confirmed</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="success-ring">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M6 16l7 7 13-13" stroke="#2e7d52" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40"/>
+    </svg>
+  </div>
+
+  <h2 class="success-heading">Booking Confirmed</h2>
+  <p class="success-sub">Your chauffeur will be in touch before your pickup time.</p>
+
+  <div class="ref-badge">
+    <span>Booking Reference</span>
+    #{{ order.id|stringformat:"06d" }}
+  </div>
+
+  <!-- Journey -->
+  <div class="card">
+    <div class="card-title">🗺️ Journey Details</div>
+    <div class="detail-row"><span class="detail-label">From</span><span class="detail-value">{{ order.pickup_address }}</span></div>
+    {% if order.additional_stop %}
+    <div class="detail-row"><span class="detail-label">Via</span><span class="detail-value">{{ order.additional_stop }}</span></div>
+    {% endif %}
+    <div class="detail-row"><span class="detail-label">To</span><span class="detail-value">{{ order.destination_address }}</span></div>
+    <div class="detail-row"><span class="detail-label">Date</span><span class="detail-value">{{ order.pickup_date }}</span></div>
+    <div class="detail-row"><span class="detail-label">Time</span><span class="detail-value">{{ order.pickup_time }}</span></div>
+    {% if order.flight_number %}
+    <div class="detail-row"><span class="detail-label">Flight</span><span class="detail-value">{{ order.flight_number }}</span></div>
+    {% endif %}
+    {% if order.special_instruction %}
+    <div class="detail-row"><span class="detail-label">Instructions</span><span class="detail-value">{{ order.special_instruction }}</span></div>
+    {% endif %}
+
+    <div class="tag-row">
+      <span class="tag">{{ order.limo_service_type }}</span>
+      <span class="tag">{{ order.number_of_passengers }} passenger{% if order.number_of_passengers != 1 %}s{% endif %}</span>
+      <span class="tag">{{ order.number_of_bags }} bag{% if order.number_of_bags != 1 %}s{% endif %}</span>
+      {% if order.baby_seat   %}<span class="tag green">🍼 Baby seat</span>{% endif %}
+      {% if order.return_ride %}<span class="tag green">🔄 Return ride</span>{% endif %}
+      {% if has_tolls %}<span class="tag" style="background:#fff8e1;color:#7a5f00;border-color:#ffe082;">🛣️ Tolls included</span>{% endif %}
+    </div>
+  </div>
+
+  <!-- Passenger -->
+  <div class="card">
+    <div class="card-title">👤 Passenger</div>
+    <div class="detail-row"><span class="detail-label">Name</span><span class="detail-value">{{ order.passenger_name }}</span></div>
+    <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">{{ order.passenger_number }}</span></div>
+    <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">{{ order.passenger_email }}</span></div>
+  </div>
+
+  <!-- Price -->
+  <div class="price-summary">
+    <div class="ps-label">Amount Charged</div>
+    <div class="ps-amount"><span class="aud">AUD</span>{{ order.total_price }}</div>
+    <div class="ps-breakdown">
+      {% if breakdown %}
+        <span class="ps-tag">Base ${{ breakdown.base }}</span>
+        <span class="ps-tag">{{ breakdown.distance_km }} km at rate</span>
+        {% if breakdown.stop_cost    %}<span class="ps-tag">Stop +${{ breakdown.stop_cost }}</span>{% endif %}
+        {% if breakdown.toll_cost    %}<span class="ps-tag">Tolls +${{ breakdown.toll_cost }}</span>{% endif %}
+        {% if breakdown.baby_cost    %}<span class="ps-tag">Baby seat +${{ breakdown.baby_cost }}</span>{% endif %}
+        {% if breakdown.return_multiplier %}<span class="ps-tag">Return × 2</span>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- What's next -->
+  <div class="next-steps" style="margin-top:20px;">
+    <h3>What happens next?</h3>
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <strong>Confirmation email</strong>
+        <span>A full booking summary has been sent to {{ order.passenger_email }}</span>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <strong>Driver assigned</strong>
+        <span>We'll assign your chauffeur and share their details 24 hours before pickup</span>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <strong>Day of travel</strong>
+        <span>Your driver will meet you at {{ order.pickup_address }} at {{ order.pickup_time }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

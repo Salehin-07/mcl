@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Ride</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-soft: #3d3d5c;
+    --ink-muted: #8888aa;
+    --cream: #faf9f6;
+    --white: #ffffff;
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --gold-bg: #fdf8ec;
+    --border: #e4e0d8;
+    --border-focus: #c9a84c;
+    --shadow-card: 0 2px 24px rgba(26,26,46,0.07);
+    --shadow-hover: 0 8px 40px rgba(26,26,46,0.13);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+  /* ─── Hero ─── */
+  .page-hero {
+    background: var(--ink);
+    padding: 48px 32px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,168,76,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 5vw, 42px); font-weight: 700; color: #fff; line-height: 1.18; }
+  .page-hero p  { margin-top: 10px; color: rgba(255,255,255,0.5); font-size: 15px; font-weight: 300; }
+
+  /* ─── Progress ─── */
+  .progress-wrap {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin-top: 28px; padding-bottom: 24px; position: relative; z-index: 1;
+  }
+  .p-step { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .p-line { width: 56px; height: 1px; background: rgba(255,255,255,0.2); margin-bottom: 20px; flex-shrink: 0; }
+  .p-circle {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.22);
+    color: rgba(255,255,255,0.35);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .p-step.active .p-circle { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.15); }
+  .p-step.done   .p-circle { border-color: var(--gold); background: var(--gold); color: var(--ink); }
+  .p-lbl { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 600; }
+  .p-step.active .p-lbl { color: var(--gold); }
+
+  /* ─── Form wrap ─── */
+  .form-wrap { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* ─── Cards ─── */
+  .section-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: 32px 32px 28px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s ease both;
+    transition: box-shadow 0.25s;
+  }
+  .section-card:hover { box-shadow: var(--shadow-hover); }
+  .section-card:nth-child(1){animation-delay:.05s}
+  .section-card:nth-child(2){animation-delay:.10s}
+  .section-card:nth-child(3){animation-delay:.15s}
+  .section-card:nth-child(4){animation-delay:.20s}
+  .section-card:nth-child(5){animation-delay:.25s}
+  .section-card:nth-child(6){animation-delay:.30s}
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+  .section-label { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  .section-label .num {
+    width: 28px; height: 28px; background: var(--ink); color: #fff;
+    border-radius: 50%; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .section-label h2 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; }
+
+  /* ─── Grid ─── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .span-2 { grid-column: span 2; }
+  @media(max-width:620px){
+    .grid-2{grid-template-columns:1fr}
+    .span-2{grid-column:span 1}
+    .section-card{padding:22px 18px 20px}
+    .vehicle-group{grid-template-columns:1fr!important}
+    .p-line{width:32px}
+  }
+
+  /* ─── Fields ─── */
+  .field { position: relative; display: flex; flex-direction: column; }
+  .field label {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 7px;
+  }
+  .field label .req { color: var(--gold); margin-left: 3px; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 14.5px; color: var(--ink);
+    background: var(--white); transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none; appearance: none;
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+    padding-right: 38px; cursor: pointer;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .field input::placeholder, .field textarea::placeholder { color: var(--ink-muted); font-weight: 300; }
+  .field textarea { resize: vertical; min-height: 90px; }
+
+  /* ─── Autocomplete ─── */
+  .autocomplete-wrap { position: relative; }
+  .autocomplete-list {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--white); border: 1.5px solid var(--border-focus);
+    border-radius: var(--radius-sm); box-shadow: 0 8px 32px rgba(26,26,46,0.13);
+    z-index: 999; max-height: 240px; overflow-y: auto; display: none;
+  }
+  .autocomplete-list.open { display: block; }
+  .autocomplete-item {
+    padding: 10px 14px; font-size: 14px; cursor: pointer;
+    border-bottom: 1px solid #f0ede6;
+    display: flex; align-items: flex-start; gap: 10px;
+    transition: background 0.15s; line-height: 1.4;
+  }
+  .autocomplete-item:last-child { border-bottom: none; }
+  .autocomplete-item:hover, .autocomplete-item.ac-active { background: var(--gold-bg); }
+  .autocomplete-item svg { flex-shrink: 0; margin-top: 2px; }
+  .ac-loading {
+    padding: 12px 14px; font-size: 13px; color: var(--ink-muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ac-spin {
+    width: 13px; height: 13px;
+    border: 2px solid var(--border); border-top-color: var(--gold);
+    border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── Vehicle cards ─── */
+  .vehicle-group { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .vehicle-card {
+    border: 2px solid var(--border); border-radius: var(--radius-sm);
+    padding: 16px 14px 14px; cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    position: relative; text-align: center;
+  }
+  .vehicle-card:hover { border-color: var(--gold-light); background: var(--gold-bg); }
+  .vehicle-card.selected { border-color: var(--gold); background: var(--gold-bg); box-shadow: 0 0 0 3px rgba(201,168,76,0.18); }
+  .vehicle-card input[type="radio"] { display: none; }
+  .vehicle-icon { font-size: 30px; margin-bottom: 8px; display: block; }
+  .vehicle-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; }
+  .vehicle-meta { font-size: 12px; color: var(--ink-muted); margin-top: 3px; }
+  .vehicle-price { font-size: 12px; color: var(--gold); font-weight: 600; margin-top: 5px; }
+  .vehicle-check {
+    position: absolute; top: 8px; right: 8px;
+    width: 18px; height: 18px; background: var(--gold); border-radius: 50%;
+    display: none; align-items: center; justify-content: center;
+  }
+  .vehicle-card.selected .vehicle-check { display: flex; }
+  .vehicle-check svg { width: 10px; height: 10px; }
+
+  /* ─── Upgrade notice ─── */
+  .bag-notice {
+    margin-top: 8px; padding: 10px 14px;
+    background: #fff8e1; border: 1px solid #ffe082;
+    border-radius: var(--radius-sm); font-size: 13px; color: #7a5f00;
+    display: none; align-items: center; gap: 8px;
+  }
+  .bag-notice.show { display: flex; }
+
+  /* ─── Toggles ─── */
+  .toggle-group { display: flex; flex-direction: column; gap: 12px; }
+  .toggle-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    cursor: pointer; transition: border-color 0.2s, background 0.2s; user-select: none;
+  }
+  .toggle-item:hover { border-color: var(--gold-light); background: var(--gold-bg); }
+  .toggle-item.active { border-color: var(--gold); background: var(--gold-bg); }
+  .toggle-left { display: flex; align-items: center; gap: 12px; }
+  .toggle-icon { font-size: 20px; width: 36px; text-align: center; }
+  .toggle-text strong { display: block; font-size: 14px; font-weight: 600; }
+  .toggle-text span { font-size: 12px; color: var(--ink-muted); }
+  .toggle-switch {
+    width: 42px; height: 24px; background: var(--border);
+    border-radius: 12px; position: relative; flex-shrink: 0; transition: background 0.25s;
+  }
+  .toggle-item.active .toggle-switch { background: var(--gold); }
+  .toggle-thumb {
+    position: absolute; width: 18px; height: 18px; background: var(--white);
+    border-radius: 50%; top: 3px; left: 3px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2); transition: transform 0.25s;
+  }
+  .toggle-item.active .toggle-thumb { transform: translateX(18px); }
+  .toggle-item input { display: none; }
+
+  /* ─── Error ─── */
+  .error-banner {
+    background: #fff5f5; border: 1.5px solid #fdb8b8; color: #c0392b;
+    border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 20px;
+    font-size: 14px; display: flex; align-items: center; gap: 10px;
+  }
+
+  /* ─── Next button ─── */
+  .next-btn {
+    width: 100%; padding: 17px 24px;
+    background: var(--gold); color: var(--ink); border: none;
+    border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 700; letter-spacing: 0.4px;
+    cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 18px rgba(201,168,76,0.4);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .next-btn:hover { background: #b8922e; box-shadow: 0 6px 24px rgba(201,168,76,0.5); transform: translateY(-1px); }
+  .next-btn:active { transform: translateY(0); }
+  .next-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+  .btn-spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(26,26,46,0.3); border-top-color: var(--ink);
+    border-radius: 50%; animation: spin 0.7s linear infinite; display: none;
+  }
+
+  .sub-note {
+    text-align: center; font-size: 13px; color: var(--ink-muted);
+    margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-hero">
+  <p class="eyebrow">Melbourne Chauffeur Service</p>
+  <h1>Book Your Journey</h1>
+  <p>Professional, punctual, premium transport across Melbourne</p>
+
+  <div class="progress-wrap">
+    <div class="p-step active">
+      <div class="p-circle">1</div>
+      <div class="p-lbl">Details</div>
+    </div>
+    <div class="p-line"></div>
+    <div class="p-step">
+      <div class="p-circle">2</div>
+      <div class="p-lbl">Price</div>
+    </div>
+    <div class="p-line"></div>
+    <div class="p-step">
+      <div class="p-circle">3</div>
+      <div class="p-lbl">Confirm</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-wrap">
+
+  {% if error %}
+  <div class="error-banner">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="8" stroke="#c0392b" stroke-width="1.5"/>
+      <path d="M9 5v5M9 12.5v.5" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    {{ error }}
+  </div>
+  {% endif %}
+
+  <form method="POST" id="bookingForm" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="action" value="calculate">
+    <input type="hidden" name="limo_service_type" id="serviceTypeInput" value="{{ form_data.limo_service_type|default:'Sedan 1-5' }}">
+
+    <!-- ─── 1. Your Details ─── -->
+    <div class="section-card">
+      <div class="section-label"><div class="num">1</div><h2>Your Details</h2></div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" name="passenger_name" placeholder="e.g. James Wilson"
+                 value="{{ form_data.passenger_name|default:'' }}" required>
+        </div>
+        <div class="field">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" name="passenger_number" placeholder="+61 4xx xxx xxx"
+                 value="{{ form_data.passenger_number|default:'' }}" required>
+        </div>
+        <div class="field span-2">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" name="passenger_email" placeholder="you@example.com"
+                 value="{{ form_data.passenger_email|default:'' }}" required>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 2. Journey Details ─── -->
+    <div class="section-card">
+      <div class="section-label"><div class="num">2</div><h2>Journey Details</h2></div>
+      <div class="grid-2">
+
+        <div class="field span-2">
+          <label>Pickup Address <span class="req">*</span></label>
+          <div class="autocomplete-wrap">
+            <input type="text" name="pickup_address" id="pickupInput"
+                   placeholder="Start typing an address…"
+                   value="{{ form_data.pickup_address|default:'' }}"
+                   required autocomplete="off">
+            <div class="autocomplete-list" id="pickupList"></div>
+          </div>
+        </div>
+
+        <div class="field span-2">
+          <label>Destination Address <span class="req">*</span></label>
+          <div class="autocomplete-wrap">
+            <input type="text" name="destination_address" id="destInput"
+                   placeholder="Where are you headed?"
+                   value="{{ form_data.destination_address|default:'' }}"
+                   required autocomplete="off">
+            <div class="autocomplete-list" id="destList"></div>
+          </div>
+        </div>
+
+        <div class="field span-2">
+          <label>
+            Additional Stop
+            <span style="color:var(--ink-muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span>
+          </label>
+          <div class="autocomplete-wrap">
+            <input type="text" name="additional_stop" id="stopInput"
+                   placeholder="Add an intermediate stop if needed"
+                   value="{{ form_data.additional_stop|default:'' }}"
+                   autocomplete="off">
+            <div class="autocomplete-list" id="stopList"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Pickup Date <span class="req">*</span></label>
+          <input type="date" name="pickup_date" value="{{ form_data.pickup_date|default:'' }}" required>
+        </div>
+        <div class="field">
+          <label>Pickup Time <span class="req">*</span></label>
+          <input type="time" name="pickup_time" value="{{ form_data.pickup_time|default:'' }}" required>
+        </div>
+        <div class="field">
+          <label>Flight Number</label>
+          <input type="text" name="flight_number" placeholder="e.g. QF407"
+                 value="{{ form_data.flight_number|default:'' }}">
+        </div>
+        <div class="field">
+          <label>Special Instructions</label>
+          <input type="text" name="special_instruction" placeholder="Any notes for your driver…"
+                 value="{{ form_data.special_instruction|default:'' }}">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── 3. Vehicle & Passengers ─── -->
+    <div class="section-card">
+      <div class="section-label"><div class="num">3</div><h2>Vehicle & Passengers</h2></div>
+
+      <div class="vehicle-group" id="vehicleGroup">
+        <div class="vehicle-card {% if form_data.limo_service_type == 'Sedan 1-5' or not form_data.limo_service_type %}selected{% endif %}"
+             data-value="Sedan 1-5" onclick="selectVehicle(this)">
+          <input type="radio" name="_v" value="Sedan 1-5">
+          <div class="vehicle-check">
+            <svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="vehicle-icon">🚗</span>
+          <div class="vehicle-name">Sedan</div>
+          <div class="vehicle-meta">1–5 passengers</div>
+          <div class="vehicle-price">From $30 · $3.50/km</div>
+        </div>
+        <div class="vehicle-card {% if form_data.limo_service_type == 'SUV 1-7' %}selected{% endif %}"
+             data-value="SUV 1-7" onclick="selectVehicle(this)">
+          <input type="radio" name="_v" value="SUV 1-7">
+          <div class="vehicle-check">
+            <svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="vehicle-icon">🚙</span>
+          <div class="vehicle-name">SUV</div>
+          <div class="vehicle-meta">1–7 passengers</div>
+          <div class="vehicle-price">From $55 · $5.50/km</div>
+        </div>
+        <div class="vehicle-card {% if form_data.limo_service_type == 'Stretch 1-13' %}selected{% endif %}"
+             data-value="Stretch 1-13" onclick="selectVehicle(this)">
+          <input type="radio" name="_v" value="Stretch 1-13">
+          <div class="vehicle-check">
+            <svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="vehicle-icon">🚐</span>
+          <div class="vehicle-name">Stretch</div>
+          <div class="vehicle-meta">1–13 passengers</div>
+          <div class="vehicle-price">From $135 · $9.50/km</div>
+        </div>
+      </div>
+
+      <div class="bag-notice" id="bagNotice">
+        <span>⚠️</span><span id="bagNoticeText"></span>
+      </div>
+
+      <div class="grid-2" style="margin-top:20px;">
+        <div class="field">
+          <label>Passengers <span class="req">*</span></label>
+          <select name="number_of_passengers" id="passengersSelect" onchange="handlePassengerChange()"></select>
+        </div>
+        <div class="field">
+          <label>Bags / Luggage <span class="req">*</span></label>
+          <select name="number_of_bags" id="bagsSelect" onchange="handleBagChange()"></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 4. Add-ons & Extras ─── -->
+    <div class="section-card">
+      <div class="section-label"><div class="num">4</div><h2>Add-ons & Extras</h2></div>
+      <div class="toggle-group">
+
+        <label class="toggle-item {% if form_data.baby_seat %}active{% endif %}" onclick="toggleOption(this,event)">
+          <div class="toggle-left">
+            <span class="toggle-icon">🍼</span>
+            <div class="toggle-text">
+              <strong>Baby / Child Seat</strong>
+              <span>Approved safety seat — +$20.00</span>
+            </div>
+          </div>
+          <div class="toggle-switch"><div class="toggle-thumb"></div></div>
+          <input type="checkbox" name="baby_seat" {% if form_data.baby_seat %}checked{% endif %}>
+        </label>
+
+        <label class="toggle-item {% if form_data.return_ride %}active{% endif %}" onclick="toggleOption(this,event)">
+          <div class="toggle-left">
+            <span class="toggle-icon">🔄</span>
+            <div class="toggle-text">
+              <strong>Return Journey</strong>
+              <span>Same route back — price doubled</span>
+            </div>
+          </div>
+          <div class="toggle-switch"><div class="toggle-thumb"></div></div>
+          <input type="checkbox" name="return_ride" {% if form_data.return_ride %}checked{% endif %}>
+        </label>
+
+        <label class="toggle-item {% if form_data.has_tolls %}active{% endif %}" onclick="toggleOption(this,event)">
+          <div class="toggle-left">
+            <span class="toggle-icon">🛣️</span>
+            <div class="toggle-text">
+              <strong>Route Includes Toll Roads</strong>
+              <span>Melbourne toll roads on this route — +$18.50 flat fee</span>
+            </div>
+          </div>
+          <div class="toggle-switch"><div class="toggle-thumb"></div></div>
+          <input type="checkbox" name="has_tolls" {% if form_data.has_tolls %}checked{% endif %}>
+        </label>
+
+      </div>
+    </div>
+
+    <!-- ─── 5. Vehicle Preferences ─── -->
+    <div class="section-card">
+      <div class="section-label"><div class="num">5</div><h2>Vehicle Preferences</h2></div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Preferred Colour</label>
+          <select name="vehicle_colour">
+            <option value="">No preference</option>
+            <option {% if form_data.vehicle_colour == 'Black'     %}selected{% endif %}>Black</option>
+            <option {% if form_data.vehicle_colour == 'White'     %}selected{% endif %}>White</option>
+            <option {% if form_data.vehicle_colour == 'Silver'    %}selected{% endif %}>Silver</option>
+            <option {% if form_data.vehicle_colour == 'Champagne' %}selected{% endif %}>Champagne</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Wedding Ribbon</label>
+          <select name="wedding_ribbon">
+            <option value="">None</option>
+            <option {% if form_data.wedding_ribbon == 'White' %}selected{% endif %}>White</option>
+            <option {% if form_data.wedding_ribbon == 'Ivory' %}selected{% endif %}>Ivory</option>
+            <option {% if form_data.wedding_ribbon == 'Gold'  %}selected{% endif %}>Gold</option>
+            <option {% if form_data.wedding_ribbon == 'Pink'  %}selected{% endif %}>Pink</option>
+            <option {% if form_data.wedding_ribbon == 'Red'   %}selected{% endif %}>Red</option>
+          </select>
+        </div>
+        <div class="field span-2">
+          <label>Special Signboard / Name Display</label>
+          <input type="text" name="special_signboard" placeholder="e.g. Welcome Mr. Johnson"
+                 value="{{ form_data.special_signboard|default:'' }}">
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 6. Payment Details ─── -->
+    <div class="section-card">
+      <div class="section-label"><div class="num">6</div><h2>Payment Details</h2></div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Name on Card <span class="req">*</span></label>
+          <input type="text" name="name_on_card" placeholder="As it appears on card"
+                 value="{{ form_data.name_on_card|default:'' }}" required>
+        </div>
+        <div class="field">
+          <label>Card Type <span class="req">*</span></label>
+          <select name="card_type" required>
+            <option value="">Select card type</option>
+            <option {% if form_data.card_type == 'Visa'             %}selected{% endif %}>Visa</option>
+            <option {% if form_data.card_type == 'Mastercard'       %}selected{% endif %}>Mastercard</option>
+            <option {% if form_data.card_type == 'American Express' %}selected{% endif %}>American Express</option>
+          </select>
+        </div>
+        <div class="field span-2">
+          <label>Card Number <span class="req">*</span></label>
+          <input type="text" name="card_number" id="cardNumber"
+                 placeholder="0000 0000 0000 0000" maxlength="19"
+                 value="{{ form_data.card_number|default:'' }}"
+                 required autocomplete="cc-number">
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Submit ─── -->
+    <button type="submit" class="next-btn" id="nextBtn">
+      <span id="btnText">Calculate Price &amp; Continue</span>
+      <svg id="btnArrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="btn-spinner" id="btnSpinner"></div>
+    </button>
+    <p class="sub-note">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="6" stroke="#8888aa" stroke-width="1.2"/>
+        <path d="M7 4v3.5L9 9" stroke="#8888aa" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      Price calculated via OpenStreetMap routing — no charge until you confirm
+    </p>
+  </form>
+</div>
+
+<script>
+/* ─── Vehicle / passenger / bag logic ─────────────────────────────────── */
+const LIMITS = {
+  'Sedan 1-5':    { maxP: 5,  maxB: 5  },
+  'SUV 1-7':      { maxP: 7,  maxB: 7  },
+  'Stretch 1-13': { maxP: 13, maxB: 13 },
+};
+const VORDER = ['Sedan 1-5', 'SUV 1-7', 'Stretch 1-13'];
+
+let currentVehicle = document.getElementById('serviceTypeInput').value || 'Sedan 1-5';
+
+(function init(){
+  rebuildP({{ form_data.number_of_passengers|default:2 }});
+  rebuildB({{ form_data.number_of_bags|default:2 }});
+  const d = document.querySelector('input[name="pickup_date"]');
+  const today = new Date().toISOString().split('T')[0];
+  if(d){ d.min = today; if(!d.value) d.value = today; }
+})();
+
+function selectVehicle(card){
+  document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  currentVehicle = card.dataset.value;
+  document.getElementById('serviceTypeInput').value = currentVehicle;
+  rebuildP(); rebuildB();
+}
+
+function handlePassengerChange(){
+  const p = +document.getElementById('passengersSelect').value;
+  const needed = VORDER.find(v => LIMITS[v].maxP >= p);
+  if(needed && VORDER.indexOf(needed) > VORDER.indexOf(currentVehicle))
+    upgrade(needed, `Upgraded to ${needed.split(' ')[0]} for ${p} passengers.`);
+}
+
+function handleBagChange(){
+  const b = +document.getElementById('bagsSelect').value;
+  const needed = VORDER.find(v => LIMITS[v].maxB >= b);
+  if(needed && VORDER.indexOf(needed) > VORDER.indexOf(currentVehicle))
+    upgrade(needed, `Upgraded to ${needed.split(' ')[0]} to fit ${b} bags.`);
+}
+
+function upgrade(v, msg){
+  document.querySelectorAll('.vehicle-card').forEach(c => c.classList.toggle('selected', c.dataset.value === v));
+  currentVehicle = v;
+  document.getElementById('serviceTypeInput').value = v;
+  document.getElementById('bagNoticeText').textContent = msg;
+  const n = document.getElementById('bagNotice');
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 4200);
+  rebuildP(); rebuildB();
+}
+
+function rebuildP(target){
+  const sel = document.getElementById('passengersSelect');
+  const cur = target !== undefined ? +target : +sel.value || 1;
+  const max = LIMITS[currentVehicle].maxP;
+  sel.innerHTML = '';
+  for(let i = 1; i <= max; i++){
+    const o = document.createElement('option');
+    o.value = i;
+    o.textContent = i === 1 ? '1 Passenger' : `${i} Passengers`;
+    if(i === Math.min(cur, max)) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+function rebuildB(target){
+  const sel = document.getElementById('bagsSelect');
+  const cur = target !== undefined ? +target : +sel.value || 0;
+  const max = LIMITS[currentVehicle].maxB;
+  sel.innerHTML = '';
+  for(let i = 0; i <= max; i++){
+    const o = document.createElement('option');
+    o.value = i;
+    o.textContent = i === 1 ? '1 Bag' : `${i} Bags`;
+    if(i === Math.min(cur, max)) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+function toggleOption(el, e){
+  e.preventDefault();
+  el.classList.toggle('active');
+  el.querySelector('input[type="checkbox"]').checked = el.classList.contains('active');
+}
+
+/* ─── Nominatim address autocomplete ──────────────────────────────────── */
+// Debounce helper — waits 350ms after the user stops typing before firing
+function debounce(fn, delay){
+  let t;
+  return function(...args){ clearTimeout(t); t = setTimeout(() => fn.apply(this, args), delay); };
+}
+
+function setupAC(inputId, listId){
+  const input = document.getElementById(inputId);
+  const list  = document.getElementById(listId);
+  if(!input) return;
+
+  let items = [], ai = -1;
+
+  const fetchSuggestions = debounce(async (query) => {
+    // Show loading indicator
+    list.innerHTML = '<div class="ac-loading"><div class="ac-spin"></div>Searching addresses…</div>';
+    list.classList.add('open');
+
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?` +
+        `q=${encodeURIComponent(query)}&format=json&limit=6&countrycodes=au&addressdetails=0`;
+
+      const res = await fetch(url, {
+        headers: { 'Accept-Language': 'en', 'User-Agent': 'MelbourneLimoBooking/1.0' }
+      });
+      const data = await res.json();
+
+      if(!data.length){
+        list.innerHTML = '<div class="ac-loading">No results found — try a different address</div>';
+        return;
+      }
+
+      items = data;
+      ai = -1;
+      list.innerHTML = data.map((r, i) => `
+        <div class="autocomplete-item" data-idx="${i}">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1C4.791 1 3 2.791 3 5c0 3 4 8 4 8s4-5 4-8c0-2.209-1.791-4-4-4z"
+                  stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+            <circle cx="7" cy="5" r="1.3" fill="#c9a84c"/>
+          </svg>
+          <span>${r.display_name}</span>
+        </div>`).join('');
+
+    } catch(err) {
+      list.innerHTML = '<div class="ac-loading">Could not reach address service — type your address manually</div>';
+    }
+  }, 350);
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    if(val.length < 3){ list.classList.remove('open'); return; }
+    fetchSuggestions(val);
+  });
+
+  list.addEventListener('click', e => {
+    const item = e.target.closest('.autocomplete-item');
+    if(!item) return;
+    input.value = items[+item.dataset.idx].display_name;
+    list.classList.remove('open');
+    ai = -1;
+  });
+
+  input.addEventListener('keydown', e => {
+    const vis = list.querySelectorAll('.autocomplete-item');
+    if(!vis.length) return;
+    if(e.key === 'ArrowDown'){
+      ai = Math.min(ai + 1, vis.length - 1);
+      highlight(vis); e.preventDefault();
+    } else if(e.key === 'ArrowUp'){
+      ai = Math.max(ai - 1, -1);
+      highlight(vis); e.preventDefault();
+    } else if(e.key === 'Enter' && ai >= 0){
+      input.value = items[ai].display_name;
+      list.classList.remove('open'); ai = -1;
+      e.preventDefault();
+    } else if(e.key === 'Escape'){
+      list.classList.remove('open'); ai = -1;
+    }
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', e => {
+    if(!input.contains(e.target) && !list.contains(e.target)){
+      list.classList.remove('open'); ai = -1;
+    }
+  });
+
+  function highlight(els){
+    els.forEach((el, i) => el.classList.toggle('ac-active', i === ai));
+    if(ai >= 0) els[ai].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+// Initialise autocomplete on all three address fields
+setupAC('pickupInput', 'pickupList');
+setupAC('destInput',   'destList');
+setupAC('stopInput',   'stopList');
+
+/* ─── Card number formatting ───────────────────────────────────────────── */
+document.getElementById('cardNumber').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g, '').slice(0, 16);
+  this.value = v.replace(/(.{4})/g, '$1 ').trim();
+});
+
+/* ─── Submit loading state ─────────────────────────────────────────────── */
+document.getElementById('bookingForm').addEventListener('submit', function(){
+  const btn = document.getElementById('nextBtn');
+  btn.disabled = true;
+  document.getElementById('btnSpinner').style.display = 'block';
+  document.getElementById('btnArrow').style.display   = 'none';
+  document.getElementById('btnText').textContent = 'Calculating route… ';
+});
+</script>
+
+</body>
+</html>
