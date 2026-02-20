@@ -30,10 +30,13 @@ SECRET_KEY = 'django-insecure-)18j#ch3(0&a5c2%vp6gu%e$&h*i!9#ve68hi-1j1jj$yc3^so
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
+    'mcl-1fpe.onrender.com',
 ]
 
-#CSRF_TRUSTED_ORIGINS = []
+
+CSRF_TRUSTED_ORIGINS = [
+    'mcl-1fpe.onrender.com',
+]
 
 # Application definition
 
@@ -147,16 +150,7 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
-]
 
-
-
-COMPRESS_ENABLED = False
-#COMPRESS_OFFLINE = True
 
 
 LOGGING = DEFAULT_LOGGING
