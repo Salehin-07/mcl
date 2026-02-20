@@ -6,3 +6,4 @@ requests
 googlemaps
 python-dotenv
 gunicorn
+psycopg2
