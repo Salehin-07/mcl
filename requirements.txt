@@ -5,3 +5,4 @@ dj-database-uri
 requests
 googlemaps
 python-dotenv
+gunicorn
