@@ -1,0 +1,935 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Profile | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block meta_description %}Manage your Melbourne Chauffeur account — update your details, change your password and view your profile.{% endblock %}
+{% block canonical_url %}https://www.yourdomain.com.au/profile/{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   PROFILE PAGE — all classes pr__  ·  scoped to [data-page="profile"]
+   No conflict with nav__ / ftr__ / hp__ / cp__ / tc__ / ab__ / su__ / li__
+════════════════════════════════════════════════════════════════ */
+[data-page="profile"] {
+    --pr-gold:      #b8902e;
+    --pr-gold-lt:   #d4aa4a;
+    --pr-gold-dk:   #9a7520;
+    --pr-gold-bg:   rgba(184,144,46,0.07);
+    --pr-ink:       #1a1714;
+    --pr-ink-2:     #2e2a26;
+    --pr-muted:     #6b6560;
+    --pr-faint:     #a09890;
+    --pr-cream:     #faf8f3;
+    --pr-cream-2:   #f3efe6;
+    --pr-white:     #ffffff;
+    --pr-border:    #e8e2d6;
+    --pr-border-2:  #f0ece4;
+    --pr-err:       #b83232;
+    --pr-ok:        #2a6e48;
+    --pr-serif:     'Cormorant Garamond', Georgia, serif;
+    --pr-sans:      'Jost', system-ui, sans-serif;
+    --pr-ease:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family: var(--pr-sans);
+    color: var(--pr-ink);
+    background: var(--pr-cream);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ── Reveal ───────────────────────────────────────────────── */
+.pr__reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s var(--pr-ease), transform .6s var(--pr-ease); }
+.pr__reveal.pr__in { opacity: 1; transform: none; }
+.pr__d1 { transition-delay: .1s; } .pr__d2 { transition-delay: .2s; }
+.pr__d3 { transition-delay: .3s; }
+
+/* ════════════════════════════════════════════════════════════
+   HERO BAND
+════════════════════════════════════════════════════════════ */
+.pr__hero {
+    background: var(--pr-ink);
+    padding: calc(36px + 68px + 2.5rem) 2rem 3rem;
+    position: relative; overflow: hidden;
+}
+.pr__hero-bg {
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(108deg, rgba(26,23,20,.97) 0%, rgba(26,23,20,.88) 60%, rgba(26,23,20,.7) 100%),
+        url("{% static 'img/hero-car.jpg' %}") center / cover no-repeat;
+}
+.pr__hero-rule {
+    position: absolute; bottom: 0; left: 0;
+    width: 40%; height: 2px;
+    background: linear-gradient(to right, var(--pr-gold), transparent);
+}
+.pr__hero-inner {
+    position: relative; z-index: 2;
+    max-width: 1160px; margin: 0 auto;
+    display: flex; align-items: center; gap: 2rem;
+    flex-wrap: wrap;
+}
+
+/* avatar circle */
+.pr__avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--pr-gold-bg);
+    border: 2px solid rgba(184,144,46,.4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--pr-serif); font-size: 1.8rem; font-weight: 400;
+    color: var(--pr-gold-lt);
+    opacity: 0; animation: pr-up .7s .3s var(--pr-ease) forwards;
+}
+
+.pr__hero-text {
+    opacity: 0; animation: pr-up .8s .45s var(--pr-ease) forwards;
+}
+.pr__hero-kicker {
+    font-size: .62rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--pr-gold-lt); display: flex; align-items: center; gap: .6rem;
+    margin-bottom: .5rem;
+}
+.pr__hero-kicker::before { content: ''; width: 22px; height: 1px; background: var(--pr-gold-lt); display: block; }
+.pr__hero-name {
+    font-family: var(--pr-serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 300; color: #f8f5ef; line-height: 1.1; letter-spacing: -.01em;
+}
+.pr__hero-name em { font-style: italic; color: var(--pr-gold-lt); }
+.pr__hero-meta {
+    display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: .6rem;
+}
+.pr__hero-meta-item {
+    font-size: .73rem; color: rgba(248,245,239,.45);
+    display: flex; align-items: center; gap: .4rem;
+}
+.pr__hero-meta-item svg { color: var(--pr-gold-lt); opacity: .7; }
+
+@keyframes pr-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   PAGE BODY
+════════════════════════════════════════════════════════════ */
+.pr__body {
+    max-width: 1160px; margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+/* ── SIDEBAR NAV ─────────────────────────────────────────── */
+.pr__sidenav {
+    background: var(--pr-white);
+    border: 1px solid var(--pr-border);
+    border-radius: 13px; overflow: hidden;
+    position: sticky; top: 120px;
+}
+.pr__sidenav-head {
+    padding: 1.1rem 1.5rem;
+    background: var(--pr-cream-2);
+    border-bottom: 1px solid var(--pr-border);
+    font-size: .63rem; font-weight: 600; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--pr-gold);
+}
+.pr__sidenav-list { list-style: none; padding: .4rem 0; margin: 0; }
+.pr__sidenav-item { border-bottom: 1px solid var(--pr-border-2); }
+.pr__sidenav-item:last-child { border-bottom: none; }
+.pr__sidenav-btn {
+    display: flex; align-items: center; gap: .75rem;
+    width: 100%; padding: .85rem 1.5rem;
+    background: none; border: none; cursor: pointer;
+    font-family: var(--pr-sans); font-size: .8rem; font-weight: 400;
+    color: var(--pr-muted); text-align: left;
+    transition: color .2s, background .2s, padding-left .2s;
+    position: relative;
+}
+.pr__sidenav-btn::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: var(--pr-gold);
+    transform: scaleY(0); transition: transform .22s var(--pr-ease);
+}
+.pr__sidenav-btn:hover { color: var(--pr-ink); background: var(--pr-gold-bg); padding-left: 1.8rem; }
+.pr__sidenav-btn:hover::before { transform: scaleY(1); }
+.pr__sidenav-btn.pr__active { color: var(--pr-gold); font-weight: 500; background: var(--pr-gold-bg); }
+.pr__sidenav-btn.pr__active::before { transform: scaleY(1); }
+.pr__sidenav-btn svg { flex-shrink: 0; }
+
+/* danger logout button in sidebar */
+.pr__sidenav-btn--logout { color: var(--pr-err); }
+.pr__sidenav-btn--logout:hover { color: var(--pr-err); background: rgba(184,50,50,.05); }
+.pr__sidenav-btn--logout::before { background: var(--pr-err); }
+
+/* ── MAIN CONTENT ────────────────────────────────────────── */
+.pr__main { display: flex; flex-direction: column; gap: 1.6rem; }
+
+/* tab panels */
+.pr__panel { display: none; }
+.pr__panel.pr__active { display: flex; flex-direction: column; gap: 1.6rem; }
+
+/* card */
+.pr__card {
+    background: var(--pr-white);
+    border: 1px solid var(--pr-border);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.045);
+}
+.pr__card-head {
+    padding: 1.6rem 2rem;
+    border-bottom: 1px solid var(--pr-border-2);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+}
+.pr__card-head-left { display: flex; align-items: center; gap: .85rem; }
+.pr__card-ico {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--pr-gold-bg); border: 1px solid rgba(184,144,46,.18);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--pr-gold); flex-shrink: 0;
+}
+.pr__card-title {
+    font-family: var(--pr-serif); font-size: 1.2rem; font-weight: 500;
+    color: var(--pr-ink); line-height: 1.2;
+}
+.pr__card-sub { font-size: .76rem; color: var(--pr-faint); margin-top: .1rem; }
+.pr__card-body { padding: 2rem; }
+
+/* ── fields ─────────────────────────────────────────────── */
+.pr__row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.2rem; margin-bottom: 1.2rem;
+}
+.pr__field { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.2rem; }
+.pr__field:last-of-type { margin-bottom: 0; }
+
+.pr__label {
+    font-size: .67rem; font-weight: 600; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--pr-ink-2);
+}
+
+.pr__input-shell { position: relative; }
+.pr__input-ico {
+    position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+    color: var(--pr-faint); pointer-events: none; display: flex;
+    transition: color .22s;
+}
+.pr__input-shell:focus-within .pr__input-ico { color: var(--pr-gold); }
+
+.pr__eye {
+    position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+    color: var(--pr-faint); background: none; border: none;
+    cursor: pointer; padding: 0; display: flex;
+    transition: color .2s;
+}
+.pr__eye:hover { color: var(--pr-gold); }
+
+.pr__input {
+    width: 100%; font-family: var(--pr-sans); font-size: .9rem; font-weight: 300;
+    color: var(--pr-ink); background: var(--pr-cream);
+    border: 1.5px solid var(--pr-border); border-radius: 10px; outline: none;
+    padding: .88rem 1rem .88rem 2.7rem;
+    -webkit-appearance: none; appearance: none;
+    transition: border-color .22s, background .22s, box-shadow .22s;
+}
+.pr__input--pw   { padding-right: 2.8rem; }
+.pr__input--no-ico { padding-left: 1.1rem; }
+.pr__input::placeholder { color: var(--pr-faint); font-weight: 300; }
+.pr__input:hover  { border-color: rgba(184,144,46,.4); background: var(--pr-white); }
+.pr__input:focus  { border-color: var(--pr-gold); background: var(--pr-white); box-shadow: 0 0 0 3px rgba(184,144,46,.11); }
+.pr__input.pr__bad  { border-color: var(--pr-err); box-shadow: 0 0 0 3px rgba(184,50,50,.09); }
+.pr__input:disabled { opacity: .55; cursor: not-allowed; }
+
+.pr__err {
+    font-size: .71rem; color: var(--pr-err);
+    display: none; align-items: center; gap: .35rem;
+}
+.pr__err.pr__show { display: flex; }
+
+/* django messages / banners */
+.pr__banner {
+    display: none; align-items: flex-start; gap: .8rem;
+    padding: 1rem 1.2rem; border-radius: 9px; border: 1px solid;
+    font-size: .875rem; line-height: 1.65;
+}
+.pr__banner.pr__show   { display: flex; }
+.pr__banner--success   { background: rgba(42,110,72,.06);  border-color: rgba(42,110,72,.22);  color: var(--pr-ok); }
+.pr__banner--error     { background: rgba(184,50,50,.06);  border-color: rgba(184,50,50,.22);  color: var(--pr-err); }
+.pr__banner--warning   { background: rgba(184,144,46,.06); border-color: rgba(184,144,46,.28); color: var(--pr-gold-dk); }
+.pr__banner--info      { background: rgba(42,110,72,.06);  border-color: rgba(42,110,72,.22);  color: var(--pr-ok); }
+.pr__banner svg        { flex-shrink: 0; margin-top: 2px; }
+
+/* strength bar */
+.pr__strength { display: none; flex-direction: column; gap: .3rem; margin-top: .4rem; }
+.pr__strength.pr__show { display: flex; }
+.pr__strength-bar { height: 3px; border-radius: 2px; background: var(--pr-border); overflow: hidden; }
+.pr__strength-fill { height: 100%; width: 0; border-radius: 2px; transition: width .35s var(--pr-ease), background .35s; }
+.pr__strength-lbl { font-size: .68rem; color: var(--pr-faint); }
+
+/* submit button */
+.pr__submit {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--pr-gold); color: #fff;
+    font-family: var(--pr-sans); font-size: .74rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding: .9rem 2rem; border: none; border-radius: 9px; cursor: pointer;
+    transition: background .22s, transform .2s, box-shadow .22s;
+    box-shadow: 0 3px 16px rgba(184,144,46,.28);
+}
+.pr__submit:hover   { background: var(--pr-gold-dk); transform: translateY(-2px); box-shadow: 0 7px 22px rgba(184,144,46,.38); }
+.pr__submit:active  { transform: translateY(0); }
+.pr__submit:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
+
+/* card footer row */
+.pr__card-foot {
+    padding: 1.3rem 2rem;
+    border-top: 1px solid var(--pr-border-2);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    background: var(--pr-cream);
+}
+.pr__card-foot-note { font-size: .75rem; color: var(--pr-faint); }
+
+/* read-only info row */
+.pr__info-row {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .85rem 0;
+    border-bottom: 1px solid var(--pr-border-2);
+}
+.pr__info-row:first-child { padding-top: 0; }
+.pr__info-row:last-child  { border-bottom: none; padding-bottom: 0; }
+.pr__info-ico {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--pr-gold-bg); border: 1px solid rgba(184,144,46,.15);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--pr-gold); flex-shrink: 0;
+}
+.pr__info-lbl  { font-size: .63rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--pr-faint); }
+.pr__info-val  { font-size: .9rem; color: var(--pr-ink-2); margin-top: .1rem; }
+
+/* danger zone */
+.pr__danger-card {
+    background: var(--pr-white);
+    border: 1px solid rgba(184,50,50,.22);
+    border-radius: 14px; overflow: hidden;
+}
+.pr__danger-head {
+    padding: 1.4rem 2rem;
+    border-bottom: 1px solid rgba(184,50,50,.12);
+    display: flex; align-items: center; gap: .8rem;
+}
+.pr__danger-ico {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: rgba(184,50,50,.08); border: 1px solid rgba(184,50,50,.18);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--pr-err); flex-shrink: 0;
+}
+.pr__danger-title { font-family: var(--pr-serif); font-size: 1.1rem; font-weight: 500; color: var(--pr-err); }
+.pr__danger-body { padding: 1.5rem 2rem; font-size: .86rem; color: var(--pr-muted); line-height: 1.75; }
+.pr__danger-foot { padding: 1.2rem 2rem; border-top: 1px solid rgba(184,50,50,.1); background: rgba(184,50,50,.03); }
+.pr__btn-danger {
+    display: inline-flex; align-items: center; gap: .55rem;
+    background: rgba(184,50,50,.09); color: var(--pr-err);
+    font-family: var(--pr-sans); font-size: .72rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase;
+    padding: .75rem 1.4rem; border: 1px solid rgba(184,50,50,.25);
+    border-radius: 8px; cursor: pointer;
+    transition: background .22s, border-color .22s;
+}
+.pr__btn-danger:hover { background: rgba(184,50,50,.16); border-color: rgba(184,50,50,.4); }
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .pr__body { grid-template-columns: 1fr; gap: 1.5rem; }
+    .pr__sidenav { position: static; }
+    .pr__sidenav-list { display: flex; flex-wrap: wrap; padding: .6rem; gap: .4rem; }
+    .pr__sidenav-item { border-bottom: none; flex: 0 0 auto; }
+    .pr__sidenav-btn {
+        padding: .55rem 1rem; border-radius: 7px; border: 1px solid var(--pr-border);
+        font-size: .72rem;
+    }
+    .pr__sidenav-btn::before { display: none; }
+    .pr__sidenav-btn:hover { padding-left: 1rem; }
+    .pr__sidenav-btn.pr__active { border-color: rgba(184,144,46,.35); }
+}
+@media (max-width: 560px) {
+    .pr__row { grid-template-columns: 1fr; }
+    .pr__card-body { padding: 1.5rem; }
+    .pr__card-foot { padding: 1rem 1.5rem; }
+    .pr__hero-inner { gap: 1.2rem; }
+    .pr__body { padding: 1.8rem 1.25rem 4rem; }
+}
+
+@keyframes pr-spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div data-page="profile">
+
+<!-- ════════════════════════════════
+     HERO BAND
+════════════════════════════════ -->
+<section class="pr__hero" aria-label="Profile header">
+    <div class="pr__hero-bg" role="img" aria-label="Melbourne Chauffeur background"></div>
+    <div class="pr__hero-rule" aria-hidden="true"></div>
+    <div class="pr__hero-inner">
+
+        <!-- initials avatar -->
+        <div class="pr__avatar" aria-hidden="true">
+            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+        </div>
+
+        <div class="pr__hero-text">
+            <p class="pr__hero-kicker">My Account</p>
+            <h1 class="pr__hero-name">
+                {{ user.first_name }} <em>{{ user.last_name }}</em>
+            </h1>
+            <div class="pr__hero-meta">
+                <span class="pr__hero-meta-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    {{ user.email }}
+                </span>
+                {% if user.extended_profile.phone %}
+                <span class="pr__hero-meta-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/></svg>
+                    {{ user.extended_profile.phone }}
+                </span>
+                {% endif %}
+                <span class="pr__hero-meta-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Member since {{ user.date_joined|date:"F Y" }}
+                </span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     BODY — SIDEBAR + PANELS
+════════════════════════════════ -->
+<div class="pr__body">
+
+    <!-- ── SIDEBAR NAV ──────────────────────────────────── -->
+    <aside class="pr__sidenav pr__reveal" aria-label="Profile sections">
+        <div class="pr__sidenav-head">Account</div>
+        <ul class="pr__sidenav-list" role="list">
+
+            <li class="pr__sidenav-item">
+                <button class="pr__sidenav-btn pr__active" data-tab="details" aria-current="true">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Personal Details
+                </button>
+            </li>
+
+            <li class="pr__sidenav-item">
+                <button class="pr__sidenav-btn" data-tab="password">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Change Password
+                </button>
+            </li>
+
+            <li class="pr__sidenav-item">
+                <button class="pr__sidenav-btn" data-tab="account">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Account Info
+                </button>
+            </li>
+
+            <li class="pr__sidenav-item" style="margin-top:.4rem;">
+                <form method="POST" action="{% url 'logout' %}" style="margin:0;">
+                    {% csrf_token %}
+                    <button type="submit" class="pr__sidenav-btn pr__sidenav-btn--logout">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </button>
+                </form>
+            </li>
+
+        </ul>
+    </aside>
+
+    <!-- ── MAIN PANELS ──────────────────────────────────── -->
+    <div class="pr__main">
+
+        <!-- Django messages -->
+        {% if messages %}
+            {% for message in messages %}
+            <div class="pr__banner pr__banner--{{ message.tags }} pr__show pr__reveal" role="alert">
+                {% if message.tags == 'success' %}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                {% else %}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                {% endif %}
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- ══ PANEL 1 — Personal Details ══════════════════ -->
+        <div class="pr__panel pr__active pr__reveal" id="pr-panel-details">
+            <div class="pr__card">
+                <div class="pr__card-head">
+                    <div class="pr__card-head-left">
+                        <div class="pr__card-ico" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__card-title">Personal Details</div>
+                            <div class="pr__card-sub">Update your name, email and phone number</div>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="POST" action="{% url 'profile_update_details' %}" id="pr-details-form" novalidate>
+                    {% csrf_token %}
+                    <div class="pr__card-body">
+
+                        <!-- First + Last name -->
+                        <div class="pr__row">
+                            <div class="pr__field">
+                                <label class="pr__label" for="pr-first">First Name</label>
+                                <div class="pr__input-shell">
+                                    <span class="pr__input-ico" aria-hidden="true">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    </span>
+                                    <input class="pr__input" type="text" id="pr-first" name="first_name"
+                                        value="{{ user.first_name }}" autocomplete="given-name" required>
+                                </div>
+                                <span class="pr__err" id="pr-first-err">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                    Please enter your first name.
+                                </span>
+                            </div>
+
+                            <div class="pr__field">
+                                <label class="pr__label" for="pr-last">Last Name</label>
+                                <div class="pr__input-shell">
+                                    <span class="pr__input-ico" aria-hidden="true">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    </span>
+                                    <input class="pr__input" type="text" id="pr-last" name="last_name"
+                                        value="{{ user.last_name }}" autocomplete="family-name" required>
+                                </div>
+                                <span class="pr__err" id="pr-last-err">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                    Please enter your last name.
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="pr__field">
+                            <label class="pr__label" for="pr-email">Email Address</label>
+                            <div class="pr__input-shell">
+                                <span class="pr__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                </span>
+                                <input class="pr__input" type="email" id="pr-email" name="email"
+                                    value="{{ user.email }}" autocomplete="email" required>
+                            </div>
+                            <span class="pr__err" id="pr-email-err">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Please enter a valid email address.
+                            </span>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="pr__field">
+                            <label class="pr__label" for="pr-phone">Phone Number</label>
+                            <div class="pr__input-shell">
+                                <span class="pr__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/></svg>
+                                </span>
+                                <input class="pr__input" type="tel" id="pr-phone" name="phone"
+                                    value="{{ user.extended_profile.phone }}" autocomplete="tel" required>
+                            </div>
+                            <span class="pr__err" id="pr-phone-err">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Please enter a valid phone number.
+                            </span>
+                        </div>
+
+                    </div>
+                    <div class="pr__card-foot">
+                        <span class="pr__card-foot-note">Changes take effect immediately.</span>
+                        <button type="submit" class="pr__submit" id="pr-details-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ══ PANEL 2 — Change Password ═══════════════════ -->
+        <div class="pr__panel" id="pr-panel-password">
+            <div class="pr__card">
+                <div class="pr__card-head">
+                    <div class="pr__card-head-left">
+                        <div class="pr__card-ico" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__card-title">Change Password</div>
+                            <div class="pr__card-sub">Choose a strong password you don't use elsewhere</div>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="POST" action="{% url 'profile_update_password' %}" id="pr-pw-form" novalidate>
+                    {% csrf_token %}
+                    <div class="pr__card-body">
+
+                        <!-- Current password -->
+                        <div class="pr__field">
+                            <label class="pr__label" for="pr-cur-pw">Current Password</label>
+                            <div class="pr__input-shell">
+                                <span class="pr__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <input class="pr__input pr__input--pw" type="password" id="pr-cur-pw"
+                                    name="current_password" placeholder="Your current password" autocomplete="current-password" required>
+                                <button type="button" class="pr__eye" data-target="pr-cur-pw" aria-label="Show password">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            <span class="pr__err" id="pr-cur-err">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Please enter your current password.
+                            </span>
+                        </div>
+
+                        <!-- New password -->
+                        <div class="pr__field">
+                            <label class="pr__label" for="pr-new-pw">New Password</label>
+                            <div class="pr__input-shell">
+                                <span class="pr__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <input class="pr__input pr__input--pw" type="password" id="pr-new-pw"
+                                    name="new_password" placeholder="Min. 8 characters" autocomplete="new-password" required>
+                                <button type="button" class="pr__eye" data-target="pr-new-pw" aria-label="Show password">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            <span class="pr__err" id="pr-new-err">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Password must be at least 8 characters.
+                            </span>
+                            <div class="pr__strength" id="pr-strength">
+                                <div class="pr__strength-bar"><div class="pr__strength-fill" id="pr-strength-fill"></div></div>
+                                <span class="pr__strength-lbl" id="pr-strength-lbl"></span>
+                            </div>
+                        </div>
+
+                        <!-- Confirm new password -->
+                        <div class="pr__field">
+                            <label class="pr__label" for="pr-conf-pw">Confirm New Password</label>
+                            <div class="pr__input-shell">
+                                <span class="pr__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <input class="pr__input pr__input--pw" type="password" id="pr-conf-pw"
+                                    name="confirm_password" placeholder="Repeat new password" autocomplete="new-password" required>
+                                <button type="button" class="pr__eye" data-target="pr-conf-pw" aria-label="Show password">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            <span class="pr__err" id="pr-conf-err">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Passwords do not match.
+                            </span>
+                        </div>
+
+                    </div>
+                    <div class="pr__card-foot">
+                        <span class="pr__card-foot-note">You'll stay logged in after changing your password.</span>
+                        <button type="submit" class="pr__submit" id="pr-pw-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ══ PANEL 3 — Account Info ═══════════════════════ -->
+        <div class="pr__panel" id="pr-panel-account">
+            <div class="pr__card">
+                <div class="pr__card-head">
+                    <div class="pr__card-head-left">
+                        <div class="pr__card-ico" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__card-title">Account Info</div>
+                            <div class="pr__card-sub">Read-only account details</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pr__card-body">
+
+                    <div class="pr__info-row">
+                        <div class="pr__info-ico" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__info-lbl">Full Name</div>
+                            <div class="pr__info-val">{{ user.get_full_name }}</div>
+                        </div>
+                    </div>
+
+                    <div class="pr__info-row">
+                        <div class="pr__info-ico" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__info-lbl">Email Address</div>
+                            <div class="pr__info-val">{{ user.email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="pr__info-row">
+                        <div class="pr__info-ico" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__info-lbl">Phone</div>
+                            <div class="pr__info-val">{{ user.extended_profile.phone|default:"—" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="pr__info-row">
+                        <div class="pr__info-ico" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__info-lbl">Member Since</div>
+                            <div class="pr__info-val">{{ user.date_joined|date:"d F Y" }}</div>
+                        </div>
+                    </div>
+
+                    <div class="pr__info-row">
+                        <div class="pr__info-ico" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div>
+                            <div class="pr__info-lbl">Last Login</div>
+                            <div class="pr__info-val">{{ user.last_login|date:"d F Y, g:i A"|default:"—" }}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Danger zone -->
+            <div class="pr__danger-card">
+                <div class="pr__danger-head">
+                    <div class="pr__danger-ico" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <div class="pr__danger-title">Danger Zone</div>
+                </div>
+                <div class="pr__danger-body">
+                    Deleting your account is permanent and cannot be undone. All your booking history and personal details will be removed from our system.
+                </div>
+                <div class="pr__danger-foot">
+                    <form method="POST" action="{% url 'profile_delete' %}" id="pr-delete-form"
+                        onsubmit="return confirm('Are you sure you want to permanently delete your account? This cannot be undone.');">
+                        {% csrf_token %}
+                        <button type="submit" class="pr__btn-danger">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                            Delete My Account
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /pr__main -->
+</div><!-- /pr__body -->
+
+</div><!-- /data-page="profile" -->
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+(function () {
+    'use strict';
+
+    /* ── Reveal ────────────────────────────────────────────── */
+    var els = document.querySelectorAll('.pr__reveal');
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('pr__in'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.08 });
+        els.forEach(function (el) { obs.observe(el); });
+    } else {
+        els.forEach(function (el) { el.classList.add('pr__in'); });
+    }
+
+    /* ── Sidebar tab switching ──────────────────────────────── */
+    var btns   = document.querySelectorAll('.pr__sidenav-btn[data-tab]');
+    var panels = document.querySelectorAll('.pr__panel');
+
+    btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var tab = btn.getAttribute('data-tab');
+
+            btns.forEach(function (b) { b.classList.remove('pr__active'); b.removeAttribute('aria-current'); });
+            panels.forEach(function (p) { p.classList.remove('pr__active'); });
+
+            btn.classList.add('pr__active');
+            btn.setAttribute('aria-current', 'true');
+            var panel = document.getElementById('pr-panel-' + tab);
+            if (panel) panel.classList.add('pr__active');
+        });
+    });
+
+    /* ── Password eye toggles ───────────────────────────────── */
+    document.querySelectorAll('.pr__eye').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var inp    = document.getElementById(btn.getAttribute('data-target'));
+            if (!inp) return;
+            var hidden = inp.type === 'password';
+            inp.type   = hidden ? 'text' : 'password';
+            btn.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
+            btn.querySelector('svg').innerHTML = hidden
+                ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+                : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        });
+    });
+
+    /* ── Password strength ──────────────────────────────────── */
+    var newPw        = document.getElementById('pr-new-pw');
+    var strengthWrap = document.getElementById('pr-strength');
+    var strengthFill = document.getElementById('pr-strength-fill');
+    var strengthLbl  = document.getElementById('pr-strength-lbl');
+
+    if (newPw) {
+        newPw.addEventListener('input', function () {
+            var pw = newPw.value;
+            if (!pw) { strengthWrap.classList.remove('pr__show'); return; }
+            strengthWrap.classList.add('pr__show');
+            var score = 0;
+            if (pw.length >= 8)           score++;
+            if (pw.length >= 12)          score++;
+            if (/[A-Z]/.test(pw))         score++;
+            if (/[0-9]/.test(pw))         score++;
+            if (/[^A-Za-z0-9]/.test(pw))  score++;
+            var pct, color, lbl;
+            if      (score <= 1) { pct='25%';  color='#c0392b'; lbl='Weak'; }
+            else if (score <= 2) { pct='50%';  color='#e67e22'; lbl='Fair'; }
+            else if (score <= 3) { pct='75%';  color='#f1c40f'; lbl='Good'; }
+            else                 { pct='100%'; color='#2a6e48'; lbl='Strong'; }
+            strengthFill.style.width      = pct;
+            strengthFill.style.background = color;
+            strengthLbl.textContent       = lbl;
+            strengthLbl.style.color       = color;
+        });
+    }
+
+    /* ── Details form validation ────────────────────────────── */
+    var detailsForm = document.getElementById('pr-details-form');
+    if (detailsForm) {
+        var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var phoneRe = /^[\d\s\+\-\(\)]{6,15}$/;
+
+        function setErr(id, errId) {
+            document.getElementById(id).classList.add('pr__bad');
+            document.getElementById(errId).classList.add('pr__show');
+        }
+        function clearErr(id, errId) {
+            var inp = document.getElementById(id);
+            if (inp) { inp.classList.remove('pr__bad'); }
+            var err = document.getElementById(errId);
+            if (err) { err.classList.remove('pr__show'); }
+        }
+
+        ['pr-first','pr-last','pr-email','pr-phone'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.addEventListener('input', function () { clearErr(id, id + '-err'); });
+        });
+
+        detailsForm.addEventListener('submit', function (e) {
+            var valid = true;
+            if (!document.getElementById('pr-first').value.trim()) { setErr('pr-first','pr-first-err'); valid=false; }
+            if (!document.getElementById('pr-last').value.trim())  { setErr('pr-last','pr-last-err');   valid=false; }
+            var email = document.getElementById('pr-email').value.trim();
+            if (!email || !emailRe.test(email)) { setErr('pr-email','pr-email-err'); valid=false; }
+            var phone = document.getElementById('pr-phone').value.trim();
+            if (!phone || !phoneRe.test(phone)) { setErr('pr-phone','pr-phone-err'); valid=false; }
+            if (!valid) { e.preventDefault(); return; }
+            var btn = document.getElementById('pr-details-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:pr-spin 1s linear infinite" aria-hidden="true"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" opacity=".25"/><path d="M21 12a9 9 0 0 0-9-9"/></svg> Saving\u2026';
+        });
+    }
+
+    /* ── Password form validation ───────────────────────────── */
+    var pwForm = document.getElementById('pr-pw-form');
+    if (pwForm) {
+        pwForm.addEventListener('submit', function (e) {
+            var valid   = true;
+            var curPw   = document.getElementById('pr-cur-pw');
+            var newPwEl = document.getElementById('pr-new-pw');
+            var confPw  = document.getElementById('pr-conf-pw');
+
+            if (!curPw.value) {
+                curPw.classList.add('pr__bad');
+                document.getElementById('pr-cur-err').classList.add('pr__show');
+                valid = false;
+            }
+            if (!newPwEl.value || newPwEl.value.length < 8) {
+                newPwEl.classList.add('pr__bad');
+                document.getElementById('pr-new-err').classList.add('pr__show');
+                valid = false;
+            }
+            if (!confPw.value || confPw.value !== newPwEl.value) {
+                confPw.classList.add('pr__bad');
+                document.getElementById('pr-conf-err').classList.add('pr__show');
+                valid = false;
+            }
+            if (!valid) { e.preventDefault(); return; }
+            var btn = document.getElementById('pr-pw-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:pr-spin 1s linear infinite" aria-hidden="true"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" opacity=".25"/><path d="M21 12a9 9 0 0 0-9-9"/></svg> Updating\u2026';
+        });
+
+        ['pr-cur-pw','pr-new-pw','pr-conf-pw'].forEach(function (id) {
+            var el = document.getElementById(id);
+            var errMap = { 'pr-cur-pw':'pr-cur-err','pr-new-pw':'pr-new-err','pr-conf-pw':'pr-conf-err' };
+            if (el) el.addEventListener('input', function () {
+                el.classList.remove('pr__bad');
+                var err = document.getElementById(errMap[id]);
+                if (err) err.classList.remove('pr__show');
+            });
+        });
+    }
+
+    /* ── Open correct tab if Django sets ?tab= in URL ────────── */
+    var params = new URLSearchParams(window.location.search);
+    var tab    = params.get('tab');
+    if (tab) {
+        var btn = document.querySelector('.pr__sidenav-btn[data-tab="' + tab + '"]');
+        if (btn) btn.click();
+    }
+
+}());
+</script>
+{% endblock %}

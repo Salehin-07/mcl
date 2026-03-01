@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment Unsuccessful — Melbourne Chauffeur{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bf-ink: #1a1a2e; --bf-ink-soft: #3d3d5c; --bf-ink-muted: #8888aa;
+    --bf-cream: #faf9f6; --bf-white: #ffffff;
+    --bf-gold: #c9a84c; --bf-gold-bg: #fdf8ec; --bf-gold-light: #e8d08a;
+    --bf-border: #e4e0d8;
+    --bf-red: #c0392b; --bf-red-bg: #fff5f5; --bf-red-light: #fdb8b8;
+    --bf-shadow-card: 0 2px 24px rgba(26,26,46,0.07);
+    --bf-radius: 14px; --bf-radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  .bf__body { font-family: 'DM Sans', sans-serif; background: var(--bf-cream); color: var(--bf-ink); }
+
+  .bf__hero { background: var(--bf-ink); padding: 48px 32px 0; text-align: center; position: relative; overflow: hidden; }
+  .bf__hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(192,57,43,0.2) 0%, transparent 70%); pointer-events: none; }
+  .bf__eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--bf-gold); margin-bottom: 12px; position: relative; z-index: 1; }
+  .bf__hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(24px,5vw,40px); font-weight: 700; color: #fff; line-height: 1.18; position: relative; z-index: 1; }
+  .bf__hero-sub { margin-top: 10px; color: rgba(255,255,255,0.5); font-size: 15px; font-weight: 300; position: relative; z-index: 1; margin-bottom: 36px; }
+
+  .bf__wrap { max-width: 600px; margin: 0 auto; padding: 48px 20px 80px; text-align: center; }
+
+  .bf__fail-ring { display: flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; background: var(--bf-red-bg); border: 2px solid var(--bf-red-light); margin: 0 auto 24px; animation: bf-popIn 0.5s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes bf-popIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+
+  .bf__fail-heading { font-family: 'Playfair Display', serif; font-size: clamp(20px,4vw,30px); font-weight: 700; margin-bottom: 10px; }
+  .bf__fail-sub { color: var(--bf-ink-muted); font-size: 15px; line-height: 1.6; margin-bottom: 36px; }
+
+  .bf__ref-pill { display: inline-block; background: var(--bf-ink); color: rgba(255,255,255,0.5); font-size: 13px; padding: 8px 18px; border-radius: 20px; margin-bottom: 36px; }
+  .bf__ref-pill strong { color: var(--bf-gold); font-family: 'Playfair Display', serif; font-size: 15px; }
+
+  .bf__card { background: var(--bf-white); border: 1px solid var(--bf-border); border-radius: var(--bf-radius); box-shadow: var(--bf-shadow-card); padding: 28px; margin-bottom: 20px; text-align: left; animation: bf-fadeUp 0.4s ease 0.1s both; }
+  @keyframes bf-fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .bf__card-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--bf-border); display: flex; align-items: center; gap: 10px; }
+
+  .bf__detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #f5f3ee; font-size: 14px; }
+  .bf__detail-row:last-child { border-bottom: none; }
+  .bf__detail-label { color: var(--bf-ink-muted); flex-shrink: 0; margin-right: 16px; }
+  .bf__detail-value { color: var(--bf-ink); font-weight: 500; text-align: right; }
+
+  .bf__action-group { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+
+  .bf__btn-primary { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 16px 24px; background: var(--bf-gold); color: var(--bf-ink); border: none; border-radius: var(--bf-radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none; box-shadow: 0 4px 18px rgba(201,168,76,0.4); transition: background 0.2s, transform 0.15s, box-shadow 0.2s; }
+  .bf__btn-primary:hover { background: #b8922e; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.5); }
+
+  .bf__btn-ghost { display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px 24px; background: transparent; color: var(--bf-ink-soft); border: 1.5px solid var(--bf-border); border-radius: var(--bf-radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+  .bf__btn-ghost:hover { border-color: var(--bf-gold); color: var(--bf-ink); }
+
+  .bf__help-note { margin-top: 32px; padding: 16px 20px; background: var(--bf-gold-bg); border: 1px solid var(--bf-gold-light); border-radius: var(--bf-radius-sm); font-size: 13px; color: var(--bf-ink-soft); text-align: left; }
+  .bf__help-note strong { color: var(--bf-ink); display: block; margin-bottom: 4px; }
+
+  @media(max-width:620px){ .bf__card{padding:20px 18px} }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="bf__body">
+
+<div class="bf__hero">
+  <p class="bf__eyebrow">Melbourne Chauffeur Service</p>
+  <h1>Payment Unsuccessful</h1>
+  <p class="bf__hero-sub">Don't worry — your booking details have been saved</p>
+</div>
+
+<div class="bf__wrap">
+
+  <div class="bf__fail-ring">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M10 10l12 12M22 10l-12 12" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <h2 class="bf__fail-heading">We couldn't process your payment</h2>
+  <p class="bf__fail-sub">
+    Your card was declined or the payment timed out. No charge has been made.<br>
+    Your booking is saved — you can start a new booking below.
+  </p>
+
+  <div class="bf__ref-pill">Booking ref &nbsp;<strong>#{{ order.id|stringformat:"06d" }}</strong></div>
+
+  <!-- Journey snapshot -->
+  <div class="bf__card">
+    <div class="bf__card-title">🗺️ Your Saved Journey</div>
+    <div class="bf__detail-row"><span class="bf__detail-label">From</span><span class="bf__detail-value">{{ order.pickup_address }}</span></div>
+    {% if order.additional_stop %}
+    <div class="bf__detail-row"><span class="bf__detail-label">Via</span><span class="bf__detail-value">{{ order.additional_stop }}</span></div>
+    {% endif %}
+    <div class="bf__detail-row"><span class="bf__detail-label">To</span><span class="bf__detail-value">{{ order.destination_address }}</span></div>
+    <div class="bf__detail-row"><span class="bf__detail-label">Date &amp; Time</span><span class="bf__detail-value">{{ order.pickup_date }} at {{ order.pickup_time }}</span></div>
+    <div class="bf__detail-row"><span class="bf__detail-label">Vehicle</span><span class="bf__detail-value">{{ order.limo_service_type }}</span></div>
+    <div class="bf__detail-row"><span class="bf__detail-label">Amount due</span><span class="bf__detail-value" style="color:var(--bf-ink);font-weight:700;">AUD ${{ order.total_price }}</span></div>
+  </div>
+
+  <!-- Actions -->
+  <div class="bf__action-group">
+    <a href="{% url 'orders' %}" class="bf__btn-primary">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Start a New Booking
+    </a>
+    <a href="/" class="bf__btn-ghost">Return to Home</a>
+  </div>
+
+  <div class="bf__help-note">
+    <strong>Need help?</strong>
+    If you keep experiencing issues or were charged unexpectedly, please contact us at
+    <a href="mailto:support@melbournechauffeur.com.au" style="color:var(--bf-gold)">support@melbournechauffeur.com.au</a>
+    quoting reference <strong>#{{ order.id|stringformat:"06d" }}</strong>.
+  </div>
+
+</div>
+</div>{# bf__body #}
+{% endblock %}

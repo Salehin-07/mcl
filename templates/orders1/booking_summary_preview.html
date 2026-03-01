@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Review Your Booking — Melbourne Chauffeur{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bf-ink: #1a1a2e; --bf-ink-soft: #3d3d5c; --bf-ink-muted: #8888aa;
+    --bf-cream: #faf9f6; --bf-white: #ffffff;
+    --bf-gold: #c9a84c; --bf-gold-light: #e8d08a; --bf-gold-bg: #fdf8ec;
+    --bf-border: #e4e0d8; --bf-green: #2e7d52; --bf-green-bg: #f0faf5;
+    --bf-shadow-card: 0 2px 24px rgba(26,26,46,0.07);
+    --bf-shadow-hover: 0 8px 40px rgba(26,26,46,0.13);
+    --bf-radius: 14px; --bf-radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  .bf__body { font-family: 'DM Sans', sans-serif; background: var(--bf-cream); color: var(--bf-ink); }
+
+  .bf__hero { background: var(--bf-ink); padding: 48px 32px 0; text-align: center; position: relative; overflow: hidden; }
+  .bf__hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,168,76,0.18) 0%, transparent 70%); pointer-events: none; }
+  .bf__eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--bf-gold); margin-bottom: 12px; }
+  .bf__hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(24px,5vw,40px); font-weight: 700; color: #fff; line-height: 1.18; }
+  .bf__hero-sub { margin-top: 10px; color: rgba(255,255,255,0.5); font-size: 15px; font-weight: 300; }
+  .bf__type-badge { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 6px 16px; background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.35); border-radius: 20px; color: var(--bf-gold); font-size: 12px; font-weight: 600; position: relative; z-index: 1; }
+
+  .bf__progress { display: flex; align-items: center; justify-content: center; margin-top: 24px; padding-bottom: 24px; position: relative; z-index: 1; }
+  .bf__p-step { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .bf__p-line { width: 56px; height: 1px; margin-bottom: 20px; flex-shrink: 0; }
+  .bf__p-line--done { background: var(--bf-gold); }
+  .bf__p-line--pending { background: rgba(255,255,255,0.2); }
+  .bf__p-circle { width: 30px; height: 30px; border-radius: 50%; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .bf__p-step--done .bf__p-circle  { border: 2px solid var(--bf-gold); background: var(--bf-gold); color: var(--bf-ink); }
+  .bf__p-step--active .bf__p-circle { border: 2px solid var(--bf-gold); color: var(--bf-gold); background: rgba(201,168,76,0.15); }
+  .bf__p-step--idle .bf__p-circle { border: 2px solid rgba(255,255,255,0.22); color: rgba(255,255,255,0.35); }
+  .bf__p-lbl { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 600; }
+  .bf__p-step--done .bf__p-lbl, .bf__p-step--active .bf__p-lbl { color: var(--bf-gold); }
+  .bf__p-step--idle .bf__p-lbl { color: rgba(255,255,255,0.3); }
+
+  .bf__wrap { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+  .bf__two-col { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+  @media(max-width:720px){ .bf__two-col { grid-template-columns: 1fr; } }
+
+  .bf__card { background: var(--bf-white); border: 1px solid var(--bf-border); border-radius: var(--bf-radius); box-shadow: var(--bf-shadow-card); padding: 28px 28px 24px; margin-bottom: 20px; animation: bf-fadeUp 0.4s ease both; transition: box-shadow 0.25s; }
+  .bf__card:hover { box-shadow: var(--bf-shadow-hover); }
+  .bf__card:nth-child(1){animation-delay:.05s} .bf__card:nth-child(2){animation-delay:.10s}
+  @keyframes bf-fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .bf__card-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--bf-border); display: flex; align-items: center; gap: 10px; }
+
+  .bf__detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #f5f3ee; font-size: 14px; }
+  .bf__detail-row:last-child { border-bottom: none; }
+  .bf__detail-label { color: var(--bf-ink-muted); font-weight: 400; flex-shrink: 0; margin-right: 16px; }
+  .bf__detail-value { color: var(--bf-ink); font-weight: 500; text-align: right; }
+
+  .bf__price-panel { background: var(--bf-ink); border-radius: var(--bf-radius); padding: 28px 28px 24px; position: sticky; top: 24px; overflow: hidden; animation: bf-fadeUp 0.4s ease 0.2s both; }
+  .bf__price-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 90% 70% at 110% 110%, rgba(201,168,76,0.22) 0%, transparent 65%); pointer-events: none; }
+  .bf__price-eyebrow { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--bf-gold); font-weight: 600; margin-bottom: 6px; position: relative; }
+  .bf__price-big { font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 700; color: #fff; line-height: 1; position: relative; }
+  .bf__price-big .bf__aud { font-size: 20px; font-weight: 400; opacity: 0.6; margin-right: 4px; vertical-align: top; line-height: 2.1; }
+  .bf__price-note { font-size: 12px; color: rgba(255,255,255,0.38); margin-top: 6px; position: relative; }
+
+  .bf__breakdown { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; }
+  .bf__b-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; color: rgba(255,255,255,0.65); }
+  .bf__b-row--total { color: #fff; font-weight: 700; font-size: 15px; border-top: 1px solid rgba(255,255,255,0.15); margin-top: 8px; padding-top: 14px; }
+  .bf__b-row--total .bf__b-val { color: var(--bf-gold); }
+  .bf__b-row--discount { color: #a8d5be; }
+  .bf__b-badge { background: rgba(201,168,76,0.18); color: #e8d08a; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+  .bf__b-flat-badge { background: rgba(46,125,82,0.25); color: #a8d5be; font-size: 10px; font-weight: 600; padding: 2px 10px; border-radius: 20px; }
+
+  .bf__toll-alert { margin-top: 14px; padding: 10px 14px; background: rgba(255,166,0,0.12); border: 1px solid rgba(255,166,0,0.3); border-radius: var(--bf-radius-sm); font-size: 12px; color: #ffb74d; display: flex; align-items: center; gap: 8px; position: relative; }
+
+  .bf__confirm-btn { width: 100%; margin-top: 20px; padding: 16px; background: var(--bf-gold); color: var(--bf-ink); border: none; border-radius: var(--bf-radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 4px 18px rgba(201,168,76,0.5); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .bf__confirm-btn:hover { background: #b8922e; transform: translateY(-1px); }
+  .bf__confirm-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+  .bf__next-note { margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.35); text-align: center; position: relative; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+  .bf__back-link { display: inline-flex; align-items: center; gap: 7px; color: var(--bf-ink-muted); font-size: 14px; font-weight: 500; text-decoration: none; margin-bottom: 28px; padding: 8px 14px; border-radius: var(--bf-radius-sm); border: 1.5px solid var(--bf-border); background: var(--bf-white); transition: border-color 0.2s, color 0.2s; }
+  .bf__back-link:hover { border-color: var(--bf-gold); color: var(--bf-ink); }
+
+  .bf__tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .bf__tag { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background: var(--bf-gold-bg); color: #7a5f00; border: 1px solid #e8d08a; display: flex; align-items: center; gap: 5px; }
+  .bf__tag--green { background: var(--bf-green-bg); color: var(--bf-green); border-color: #a8d5be; }
+  .bf__tag--blue  { background: #e8f4ff; color: #1565c0; border-color: #90caf9; }
+  .bf__tag--toll  { background: #fff8e1; color: #7a5f00; border-color: #ffe082; }
+
+  .bf__spinner { width: 16px; height: 16px; border: 2px solid rgba(26,26,46,0.3); border-top-color: var(--bf-ink); border-radius: 50%; animation: bf-spin 0.7s linear infinite; display: none; }
+  @keyframes bf-spin{to{transform:rotate(360deg)}}
+
+  @media(max-width:620px){ .bf__card, .bf__price-panel{padding:20px 18px} .bf__price-big{font-size:36px} }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="bf__body">
+
+<div class="bf__hero">
+  <p class="bf__eyebrow">Melbourne Chauffeur Service</p>
+  <h1>Review Your Booking</h1>
+  <p class="bf__hero-sub">Check everything below, then proceed to secure payment</p>
+  <div>
+    <span class="bf__type-badge">
+      {% if type_key == "fair" %}✈️ From Airport
+      {% elif type_key == "tair" %}✈️ To Airport
+      {% elif type_key == "th" %}⏱️ 2 Hour Hire
+      {% elif type_key == "oh" %}🕐 1 Hour / As Directed
+      {% else %}🗺️ Point to Point
+      {% endif %}
+    </span>
+  </div>
+  <div class="bf__progress">
+    <div class="bf__p-step bf__p-step--done"><div class="bf__p-circle">✓</div><div class="bf__p-lbl">Details</div></div>
+    <div class="bf__p-line bf__p-line--done"></div>
+    <div class="bf__p-step bf__p-step--active"><div class="bf__p-circle">2</div><div class="bf__p-lbl">Price</div></div>
+    <div class="bf__p-line bf__p-line--pending"></div>
+    <div class="bf__p-step bf__p-step--idle"><div class="bf__p-circle">3</div><div class="bf__p-lbl">Pay</div></div>
+  </div>
+</div>
+
+<div class="bf__wrap">
+  <a href="javascript:history.back()" class="bf__back-link">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back &amp; Edit Details
+  </a>
+
+  <div class="bf__two-col">
+    <!-- Left -->
+    <div>
+      <div class="bf__card">
+        <div class="bf__card-title">🗺️ Journey Summary</div>
+        <div class="bf__detail-row"><span class="bf__detail-label">Pickup</span><span class="bf__detail-value">{{ form_data.pickup_address }}</span></div>
+        {% if form_data.additional_stop %}
+        <div class="bf__detail-row"><span class="bf__detail-label">Via</span><span class="bf__detail-value">{{ form_data.additional_stop }}</span></div>
+        {% endif %}
+        {% if form_data.show_destination %}
+        <div class="bf__detail-row"><span class="bf__detail-label">Destination</span><span class="bf__detail-value">{{ form_data.destination_address }}</span></div>
+        {% else %}
+        <div class="bf__detail-row"><span class="bf__detail-label">Journey</span><span class="bf__detail-value">
+          {% if type_key == "th" %}Open route — 2 hours{% else %}Open route — 1 hour{% endif %}
+        </span></div>
+        {% endif %}
+        <div class="bf__detail-row"><span class="bf__detail-label">Date &amp; Time</span><span class="bf__detail-value">{{ form_data.pickup_date }} at {{ form_data.pickup_time }}</span></div>
+        {% if breakdown.distance_km %}
+        <div class="bf__detail-row"><span class="bf__detail-label">Distance</span><span class="bf__detail-value">{{ breakdown.distance_km }} km</span></div>
+        {% endif %}
+        {% if form_data.flight_number %}
+        <div class="bf__detail-row"><span class="bf__detail-label">Flight</span><span class="bf__detail-value">{{ form_data.flight_number }}</span></div>
+        {% endif %}
+
+        <div class="bf__tag-row">
+          <span class="bf__tag">{{ form_data.limo_service_type }}</span>
+          {% if type_key == "th"   %}<span class="bf__tag bf__tag--blue">⏱️ 2 Hour Hire</span>{% endif %}
+          {% if type_key == "oh"   %}<span class="bf__tag bf__tag--blue">🕐 1 Hour Hire</span>{% endif %}
+          {% if type_key == "fair" %}<span class="bf__tag bf__tag--blue">✈️ From Airport</span>{% endif %}
+          {% if type_key == "tair" %}<span class="bf__tag bf__tag--blue">✈️ To Airport</span>{% endif %}
+          <span class="bf__tag">{{ form_data.number_of_passengers }} pax</span>
+          <span class="bf__tag">{{ form_data.number_of_bags }} bag{% if form_data.number_of_bags != '1' %}s{% endif %}</span>
+          {% if form_data.baby_seat   %}<span class="bf__tag bf__tag--green">🍼 Baby seat</span>{% endif %}
+          {% if form_data.return_ride %}<span class="bf__tag bf__tag--green">🔄 Return (5% off)</span>{% endif %}
+          {% if has_tolls %}<span class="bf__tag bf__tag--toll">🛣️ Tolls</span>{% endif %}
+        </div>
+      </div>
+
+      <div class="bf__card">
+        <div class="bf__card-title">👤 Passenger Details</div>
+        <div class="bf__detail-row"><span class="bf__detail-label">Name</span><span class="bf__detail-value">{{ form_data.passenger_name }}</span></div>
+        <div class="bf__detail-row"><span class="bf__detail-label">Phone</span><span class="bf__detail-value">{{ form_data.passenger_number }}</span></div>
+        <div class="bf__detail-row"><span class="bf__detail-label">Email</span><span class="bf__detail-value">{{ form_data.passenger_email }}</span></div>
+        {% if form_data.special_instruction %}
+        <div class="bf__detail-row"><span class="bf__detail-label">Instructions</span><span class="bf__detail-value">{{ form_data.special_instruction }}</span></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right: price panel -->
+    <div>
+      <div class="bf__price-panel">
+        <div class="bf__price-eyebrow">Your Total</div>
+        <div class="bf__price-big"><span class="bf__aud">AUD</span>{{ final_price }}</div>
+        <div class="bf__price-note">Charged on the next step</div>
+
+        <div class="bf__breakdown">
+          {% if type_key == "th" or type_key == "oh" %}
+            <div class="bf__b-row">
+              <span>{{ form_data.service_type_label }}</span>
+              <span class="bf__b-flat-badge">Flat rate</span>
+            </div>
+            <div class="bf__b-row"><span>Base hire</span><span>${{ breakdown.base }}</span></div>
+            {% if breakdown.baby_cost %}<div class="bf__b-row"><span>Baby seat</span><span>${{ breakdown.baby_cost }}</span></div>{% endif %}
+            {% if breakdown.return_discount %}
+            <div class="bf__b-row bf__b-row--discount"><span>{{ breakdown.discount_label }}</span><span>−${{ breakdown.return_discount }}</span></div>
+            {% endif %}
+          {% else %}
+            <div class="bf__b-row"><span>Base fare</span><span>${{ breakdown.base }}</span></div>
+            <div class="bf__b-row"><span>{{ breakdown.distance_km }} km × rate</span><span>${{ breakdown.distance_cost }}</span></div>
+            {% if breakdown.stop_cost %}<div class="bf__b-row"><span>Additional stop</span><span>${{ breakdown.stop_cost }}</span></div>{% endif %}
+            {% if breakdown.toll_cost %}<div class="bf__b-row"><span>Melbourne tolls</span><span>${{ breakdown.toll_cost }}</span></div>{% endif %}
+            {% if breakdown.baby_cost %}<div class="bf__b-row"><span>Baby seat</span><span>${{ breakdown.baby_cost }}</span></div>{% endif %}
+            {% if breakdown.return_multiplier %}
+            <div class="bf__b-row"><span>Return journey</span><span class="bf__b-badge">× 2</span></div>
+            <div class="bf__b-row bf__b-row--discount"><span>5% return discount</span><span>−${{ breakdown.return_discount }}</span></div>
+            {% endif %}
+          {% endif %}
+          <div class="bf__b-row bf__b-row--total"><span>Total</span><span class="bf__b-val">${{ final_price }}</span></div>
+        </div>
+
+        {% if has_tolls and type_key != "th" and type_key != "oh" %}
+        <div class="bf__toll-alert">🛣️ Flat $18.50 Melbourne toll fee included.</div>
+        {% endif %}
+
+        <form method="POST" id="bf__confirmForm">
+          {% csrf_token %}
+          <input type="hidden" name="action"               value="confirm">
+          <input type="hidden" name="service_type_key"     value="{{ form_data.service_type_key }}">
+          <input type="hidden" name="passenger_name"       value="{{ form_data.passenger_name }}">
+          <input type="hidden" name="passenger_number"     value="{{ form_data.passenger_number }}">
+          <input type="hidden" name="passenger_email"      value="{{ form_data.passenger_email }}">
+          <input type="hidden" name="number_of_passengers" value="{{ form_data.number_of_passengers }}">
+          <input type="hidden" name="number_of_bags"       value="{{ form_data.number_of_bags }}">
+          <input type="hidden" name="pickup_address"       value="{{ form_data.pickup_address }}">
+          <input type="hidden" name="destination_address"  value="{{ form_data.destination_address }}">
+          <input type="hidden" name="additional_stop"      value="{{ form_data.additional_stop }}">
+          <input type="hidden" name="flight_number"        value="{{ form_data.flight_number }}">
+          <input type="hidden" name="pickup_date"          value="{{ form_data.pickup_date }}">
+          <input type="hidden" name="pickup_time"          value="{{ form_data.pickup_time }}">
+          <input type="hidden" name="limo_service_type"    value="{{ form_data.limo_service_type }}">
+          {% if form_data.baby_seat   %}<input type="hidden" name="baby_seat"   value="on">{% endif %}
+          {% if form_data.return_ride %}<input type="hidden" name="return_ride" value="on">{% endif %}
+          <input type="hidden" name="special_instruction"  value="{{ form_data.special_instruction }}">
+          <input type="hidden" name="vehicle_colour"       value="{{ form_data.vehicle_colour }}">
+          <input type="hidden" name="wedding_ribbon"       value="{{ form_data.wedding_ribbon }}">
+          <input type="hidden" name="special_signboard"    value="{{ form_data.special_signboard }}">
+
+          <button type="submit" class="bf__confirm-btn" id="bf__confirmBtn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span id="bf__confirmText">Proceed to Payment</span>
+            <div class="bf__spinner" id="bf__confirmSpinner"></div>
+          </button>
+        </form>
+
+        <div class="bf__next-note">
+          <svg width="11" height="13" viewBox="0 0 11 13" fill="none"><rect x="0.75" y="5.25" width="9.5" height="7.25" rx="1.25" stroke="rgba(255,255,255,0.35)" stroke-width="1.1"/><path d="M3 5V3.5a2.5 2.5 0 015 0V5" stroke="rgba(255,255,255,0.35)" stroke-width="1.1" stroke-linecap="round"/></svg>
+          You'll be redirected to Stripe's secure checkout
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>{# bf__body #}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('bf__confirmForm').addEventListener('submit', function(){
+  const btn = document.getElementById('bf__confirmBtn');
+  btn.disabled = true;
+  document.getElementById('bf__confirmSpinner').style.display = 'block';
+  btn.querySelector('svg').style.display = 'none';
+  document.getElementById('bf__confirmText').textContent = 'Redirecting to payment… ';
+});
+</script>
+{% endblock %}

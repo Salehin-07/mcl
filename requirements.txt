@@ -8,3 +8,5 @@ googlemaps
 python-dotenv
 gunicorn
 psycopg2
+stripe
+

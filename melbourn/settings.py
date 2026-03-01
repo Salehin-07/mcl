@@ -20,6 +20,9 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyAyWVxTeHcQOpZ6UvPI50zMWHKPM4WhpqE'
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY','')
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY','') 
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
@@ -27,15 +30,17 @@ GOOGLE_MAPS_API_KEY = 'AIzaSyAyWVxTeHcQOpZ6UvPI50zMWHKPM4WhpqE'
 SECRET_KEY = 'django-insecure-)18j#ch3(0&a5c2%vp6gu%e$&h*i!9#ve68hi-1j1jj$yc3^so'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [
-    'mcl-1fpe.onrender.com',
-]
-
-
+# ALLOWED_HOSTS = [
+#     'localhost',
+#     'mcl-1fpe.onrender.com',
+#     'triple-solely-entrepreneur-ski.trycloudflare.com/'
+# ]
+# 
+ALLOWED_HOSTS = ['mcl-1fpe.onrender.com']
 CSRF_TRUSTED_ORIGINS = [
-    'mcl-1fpe.onrender.com',
+    'https://mcl-1fpe.onrender.com',
 ]
 
 # Application definition
@@ -51,8 +56,10 @@ INSTALLED_APPS = [
     
     # my apps 
     #'pwa',
+    'core',
     'orders',
     'bookings',
+    'accounts',
     
 ]
 
@@ -152,7 +159,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 
-
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 LOGGING = DEFAULT_LOGGING
 
 

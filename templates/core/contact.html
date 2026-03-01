@@ -1,0 +1,738 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Us | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block meta_description %}Get in touch with Melbourne's premier chauffeur service. Send us a message, call us anytime or find our contact details. We respond within 1 hour.{% endblock %}
+{% block meta_keywords %}contact Melbourne chauffeur, Melbourne limo contact, book chauffeur Melbourne, chauffeur enquiry Melbourne{% endblock %}
+{% block canonical_url %}https://www.yourdomain.com.au/contact/{% endblock %}
+{% block og_title %}Contact Us | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block og_description %}Reach Melbourne's premier chauffeur team. Available 24/7 — call, email or send us a message online.{% endblock %}
+{% block twitter_title %}Contact Melbourne Chauffeur & Limo{% endblock %}
+{% block twitter_description %}Available 24/7. We respond within the hour.{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Melbourne Chauffeur & Limo Service",
+    "url": "https://www.yourdomain.com.au/contact/"
+}
+</script>
+{% endblock %}
+
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   CONTACT PAGE — all classes cp__  ·  scoped to [data-page="contact"]
+   No conflict with nav__ / ftr__ / hp__
+════════════════════════════════════════════════════════════════ */
+[data-page="contact"] {
+    --cp-gold:       #b8902e;
+    --cp-gold-lt:    #d4aa4a;
+    --cp-gold-dk:    #9a7520;
+    --cp-gold-bg:    rgba(184,144,46,0.07);
+    --cp-ink:        #1a1714;
+    --cp-ink-2:      #2e2a26;
+    --cp-muted:      #6b6560;
+    --cp-faint:      #a09890;
+    --cp-cream:      #faf8f3;
+    --cp-cream-2:    #f3efe6;
+    --cp-white:      #ffffff;
+    --cp-border:     #e8e2d6;
+    --cp-border-2:   #f0ece4;
+    --cp-err:        #b83232;
+    --cp-ok:         #2a6e48;
+    --cp-serif:      'Cormorant Garamond', Georgia, serif;
+    --cp-sans:       'Jost', system-ui, sans-serif;
+    --cp-ease:       cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family: var(--cp-sans);
+    color: var(--cp-ink);
+    background: var(--cp-white);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* ── Reveal ───────────────────────────────────────────────── */
+.cp__reveal { opacity:0; transform:translateY(22px); transition:opacity .65s var(--cp-ease), transform .65s var(--cp-ease); }
+.cp__reveal.cp__in { opacity:1; transform:none; }
+.cp__d1 { transition-delay:.1s; } .cp__d2 { transition-delay:.2s; }
+.cp__d3 { transition-delay:.3s; } .cp__d4 { transition-delay:.4s; }
+
+/* ── Layout ───────────────────────────────────────────────── */
+.cp__wrap    { max-width:1160px; margin:0 auto; }
+.cp__section { padding:5.5rem 2rem; }
+
+/* ════════════════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════════════════ */
+.cp__hero {
+    background: var(--cp-ink);
+    padding: calc(36px + 68px + 4rem) 2rem 5.5rem;
+    position: relative; overflow: hidden;
+}
+.cp__hero-bg {
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(108deg, rgba(26,23,20,.95) 0%, rgba(26,23,20,.72) 55%, rgba(26,23,20,.35) 100%),
+        url("{% static 'img/hero-car.jpg' %}") center / cover no-repeat;
+}
+.cp__hero-rule-h {
+    position: absolute; bottom: 0; left: 0;
+    width: 55%; height: 2px;
+    background: linear-gradient(to right, var(--cp-gold), transparent);
+}
+.cp__hero-rule-v {
+    position: absolute; top: 0; right: 180px;
+    width: 1px; height: 45%;
+    background: linear-gradient(to bottom, transparent, rgba(184,144,46,.28));
+}
+.cp__hero-inner { position: relative; z-index: 2; max-width: 1160px; margin: 0 auto; }
+
+.cp__hero-kicker {
+    font-size: .63rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--cp-gold-lt); display: flex; align-items: center; gap: .75rem;
+    margin-bottom: 1.4rem;
+    opacity: 0; animation: cp-up .8s .3s var(--cp-ease) forwards;
+}
+.cp__hero-kicker::before { content: ''; width: 28px; height: 1px; background: var(--cp-gold-lt); display: block; }
+
+.cp__hero-title {
+    font-family: var(--cp-serif); font-size: clamp(2.8rem, 6vw, 4.6rem);
+    font-weight: 300; line-height: 1.06; color: #f8f5ef; letter-spacing: -.02em; max-width: 620px;
+    opacity: 0; animation: cp-up .9s .5s var(--cp-ease) forwards;
+}
+.cp__hero-title em { font-style: italic; color: var(--cp-gold-lt); }
+
+.cp__hero-sub {
+    font-size: .98rem; line-height: 1.85; color: rgba(248,245,239,.62);
+    max-width: 420px; margin-top: 1.3rem; font-weight: 300;
+    opacity: 0; animation: cp-up .9s .7s var(--cp-ease) forwards;
+}
+.cp__hero-badges {
+    display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 2.2rem;
+    opacity: 0; animation: cp-up .9s .9s var(--cp-ease) forwards;
+}
+.cp__hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(248,245,239,.15);
+    border-radius: 5px; padding: .42rem .95rem;
+    font-size: .68rem; font-weight: 500; letter-spacing: .1em;
+    text-transform: uppercase; color: rgba(248,245,239,.75);
+}
+.cp__hero-badge svg { color: var(--cp-gold-lt); flex-shrink: 0; }
+
+@keyframes cp-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   QUICK-REACH STRIP
+════════════════════════════════════════════════════════════ */
+.cp__reach { background: var(--cp-white); border-bottom: 1px solid var(--cp-border); }
+.cp__reach-grid {
+    max-width: 1160px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+}
+.cp__reach-card {
+    display: flex; align-items: center; gap: 1.1rem;
+    padding: 2rem 2.2rem;
+    border-right: 1px solid var(--cp-border);
+    text-decoration: none; color: inherit;
+    transition: background .22s;
+    position: relative;
+}
+.cp__reach-card::after {
+    content: ''; position: absolute; bottom: 0; left: 2.2rem; right: 2.2rem;
+    height: 2px; background: var(--cp-gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .3s var(--cp-ease);
+}
+.cp__reach-card:hover { background: var(--cp-cream); }
+.cp__reach-card:hover::after { transform: scaleX(1); }
+.cp__reach-card:last-child { border-right: none; }
+.cp__reach-icon {
+    width: 46px; height: 46px; flex-shrink: 0;
+    border: 1px solid var(--cp-border); border-radius: 11px;
+    background: var(--cp-cream-2); display: flex;
+    align-items: center; justify-content: center;
+    color: var(--cp-gold);
+    transition: border-color .22s, background .22s;
+}
+.cp__reach-card:hover .cp__reach-icon { border-color: var(--cp-gold); background: var(--cp-gold-bg); }
+.cp__reach-lbl  { font-size: .62rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--cp-gold); margin-bottom: .22rem; }
+.cp__reach-val  { font-size: .95rem; font-weight: 500; color: var(--cp-ink-2); line-height: 1.3; }
+.cp__reach-note { font-size: .72rem; color: var(--cp-faint); margin-top: .15rem; }
+
+/* ════════════════════════════════════════════════════════════
+   BODY — FORM + SIDEBAR
+════════════════════════════════════════════════════════════ */
+.cp__body { background: var(--cp-cream); }
+.cp__body-grid {
+    display: grid; grid-template-columns: 1.15fr .85fr;
+    gap: 3.5rem; align-items: start;
+}
+
+/* ── FORM CARD ───────────────────────────────────────────── */
+.cp__form-card {
+    background: var(--cp-white);
+    border: 1px solid var(--cp-border);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 8px 48px rgba(0,0,0,.06);
+    position: relative;
+}
+/* gold ruled accent at the top of the card */
+.cp__form-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(to right, var(--cp-gold), var(--cp-gold-lt) 50%, transparent);
+    z-index: 1;
+}
+
+.cp__form-head { padding: 2.8rem 2.8rem 2rem; border-bottom: 1px solid var(--cp-border-2); }
+
+.cp__form-eyebrow {
+    font-size: .63rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--cp-gold); display: flex; align-items: center; gap: .7rem; margin-bottom: .75rem;
+}
+.cp__form-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--cp-gold); flex-shrink: 0; }
+
+.cp__form-title {
+    font-family: var(--cp-serif);
+    font-size: 2.1rem; font-weight: 400; color: var(--cp-ink); line-height: 1.15; margin-bottom: .5rem;
+}
+.cp__form-title em { font-style: italic; color: var(--cp-gold); }
+
+.cp__form-desc { font-size: .84rem; color: var(--cp-muted); line-height: 1.75; }
+
+.cp__form-body { padding: 2.4rem 2.8rem 2.8rem; }
+
+/* ── fields ────────────────────────────────────────────── */
+.cp__field { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.6rem; }
+.cp__field:last-of-type { margin-bottom: 0; }
+
+.cp__field-lbl {
+    font-size: .68rem; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--cp-ink-2);
+    display: flex; align-items: center; gap: .4rem;
+}
+.cp__field-req { color: var(--cp-gold); font-size: .8rem; line-height: 1; }
+
+/* input with leading icon */
+.cp__input-shell { position: relative; }
+.cp__input-ico {
+    position: absolute; left: 1.05rem; top: 50%; transform: translateY(-50%);
+    color: var(--cp-faint); pointer-events: none; display: flex;
+    transition: color .22s;
+}
+.cp__input-shell:focus-within .cp__input-ico { color: var(--cp-gold); }
+
+.cp__input {
+    width: 100%; font-family: var(--cp-sans); font-size: .92rem; font-weight: 300;
+    color: var(--cp-ink); background: var(--cp-cream);
+    border: 1.5px solid var(--cp-border); border-radius: 10px; outline: none;
+    padding: .9rem 1.1rem .9rem 2.75rem;
+    -webkit-appearance: none; appearance: none;
+    transition: border-color .22s, background .22s, box-shadow .22s;
+}
+.cp__input::placeholder { color: var(--cp-faint); font-weight: 300; }
+.cp__input:hover  { border-color: rgba(184,144,46,.4); background: var(--cp-white); }
+.cp__input:focus  { border-color: var(--cp-gold); background: var(--cp-white); box-shadow: 0 0 0 3px rgba(184,144,46,.12); }
+.cp__input.cp__bad { border-color: var(--cp-err); box-shadow: 0 0 0 3px rgba(184,50,50,.1); }
+
+/* textarea — no leading icon, full width padding */
+.cp__textarea {
+    width: 100%; font-family: var(--cp-sans); font-size: .92rem; font-weight: 300;
+    color: var(--cp-ink); background: var(--cp-cream);
+    border: 1.5px solid var(--cp-border); border-radius: 10px; outline: none;
+    padding: .95rem 1.1rem; resize: vertical; min-height: 190px; line-height: 1.78;
+    -webkit-appearance: none; appearance: none;
+    transition: border-color .22s, background .22s, box-shadow .22s;
+}
+.cp__textarea::placeholder { color: var(--cp-faint); font-weight: 300; }
+.cp__textarea:hover { border-color: rgba(184,144,46,.4); background: var(--cp-white); }
+.cp__textarea:focus { border-color: var(--cp-gold); background: var(--cp-white); box-shadow: 0 0 0 3px rgba(184,144,46,.12); }
+.cp__textarea.cp__bad { border-color: var(--cp-err); box-shadow: 0 0 0 3px rgba(184,50,50,.1); }
+
+/* char counter + error row */
+.cp__field-foot { display: flex; justify-content: space-between; align-items: flex-start; margin-top: .3rem; gap: 1rem; min-height: 1.2em; }
+.cp__field-err {
+    font-size: .72rem; color: var(--cp-err);
+    display: none; align-items: center; gap: .35rem; flex: 1;
+}
+.cp__field-err.cp__show { display: flex; }
+.cp__char-hint { font-size: .7rem; color: var(--cp-faint); white-space: nowrap; flex-shrink: 0; }
+
+/* banners */
+.cp__banner {
+    display: none; align-items: flex-start; gap: .85rem;
+    padding: 1.05rem 1.3rem; border-radius: 10px; border: 1px solid;
+    font-size: .875rem; line-height: 1.65; margin-top: 1.4rem;
+}
+.cp__banner.cp__show  { display: flex; }
+.cp__banner--ok      { background: rgba(42,110,72,.06);  border-color: rgba(42,110,72,.22);  color: var(--cp-ok); }
+.cp__banner--success { background: rgba(42,110,72,.06);  border-color: rgba(42,110,72,.22);  color: var(--cp-ok); }
+.cp__banner--error   { background: rgba(184,50,50,.06);  border-color: rgba(184,50,50,.22);  color: var(--cp-err); }
+.cp__banner--warning { background: rgba(184,144,46,.06); border-color: rgba(184,144,46,.3);  color: var(--cp-gold-dk); }
+.cp__banner--fail    { background: rgba(184,50,50,.06);  border-color: rgba(184,50,50,.22);  color: var(--cp-err); }
+.cp__banner svg      { flex-shrink: 0; margin-top: 2px; }
+
+/* submit */
+.cp__submit {
+    display: flex; align-items: center; justify-content: center; gap: .65rem;
+    width: 100%; background: var(--cp-gold); color: #fff;
+    font-family: var(--cp-sans); font-size: .76rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase;
+    padding: 1.05rem 2rem; border: none; border-radius: 10px; cursor: pointer;
+    margin-top: 2.2rem;
+    transition: background .25s, transform .2s, box-shadow .25s;
+    box-shadow: 0 4px 20px rgba(184,144,46,.3);
+}
+.cp__submit:hover   { background: var(--cp-gold-dk); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(184,144,46,.38); }
+.cp__submit:active  { transform: translateY(0); }
+.cp__submit:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
+
+/* privacy note */
+.cp__privacy {
+    font-size: .72rem; color: var(--cp-faint); text-align: center;
+    margin-top: 1.1rem; line-height: 1.6;
+}
+.cp__privacy a { color: var(--cp-gold); text-decoration: none; }
+.cp__privacy a:hover { text-decoration: underline; }
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.cp__sidebar { display: flex; flex-direction: column; gap: 1.4rem; }
+
+.cp__info-card {
+    background: var(--cp-white); border: 1px solid var(--cp-border);
+    border-radius: 13px; padding: 1.8rem 2rem;
+    transition: border-color .25s, box-shadow .25s;
+}
+.cp__info-card:hover { border-color: rgba(184,144,46,.28); box-shadow: 0 6px 24px rgba(0,0,0,.05); }
+
+.cp__info-card-hd {
+    display: flex; align-items: center; gap: .8rem;
+    padding-bottom: 1.2rem; margin-bottom: 1.3rem;
+    border-bottom: 1px solid var(--cp-border-2);
+}
+.cp__info-card-ico {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--cp-gold-bg); border: 1px solid rgba(184,144,46,.18);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--cp-gold); flex-shrink: 0;
+}
+.cp__info-card-title { font-size: .68rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--cp-gold); }
+
+.cp__detail { display: flex; flex-direction: column; gap: .18rem; margin-bottom: 1rem; }
+.cp__detail:last-child { margin-bottom: 0; }
+.cp__detail-lbl { font-size: .62rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--cp-faint); }
+.cp__detail-val { font-size: .9rem; color: var(--cp-ink-2); line-height: 1.5; }
+.cp__detail-val a { color: var(--cp-ink-2); text-decoration: none; transition: color .2s; }
+.cp__detail-val a:hover { color: var(--cp-gold); }
+
+/* hours table */
+.cp__hours { width: 100%; border-collapse: collapse; font-size: .84rem; }
+.cp__hours tr { border-bottom: 1px solid var(--cp-border-2); }
+.cp__hours tr:last-child { border-bottom: none; }
+.cp__hours td { padding: .5rem 0; color: var(--cp-muted); }
+.cp__hours td:last-child { text-align: right; font-weight: 600; color: var(--cp-ok); }
+
+/* social pills */
+.cp__socials { display: flex; gap: .55rem; margin-top: .4rem; }
+.cp__social-pill {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 9px;
+    border: 1px solid var(--cp-border); color: var(--cp-faint);
+    text-decoration: none; background: var(--cp-white);
+    transition: border-color .2s, color .2s, background .2s;
+}
+.cp__social-pill:hover { border-color: var(--cp-gold); color: var(--cp-gold); background: var(--cp-gold-bg); }
+
+/* ════════════════════════════════════════════════════════════
+   MAP  — same treatment as home page areas map
+════════════════════════════════════════════════════════════ */
+.cp__map-section { padding: 0 2rem 5.5rem; background: var(--cp-cream); }
+.cp__map-shell {
+    max-width: 1160px; margin: 0 auto;
+    aspect-ratio: 16 / 5;
+    border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--cp-border);
+    box-shadow: 0 4px 28px rgba(0,0,0,.07);
+}
+.cp__map-shell iframe {
+    width: 100%; height: 100%; border: none;
+    filter: grayscale(.2) contrast(1.05);
+    display: block;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .cp__body-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .cp__map-shell { aspect-ratio: 16 / 7; }
+}
+@media (max-width: 768px) {
+    .cp__section { padding: 3.5rem 1.25rem; }
+    .cp__reach-grid { grid-template-columns: 1fr; }
+    .cp__reach-card { border-right: none; border-bottom: 1px solid var(--cp-border); }
+    .cp__reach-card:last-child { border-bottom: none; }
+    .cp__form-head { padding: 2rem 1.8rem 1.5rem; }
+    .cp__form-body { padding: 1.8rem 1.8rem 2rem; }
+    .cp__map-section { padding: 0 1.25rem 3.5rem; }
+    .cp__map-shell { aspect-ratio: 4 / 3; }
+}
+
+@keyframes cp-spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div data-page="contact">
+
+<!-- ════════════════════════════════
+     HERO
+════════════════════════════════ -->
+<section class="cp__hero" aria-label="Contact Melbourne Chauffeur">
+    <div class="cp__hero-bg" role="img" aria-label="Luxury chauffeur vehicle"></div>
+    <div class="cp__hero-rule-h" aria-hidden="true"></div>
+    <div class="cp__hero-rule-v" aria-hidden="true"></div>
+    <div class="cp__hero-inner">
+        <p class="cp__hero-kicker">We'd love to hear from you</p>
+        <h1 class="cp__hero-title">Get in <em>Touch</em><br>With Our Team</h1>
+        <p class="cp__hero-sub">Available 24 hours a day, 7 days a week. Send us a message or call us directly — we respond within the hour.</p>
+        <div class="cp__hero-badges">
+            <span class="cp__hero-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Response within 1 hour
+            </span>
+            <span class="cp__hero-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Available 24 / 7
+            </span>
+            <span class="cp__hero-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                100% Confidential
+            </span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     QUICK REACH STRIP
+════════════════════════════════ -->
+<div class="cp__reach" role="region" aria-label="Quick contact options">
+    <div class="cp__reach-grid">
+
+        <a href="tel:+61XXXXXXXXX" class="cp__reach-card cp__reveal">
+            <div class="cp__reach-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/>
+                </svg>
+            </div>
+            <div>
+                <div class="cp__reach-lbl">Phone</div>
+                <div class="cp__reach-val">+61 3 XXXX XXXX</div>
+                <div class="cp__reach-note">Available 24 hours, 7 days</div>
+            </div>
+        </a>
+
+        <a href="mailto:bookings@yourdomain.com.au" class="cp__reach-card cp__reveal cp__d1">
+            <div class="cp__reach-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+            </div>
+            <div>
+                <div class="cp__reach-lbl">Email</div>
+                <div class="cp__reach-val">bookings@yourdomain.com.au</div>
+                <div class="cp__reach-note">Reply within 1 hour</div>
+            </div>
+        </a>
+
+        <div class="cp__reach-card cp__reveal cp__d2">
+            <div class="cp__reach-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="10" r="3"/>
+                    <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 14 8 14s8-8.75 8-14a8 8 0 0 0-8-8z"/>
+                </svg>
+            </div>
+            <div>
+                <div class="cp__reach-lbl">Base</div>
+                <div class="cp__reach-val">Melbourne, Victoria</div>
+                <div class="cp__reach-note">Serving all of VIC &amp; surrounds</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     FORM + SIDEBAR
+════════════════════════════════ -->
+<section class="cp__section cp__body" aria-labelledby="cp-form-title">
+    <div class="cp__wrap">
+        <div class="cp__body-grid">
+
+            <!-- ── FORM ──────────────────────────────── -->
+            <div class="cp__form-card cp__reveal">
+
+                <div class="cp__form-head">
+                    <p class="cp__form-eyebrow">Send a message</p>
+                    <h2 class="cp__form-title" id="cp-form-title">How Can We <em>Help?</em></h2>
+                    <p class="cp__form-desc">Fill in your email and message below. Whether it's a booking enquiry, a quote or a general question — we'll get back to you promptly.</p>
+                </div>
+
+                <div class="cp__form-body">
+
+                    <!-- ── Django messages ──────────────────── -->
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="cp__banner cp__banner--{{ message.tags }} cp__show" role="alert">
+                            {% if message.tags == 'success' %}
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                            {% else %}
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            {% endif %}
+                            <span>{{ message }}</span>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form id="cp-form" method="POST" action="{% url 'contact' %}" novalidate aria-label="Contact enquiry form">
+                        {% csrf_token %}
+
+                        <!-- Email -->
+                        <div class="cp__field">
+                            <label class="cp__field-lbl" for="cp-email">
+                                Email Address
+                                <span class="cp__field-req" aria-hidden="true">*</span>
+                            </label>
+                            <div class="cp__input-shell">
+                                <span class="cp__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                </span>
+                                <input
+                                    class="cp__input"
+                                    type="email"
+                                    id="cp-email"
+                                    name="email"
+                                    placeholder="your@email.com.au"
+                                    autocomplete="email"
+                                    required
+                                    aria-required="true"
+                                    aria-describedby="cp-email-err"
+                                >
+                            </div>
+                            <div class="cp__field-foot">
+                                <span class="cp__field-err" id="cp-email-err" role="alert" aria-live="polite">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                    Please enter a valid email address.
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="cp__field">
+                            <label class="cp__field-lbl" for="cp-what-said">
+                                Your Message
+                                <span class="cp__field-req" aria-hidden="true">*</span>
+                            </label>
+                            <textarea
+                                class="cp__textarea"
+                                id="cp-what-said"
+                                name="what_said"
+                                placeholder="Tell us about your enquiry — dates, pickup location, number of passengers, or anything else we should know…"
+                                required
+                                maxlength="1200"
+                            ></textarea>
+                            <div class="cp__field-foot">
+                                <span></span>
+                                <span class="cp__char-hint" id="cp-count" aria-live="polite">0 / 1200</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="cp__submit" id="cp-btn">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                            Send Message
+                        </button>
+
+                    </form>
+
+                    <p class="cp__privacy">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:middle;margin-right:3px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        Your details are kept private and never shared. See our <a href="/privacy/">Privacy Policy</a>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ── SIDEBAR ────────────────────────────── -->
+            <aside class="cp__sidebar" aria-label="Contact information">
+
+                <div class="cp__info-card cp__reveal cp__d1">
+                    <div class="cp__info-card-hd">
+                        <div class="cp__info-card-ico" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/>
+                            </svg>
+                        </div>
+                        <div class="cp__info-card-title">Contact Details</div>
+                    </div>
+                    <div class="cp__detail">
+                        <div class="cp__detail-lbl">Phone</div>
+                        <div class="cp__detail-val"><a href="tel:+61XXXXXXXXX">+61 3 XXXX XXXX</a></div>
+                    </div>
+                    <div class="cp__detail">
+                        <div class="cp__detail-lbl">Email</div>
+                        <div class="cp__detail-val"><a href="mailto:bookings@yourdomain.com.au">bookings@yourdomain.com.au</a></div>
+                    </div>
+                    <div class="cp__detail">
+                        <div class="cp__detail-lbl">Location</div>
+                        <div class="cp__detail-val">Melbourne, Victoria, Australia</div>
+                    </div>
+                    <div class="cp__detail">
+                        <div class="cp__detail-lbl">ABN</div>
+                        <div class="cp__detail-val">XX XXX XXX XXX</div>
+                    </div>
+                </div>
+
+                <div class="cp__info-card cp__reveal cp__d2">
+                    <div class="cp__info-card-hd">
+                        <div class="cp__info-card-ico" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="cp__info-card-title">Operating Hours</div>
+                    </div>
+                    <table class="cp__hours" aria-label="Operating hours">
+                        <tbody>
+                            <tr><td>Monday – Friday</td><td>24 Hours</td></tr>
+                            <tr><td>Saturday</td>       <td>24 Hours</td></tr>
+                            <tr><td>Sunday</td>         <td>24 Hours</td></tr>
+                            <tr><td>Public Holidays</td><td>24 Hours</td></tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size:.74rem;color:var(--cp-faint);margin-top:.85rem;line-height:1.55;">No matter when you need us — we're always available.</p>
+                </div>
+
+                <div class="cp__info-card cp__reveal cp__d3">
+                    <div class="cp__info-card-hd">
+                        <div class="cp__info-card-ico" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </div>
+                        <div class="cp__info-card-title">Follow Us</div>
+                    </div>
+                    <p style="font-size:.82rem;color:var(--cp-muted);margin-bottom:1rem;line-height:1.65;">Stay updated with fleet news, special offers &amp; more.</p>
+                    <div class="cp__socials" aria-label="Social media">
+                        <a href="https://facebook.com/YourPage" class="cp__social-pill" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="https://instagram.com/YourProfile" class="cp__social-pill" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+                        </a>
+                        <a href="https://linkedin.com/company/YourCompany" class="cp__social-pill" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <a href="https://twitter.com/YourHandle" class="cp__social-pill" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     MAP  (same style as home areas section)
+════════════════════════════════ -->
+<div class="cp__map-section">
+    <div class="cp__map-shell cp__reveal" role="region" aria-label="Service area map">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345093705!2d144.95592931585508!3d-37.81720944201722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d4c2b349649%3A0xb6899234e561db11!2sMelbourne%20VIC!5e0!3m2!1sen!2sau!4v1234567890"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Melbourne Chauffeur Service area map"
+        ></iframe>
+    </div>
+</div>
+
+</div><!-- /data-page="contact" -->
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+(function () {
+    'use strict';
+
+    /* ── Scroll reveal ─────────────────────────────────────── */
+    var els = document.querySelectorAll('.cp__reveal');
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('cp__in'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        els.forEach(function (el) { obs.observe(el); });
+    } else {
+        els.forEach(function (el) { el.classList.add('cp__in'); });
+    }
+
+    /* ── Char counter ──────────────────────────────────────── */
+    var ta    = document.getElementById('cp-what-said');
+    var count = document.getElementById('cp-count');
+    if (ta && count) {
+        ta.addEventListener('input', function () {
+            count.textContent = ta.value.length + ' / 1200';
+        });
+    }
+
+    /* ── Email-only validation, then normal POST submit ────── */
+    var form     = document.getElementById('cp-form');
+    var emailEl  = document.getElementById('cp-email');
+    var emailErr = document.getElementById('cp-email-err');
+    if (!form || !emailEl) return;
+
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    /* clear error as user types */
+    emailEl.addEventListener('input', function () {
+        emailEl.classList.remove('cp__bad');
+        emailErr.classList.remove('cp__show');
+    });
+
+    form.addEventListener('submit', function (e) {
+        var val = emailEl.value.trim();
+        if (!val || !re.test(val)) {
+            //e.preventDefault();
+            emailEl.classList.add('cp__bad');
+            emailErr.classList.add('cp__show');
+            emailEl.focus();
+        }
+        /* valid — browser submits the form normally to Django */
+    });
+
+}());
+</script>
+{% endblock %}

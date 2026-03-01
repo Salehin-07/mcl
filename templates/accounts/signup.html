@@ -1,0 +1,751 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Account | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block meta_description %}Create your account with Melbourne Chauffeur & Limo Service. Book, manage and track your transfers from one place.{% endblock %}
+{% block canonical_url %}https://www.yourdomain.com.au/signup/{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   SIGNUP PAGE — all classes su__  ·  scoped to [data-page="signup"]
+   No conflict with nav__ / ftr__ / hp__ / cp__ / tc__ / ab__
+════════════════════════════════════════════════════════════════ */
+[data-page="signup"] {
+    --su-gold:      #b8902e;
+    --su-gold-lt:   #d4aa4a;
+    --su-gold-dk:   #9a7520;
+    --su-gold-bg:   rgba(184,144,46,0.07);
+    --su-ink:       #1a1714;
+    --su-ink-2:     #2e2a26;
+    --su-muted:     #6b6560;
+    --su-faint:     #a09890;
+    --su-cream:     #faf8f3;
+    --su-cream-2:   #f3efe6;
+    --su-white:     #ffffff;
+    --su-border:    #e8e2d6;
+    --su-border-2:  #f0ece4;
+    --su-err:       #b83232;
+    --su-ok:        #2a6e48;
+    --su-serif:     'Cormorant Garamond', Georgia, serif;
+    --su-sans:      'Jost', system-ui, sans-serif;
+    --su-ease:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family: var(--su-sans);
+    color: var(--su-ink);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background: var(--su-cream);
+}
+
+/* ════════════════════════════════════════════════════════════
+   PAGE LAYOUT  — split: left brand panel + right form
+════════════════════════════════════════════════════════════ */
+.su__page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+}
+
+/* ── LEFT PANEL ──────────────────────────────────────────── */
+.su__panel {
+    background: var(--su-ink);
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 3.5rem;
+    min-height: 100vh;
+}
+.su__panel-bg {
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(160deg, rgba(26,23,20,.7) 0%, rgba(26,23,20,.92) 60%, rgba(26,23,20,.98) 100%),
+        url("{% static 'img/hero-car.jpg' %}") center / cover no-repeat;
+}
+.su__panel-rule {
+    position: absolute; top: 0; left: 3.5rem;
+    width: 1px; height: 35%;
+    background: linear-gradient(to bottom, transparent, rgba(184,144,46,.3));
+}
+.su__panel-rule-h {
+    position: absolute; bottom: 0; left: 0;
+    width: 60%; height: 2px;
+    background: linear-gradient(to right, var(--su-gold), transparent);
+}
+.su__panel-inner { position: relative; z-index: 2; }
+
+.su__panel-eyebrow {
+    font-size: .62rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--su-gold-lt); display: flex; align-items: center; gap: .7rem;
+    margin-bottom: 1.2rem;
+}
+.su__panel-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--su-gold-lt); display: block; }
+
+.su__panel-title {
+    font-family: var(--su-serif); font-size: clamp(2rem, 3vw, 2.9rem);
+    font-weight: 300; line-height: 1.1; color: #f8f5ef; letter-spacing: -.02em;
+    margin-bottom: 1.1rem;
+}
+.su__panel-title em { font-style: italic; color: var(--su-gold-lt); }
+
+.su__panel-sub {
+    font-size: .88rem; color: rgba(248,245,239,.55); line-height: 1.8; font-weight: 300;
+    max-width: 340px; margin-bottom: 2.2rem;
+}
+
+/* perks list */
+.su__perks { display: flex; flex-direction: column; gap: .75rem; }
+.su__perk {
+    display: flex; align-items: center; gap: .85rem;
+    font-size: .8rem; color: rgba(248,245,239,.7); font-weight: 300;
+}
+.su__perk-ico {
+    width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+    background: rgba(184,144,46,.15); border: 1px solid rgba(184,144,46,.25);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--su-gold-lt);
+}
+
+/* already have account link */
+.su__panel-login {
+    position: relative; z-index: 2;
+    margin-top: 2.8rem; padding-top: 1.8rem;
+    border-top: 1px solid rgba(248,245,239,.1);
+    font-size: .78rem; color: rgba(248,245,239,.45);
+}
+.su__panel-login a {
+    color: var(--su-gold-lt); text-decoration: none; font-weight: 500;
+    transition: color .2s;
+}
+.su__panel-login a:hover { color: var(--su-gold); }
+
+/* ── RIGHT — FORM AREA ────────────────────────────────────── */
+.su__right {
+    background: var(--su-cream);
+    display: flex; align-items: center; justify-content: center;
+    padding: 3rem 2rem;
+}
+.su__form-wrap {
+    width: 100%; max-width: 480px;
+}
+
+/* top logo/back on mobile — hidden on desktop */
+.su__mobile-top {
+    display: none;
+    align-items: center; justify-content: space-between;
+    margin-bottom: 2rem;
+}
+.su__back-link {
+    font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--su-muted); text-decoration: none; display: flex; align-items: center; gap: .45rem;
+    transition: color .2s;
+}
+.su__back-link:hover { color: var(--su-gold); }
+
+/* heading above the card */
+.su__form-heading { margin-bottom: 2rem; }
+.su__form-eyebrow {
+    font-size: .62rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--su-gold); display: flex; align-items: center; gap: .65rem; margin-bottom: .65rem;
+}
+.su__form-eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--su-gold); flex-shrink: 0; }
+.su__form-title {
+    font-family: var(--su-serif); font-size: 2rem; font-weight: 400;
+    color: var(--su-ink); line-height: 1.15; margin-bottom: .4rem;
+}
+.su__form-title em { font-style: italic; color: var(--su-gold); }
+.su__form-desc { font-size: .83rem; color: var(--su-muted); line-height: 1.7; }
+
+/* card */
+.su__card {
+    background: var(--su-white);
+    border: 1px solid var(--su-border);
+    border-radius: 16px;
+    padding: 2.4rem 2.4rem 2.6rem;
+    box-shadow: 0 8px 40px rgba(0,0,0,.06);
+    position: relative; overflow: hidden;
+}
+.su__card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(to right, var(--su-gold), var(--su-gold-lt) 55%, transparent);
+}
+
+/* ── fields ─────────────────────────────────────────────── */
+.su__row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-bottom: 1.25rem;
+}
+.su__field { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.25rem; }
+.su__field:last-of-type { margin-bottom: 0; }
+
+.su__label {
+    font-size: .67rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--su-ink-2);
+}
+
+.su__input-shell { position: relative; }
+.su__input-ico {
+    position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+    color: var(--su-faint); pointer-events: none; display: flex;
+    transition: color .22s;
+}
+.su__input-shell:focus-within .su__input-ico { color: var(--su-gold); }
+
+/* eye toggle for password */
+.su__eye {
+    position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+    color: var(--su-faint); background: none; border: none; cursor: pointer; padding: 0;
+    display: flex; align-items: center; transition: color .2s;
+}
+.su__eye:hover { color: var(--su-gold); }
+
+.su__input {
+    width: 100%; font-family: var(--su-sans); font-size: .9rem; font-weight: 300;
+    color: var(--su-ink); background: var(--su-cream);
+    border: 1.5px solid var(--su-border); border-radius: 10px; outline: none;
+    padding: .88rem 1rem .88rem 2.7rem;
+    -webkit-appearance: none; appearance: none;
+    transition: border-color .22s, background .22s, box-shadow .22s;
+}
+/* password fields also have right padding for the eye icon */
+.su__input--pw { padding-right: 2.8rem; }
+.su__input::placeholder { color: var(--su-faint); font-weight: 300; }
+.su__input:hover  { border-color: rgba(184,144,46,.4); background: var(--su-white); }
+.su__input:focus  { border-color: var(--su-gold); background: var(--su-white); box-shadow: 0 0 0 3px rgba(184,144,46,.11); }
+.su__input.su__bad { border-color: var(--su-err); box-shadow: 0 0 0 3px rgba(184,50,50,.09); }
+.su__input.su__good { border-color: var(--su-ok); }
+
+/* field error */
+.su__err {
+    font-size: .71rem; color: var(--su-err);
+    display: none; align-items: center; gap: .35rem;
+}
+.su__err.su__show { display: flex; }
+
+/* password strength bar */
+.su__strength { margin-top: .4rem; display: none; flex-direction: column; gap: .3rem; }
+.su__strength.su__show { display: flex; }
+.su__strength-bar {
+    height: 3px; border-radius: 2px; background: var(--su-border);
+    overflow: hidden;
+}
+.su__strength-fill {
+    height: 100%; width: 0; border-radius: 2px;
+    transition: width .35s var(--su-ease), background .35s;
+}
+.su__strength-lbl { font-size: .68rem; color: var(--su-faint); }
+
+/* django messages */
+.su__banner {
+    display: none; align-items: flex-start; gap: .8rem;
+    padding: 1rem 1.2rem; border-radius: 9px; border: 1px solid;
+    font-size: .855rem; line-height: 1.65; margin-bottom: 1.4rem;
+}
+.su__banner.su__show   { display: flex; }
+.su__banner--success   { background: rgba(42,110,72,.06);  border-color: rgba(42,110,72,.22);  color: var(--su-ok); }
+.su__banner--error     { background: rgba(184,50,50,.06);  border-color: rgba(184,50,50,.22);  color: var(--su-err); }
+.su__banner--warning   { background: rgba(184,144,46,.06); border-color: rgba(184,144,46,.28); color: var(--su-gold-dk); }
+.su__banner--info      { background: rgba(42,110,72,.06);  border-color: rgba(42,110,72,.22);  color: var(--su-ok); }
+.su__banner svg        { flex-shrink: 0; margin-top: 2px; }
+
+/* terms checkbox */
+.su__check-row {
+    display: flex; align-items: flex-start; gap: .75rem;
+    margin-top: 1.4rem;
+}
+.su__check {
+    width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px;
+    accent-color: var(--su-gold); cursor: pointer;
+    border-radius: 4px;
+}
+.su__check-lbl {
+    font-size: .78rem; color: var(--su-muted); line-height: 1.6; cursor: pointer;
+}
+.su__check-lbl a { color: var(--su-gold); text-decoration: none; }
+.su__check-lbl a:hover { text-decoration: underline; }
+
+/* submit */
+.su__submit {
+    display: flex; align-items: center; justify-content: center; gap: .65rem;
+    width: 100%; background: var(--su-gold); color: #fff;
+    font-family: var(--su-sans); font-size: .75rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase;
+    padding: 1.05rem 2rem; border: none; border-radius: 10px; cursor: pointer;
+    margin-top: 1.8rem;
+    transition: background .25s, transform .2s, box-shadow .25s;
+    box-shadow: 0 4px 20px rgba(184,144,46,.3);
+}
+.su__submit:hover   { background: var(--su-gold-dk); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(184,144,46,.38); }
+.su__submit:active  { transform: translateY(0); }
+.su__submit:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
+
+/* divider */
+.su__divider {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 1.6rem 0; color: var(--su-faint); font-size: .72rem;
+}
+.su__divider::before,
+.su__divider::after { content: ''; flex: 1; height: 1px; background: var(--su-border); }
+
+/* login link */
+.su__login-row {
+    text-align: center; font-size: .8rem; color: var(--su-muted);
+    margin-top: 1.2rem;
+}
+.su__login-row a { color: var(--su-gold); text-decoration: none; font-weight: 500; }
+.su__login-row a:hover { text-decoration: underline; }
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .su__page { grid-template-columns: 1fr; }
+    .su__panel { display: none; }
+    .su__right { padding: 2rem 1.25rem; align-items: flex-start; padding-top: calc(36px + 68px + 2rem); }
+    .su__mobile-top { display: flex; }
+    .su__form-wrap { max-width: 100%; }
+}
+@media (max-width: 480px) {
+    .su__row { grid-template-columns: 1fr; }
+    .su__card { padding: 2rem 1.5rem; }
+}
+
+@keyframes su-spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div data-page="signup">
+<div class="su__page">
+
+    <!-- ════════════════════════════════
+         LEFT BRAND PANEL
+    ════════════════════════════════ -->
+    <div class="su__panel" aria-hidden="true">
+        <div class="su__panel-bg"></div>
+        <div class="su__panel-rule"></div>
+        <div class="su__panel-rule-h"></div>
+
+        <div class="su__panel-inner">
+            <p class="su__panel-eyebrow">Member Benefits</p>
+            <h2 class="su__panel-title">Travel Smarter,<br><em>Every Time</em></h2>
+            <p class="su__panel-sub">Create your account and unlock a faster, more personalised booking experience across Melbourne and Victoria.</p>
+
+            <div class="su__perks">
+                <div class="su__perk">
+                    <div class="su__perk-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    Instant booking confirmations
+                </div>
+                <div class="su__perk">
+                    <div class="su__perk-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    Full booking history &amp; receipts
+                </div>
+                <div class="su__perk">
+                    <div class="su__perk-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    Save favourite addresses
+                </div>
+                <div class="su__perk">
+                    <div class="su__perk-ico">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    Priority customer support
+                </div>
+            </div>
+
+            <div class="su__panel-login">
+                Already have an account? <a href="{% url 'login' %}">Log in here</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ════════════════════════════════
+         RIGHT — FORM
+    ════════════════════════════════ -->
+    <div class="su__right">
+        <div class="su__form-wrap">
+
+            <!-- Mobile-only top bar -->
+            <div class="su__mobile-top">
+                <a href="/" class="su__back-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    Back
+                </a>
+                <a href="{% url 'login' %}" style="font-size:.8rem;color:var(--su-gold);text-decoration:none;font-weight:500;">Sign In</a>
+            </div>
+
+            <div class="su__form-heading">
+                <p class="su__form-eyebrow">New Account</p>
+                <h1 class="su__form-title">Create Your <em>Account</em></h1>
+                <p class="su__form-desc">Secure, private and free. Takes less than a minute.</p>
+            </div>
+
+            <div class="su__card">
+
+                <!-- Django messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="su__banner su__banner--{{ message.tags }} su__show" role="alert">
+                        {% if message.tags == 'success' %}
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                        {% else %}
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        {% endif %}
+                        <span>{{ message }}</span>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form
+                    id="su-form"
+                    method="POST"
+                    action="{% url 'signup' %}"
+                    novalidate
+                    aria-label="Create account form"
+                >
+                    {% csrf_token %}
+
+                    <!-- First name + Last name -->
+                    <div class="su__row">
+                        <div class="su__field">
+                            <label class="su__label" for="su-first">First Name</label>
+                            <div class="su__input-shell">
+                                <span class="su__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </span>
+                                <input
+                                    class="su__input"
+                                    type="text"
+                                    id="su-first"
+                                    name="first_name"
+                                    placeholder="Jane"
+                                    autocomplete="given-name"
+                                    required
+                                    value="{{ form.first_name.value|default:'' }}"
+                                >
+                            </div>
+                            <span class="su__err" id="su-first-err">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Please enter your first name.
+                            </span>
+                        </div>
+
+                        <div class="su__field">
+                            <label class="su__label" for="su-last">Last Name</label>
+                            <div class="su__input-shell">
+                                <span class="su__input-ico" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </span>
+                                <input
+                                    class="su__input"
+                                    type="text"
+                                    id="su-last"
+                                    name="last_name"
+                                    placeholder="Smith"
+                                    autocomplete="family-name"
+                                    required
+                                    value="{{ form.last_name.value|default:'' }}"
+                                >
+                            </div>
+                            <span class="su__err" id="su-last-err">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Please enter your last name.
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="su__field">
+                        <label class="su__label" for="su-email">Email Address</label>
+                        <div class="su__input-shell">
+                            <span class="su__input-ico" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </span>
+                            <input
+                                class="su__input"
+                                type="email"
+                                id="su-email"
+                                name="email"
+                                placeholder="jane@email.com.au"
+                                autocomplete="email"
+                                required
+                                value="{{ form.email.value|default:'' }}"
+                            >
+                        </div>
+                        <span class="su__err" id="su-email-err">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Please enter a valid email address.
+                        </span>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="su__field">
+                        <label class="su__label" for="su-phone">Phone Number</label>
+                        <div class="su__input-shell">
+                            <span class="su__input-ico" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/></svg>
+                            </span>
+                            <input
+                                class="su__input"
+                                type="tel"
+                                id="su-phone"
+                                name="phone"
+                                placeholder="04XX XXX XXX"
+                                autocomplete="tel"
+                                required
+                                value="{{ form.phone.value|default:'' }}"
+                            >
+                        </div>
+                        <span class="su__err" id="su-phone-err">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Please enter a valid phone number.
+                        </span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="su__field">
+                        <label class="su__label" for="su-pw">Password</label>
+                        <div class="su__input-shell">
+                            <span class="su__input-ico" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                            <input
+                                class="su__input su__input--pw"
+                                type="password"
+                                id="su-pw"
+                                name="password1"
+                                placeholder="Min. 8 characters"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button type="button" class="su__eye" id="su-pw-eye" aria-label="Show password">
+                                <svg id="su-eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                        <span class="su__err" id="su-pw-err">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Password must be at least 8 characters.
+                        </span>
+                        <!-- strength bar -->
+                        <div class="su__strength" id="su-strength">
+                            <div class="su__strength-bar"><div class="su__strength-fill" id="su-strength-fill"></div></div>
+                            <span class="su__strength-lbl" id="su-strength-lbl"></span>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="su__field">
+                        <label class="su__label" for="su-pw2">Confirm Password</label>
+                        <div class="su__input-shell">
+                            <span class="su__input-ico" aria-hidden="true">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                            <input
+                                class="su__input su__input--pw"
+                                type="password"
+                                id="su-pw2"
+                                name="password2"
+                                placeholder="Repeat password"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button type="button" class="su__eye" id="su-pw2-eye" aria-label="Show confirm password">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                        <span class="su__err" id="su-pw2-err">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Passwords do not match.
+                        </span>
+                    </div>
+
+                    <!-- Terms checkbox -->
+                    <div class="su__check-row">
+                        <input class="su__check" type="checkbox" id="su-terms" name="terms" required>
+                        <label class="su__check-lbl" for="su-terms">
+                            I agree to the <a href="{% url 'terms' %}" target="_blank">Terms &amp; Conditions</a> and <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="su__submit" id="su-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                        Create Account
+                    </button>
+
+                </form>
+
+                <div class="su__divider">or</div>
+
+                <div class="su__login-row">
+                    Already have an account? <a href="{% url 'login' %}">Sign in</a>
+                </div>
+
+            </div><!-- /su__card -->
+        </div>
+    </div>
+
+</div>
+</div><!-- /data-page="signup" -->
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+(function () {
+    'use strict';
+
+    var form    = document.getElementById('su-form');
+    var btn     = document.getElementById('su-btn');
+    var firstEl = document.getElementById('su-first');
+    var lastEl  = document.getElementById('su-last');
+    var emailEl = document.getElementById('su-email');
+    var phoneEl = document.getElementById('su-phone');
+    var pwEl    = document.getElementById('su-pw');
+    var pw2El   = document.getElementById('su-pw2');
+    var termsEl = document.getElementById('su-terms');
+
+    if (!form) return;
+
+    /* ── Helpers ───────────────────────────────────────────── */
+    function setErr(inp, errId) {
+        inp.classList.add('su__bad');
+        inp.classList.remove('su__good');
+        var el = document.getElementById(errId);
+        if (el) el.classList.add('su__show');
+    }
+    function clearErr(inp, errId) {
+        inp.classList.remove('su__bad');
+        var el = document.getElementById(errId);
+        if (el) el.classList.remove('su__show');
+    }
+    function setGood(inp) {
+        inp.classList.remove('su__bad');
+        inp.classList.add('su__good');
+    }
+
+    /* clear on input */
+    [
+        [firstEl, 'su-first-err'],
+        [lastEl,  'su-last-err'],
+        [emailEl, 'su-email-err'],
+        [phoneEl, 'su-phone-err'],
+        [pwEl,    'su-pw-err'],
+        [pw2El,   'su-pw2-err'],
+    ].forEach(function (pair) {
+        pair[0].addEventListener('input', function () { clearErr(pair[0], pair[1]); });
+    });
+
+    /* ── Password strength ─────────────────────────────────── */
+    var strengthWrap = document.getElementById('su-strength');
+    var strengthFill = document.getElementById('su-strength-fill');
+    var strengthLbl  = document.getElementById('su-strength-lbl');
+
+    function calcStrength(pw) {
+        var score = 0;
+        if (pw.length >= 8)  score++;
+        if (pw.length >= 12) score++;
+        if (/[A-Z]/.test(pw)) score++;
+        if (/[0-9]/.test(pw)) score++;
+        if (/[^A-Za-z0-9]/.test(pw)) score++;
+        return score;
+    }
+
+    pwEl.addEventListener('input', function () {
+        var pw = pwEl.value;
+        if (!pw) { strengthWrap.classList.remove('su__show'); return; }
+        strengthWrap.classList.add('su__show');
+        var s = calcStrength(pw);
+        var pct, color, lbl;
+        if (s <= 1)      { pct = '25%';  color = '#c0392b'; lbl = 'Weak'; }
+        else if (s <= 2) { pct = '50%';  color = '#e67e22'; lbl = 'Fair'; }
+        else if (s <= 3) { pct = '75%';  color = '#f1c40f'; lbl = 'Good'; }
+        else             { pct = '100%'; color = var_ok();  lbl = 'Strong'; }
+        strengthFill.style.width    = pct;
+        strengthFill.style.background = color;
+        strengthLbl.textContent     = lbl;
+        strengthLbl.style.color     = color;
+    });
+
+    function var_ok() {
+        return getComputedStyle(document.documentElement)
+            .getPropertyValue('--su-ok').trim() || '#2a6e48';
+    }
+
+    /* ── Password visibility toggles ──────────────────────── */
+    function makeToggle(btnId, inputEl) {
+        var btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            var isHidden = inputEl.type === 'password';
+            inputEl.type = isHidden ? 'text' : 'password';
+            btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+            btn.querySelector('svg').innerHTML = isHidden
+                ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+                : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        });
+    }
+    makeToggle('su-pw-eye',  pwEl);
+    makeToggle('su-pw2-eye', pw2El);
+
+    /* ── Validation on submit ──────────────────────────────── */
+    var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var phoneRe = /^[\d\s\+\-\(\)]{6,15}$/;
+
+    form.addEventListener('submit', function (e) {
+        var valid = true;
+
+        if (!firstEl.value.trim()) { setErr(firstEl, 'su-first-err'); valid = false; }
+        else setGood(firstEl);
+
+        if (!lastEl.value.trim()) { setErr(lastEl, 'su-last-err'); valid = false; }
+        else setGood(lastEl);
+
+        if (!emailEl.value.trim() || !emailRe.test(emailEl.value.trim())) {
+            setErr(emailEl, 'su-email-err'); valid = false;
+        } else setGood(emailEl);
+
+        if (!phoneEl.value.trim() || !phoneRe.test(phoneEl.value.trim())) {
+            setErr(phoneEl, 'su-phone-err'); valid = false;
+        } else setGood(phoneEl);
+
+        if (!pwEl.value || pwEl.value.length < 8) {
+            setErr(pwEl, 'su-pw-err'); valid = false;
+        } else setGood(pwEl);
+
+        if (!pw2El.value || pw2El.value !== pwEl.value) {
+            setErr(pw2El, 'su-pw2-err'); valid = false;
+        } else setGood(pw2El);
+
+        if (!termsEl.checked) {
+            termsEl.focus(); valid = false;
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            var firstBad = form.querySelector('.su__bad');
+            if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        /* valid — disable button, let Django handle it */
+        btn.disabled = true;
+        btn.innerHTML =
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:su-spin 1s linear infinite" aria-hidden="true">' +
+            '<path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" opacity=".25"/><path d="M21 12a9 9 0 0 0-9-9"/></svg>' +
+            ' Creating Account\u2026';
+    });
+
+}());
+</script>
+{% endblock %}

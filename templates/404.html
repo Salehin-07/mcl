@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Page Not Found | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block meta_description %}The page you're looking for doesn't exist. Return home or contact Melbourne Chauffeur & Limo Service.{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   404 PAGE — all classes nf__  ·  scoped to [data-page="404"]
+════════════════════════════════════════════════════════════════ */
+[data-page="404"] {
+    --nf-gold:     #b8902e;
+    --nf-gold-lt:  #d4aa4a;
+    --nf-gold-dk:  #9a7520;
+    --nf-gold-bg:  rgba(184,144,46,0.07);
+    --nf-ink:      #1a1714;
+    --nf-ink-2:    #2e2a26;
+    --nf-muted:    #6b6560;
+    --nf-faint:    #a09890;
+    --nf-cream:    #faf8f3;
+    --nf-cream-2:  #f3efe6;
+    --nf-white:    #ffffff;
+    --nf-border:   #e8e2d6;
+    --nf-serif:    'Cormorant Garamond', Georgia, serif;
+    --nf-sans:     'Jost', system-ui, sans-serif;
+    --nf-ease:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family: var(--nf-sans);
+    color: var(--nf-ink);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    background: var(--nf-ink);
+    overflow-x: hidden;
+}
+
+/* ── full-page layout ─────────────────────────────────────── */
+.nf__page {
+    min-height: 100vh;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    padding: calc(36px + 68px + 3rem) 2rem 4rem;
+    overflow: hidden;
+}
+
+/* background image */
+.nf__bg {
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(160deg, rgba(26,23,20,.97) 0%, rgba(26,23,20,.85) 50%, rgba(26,23,20,.6) 100%),
+        url("{% static 'img/hero-car.jpg' %}") center / cover no-repeat;
+}
+
+/* decorative elements */
+.nf__rule-h {
+    position: absolute; bottom: 0; left: 0;
+    width: 40%; height: 2px;
+    background: linear-gradient(to right, var(--nf-gold), transparent);
+}
+.nf__rule-v {
+    position: absolute; top: 0; right: 160px;
+    width: 1px; height: 40%;
+    background: linear-gradient(to bottom, transparent, rgba(184,144,46,.22));
+}
+.nf__orb {
+    position: absolute; border-radius: 50%;
+    background: rgba(184,144,46,.05);
+    pointer-events: none;
+}
+.nf__orb-1 { width: 480px; height: 480px; top: -120px; right: -100px; }
+.nf__orb-2 { width: 320px; height: 320px; bottom: -80px; left: -60px; }
+
+/* ── inner content ────────────────────────────────────────── */
+.nf__inner {
+    position: relative; z-index: 2;
+    max-width: 680px; width: 100%;
+    text-align: center;
+}
+
+/* 404 number */
+.nf__code {
+    font-family: var(--nf-serif);
+    font-size: clamp(7rem, 18vw, 13rem);
+    font-weight: 300; line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(184,144,46,.35);
+    letter-spacing: -.04em;
+    margin-bottom: -.2em;
+    opacity: 0; animation: nf-up .9s .2s var(--nf-ease) forwards;
+    user-select: none;
+}
+
+.nf__eyebrow {
+    font-size: .63rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--nf-gold-lt); display: flex; align-items: center; justify-content: center; gap: .7rem;
+    margin-bottom: 1.2rem;
+    opacity: 0; animation: nf-up .8s .4s var(--nf-ease) forwards;
+}
+.nf__eyebrow::before,
+.nf__eyebrow::after { content: ''; width: 24px; height: 1px; background: var(--nf-gold-lt); display: block; }
+
+.nf__title {
+    font-family: var(--nf-serif); font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 300; line-height: 1.1; color: #f8f5ef; letter-spacing: -.02em;
+    margin-bottom: .9rem;
+    opacity: 0; animation: nf-up .9s .55s var(--nf-ease) forwards;
+}
+.nf__title em { font-style: italic; color: var(--nf-gold-lt); }
+
+.nf__sub {
+    font-size: .96rem; color: rgba(248,245,239,.55); line-height: 1.82; font-weight: 300;
+    max-width: 420px; margin: 0 auto 2.8rem;
+    opacity: 0; animation: nf-up .9s .7s var(--nf-ease) forwards;
+}
+
+/* actions */
+.nf__actions {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 1rem;
+    opacity: 0; animation: nf-up .9s .85s var(--nf-ease) forwards;
+}
+
+.nf__btn-gold {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--nf-gold); color: #fff;
+    font-family: var(--nf-sans); font-size: .74rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding: .95rem 1.9rem; border-radius: 9px; text-decoration: none;
+    transition: background .22s, transform .2s, box-shadow .22s;
+    box-shadow: 0 4px 20px rgba(184,144,46,.32);
+}
+.nf__btn-gold:hover { background: var(--nf-gold-dk); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(184,144,46,.42); }
+
+.nf__btn-ghost {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: rgba(255,255,255,.06); color: rgba(248,245,239,.8);
+    font-family: var(--nf-sans); font-size: .74rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding: .95rem 1.9rem; border-radius: 9px; text-decoration: none;
+    border: 1px solid rgba(248,245,239,.18);
+    transition: background .22s;
+}
+.nf__btn-ghost:hover { background: rgba(255,255,255,.12); }
+
+/* quick links */
+.nf__links {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: .5rem 2rem;
+    margin-top: 3rem; padding-top: 2rem;
+    border-top: 1px solid rgba(248,245,239,.08);
+    opacity: 0; animation: nf-up .9s 1s var(--nf-ease) forwards;
+}
+.nf__links-label {
+    width: 100%; font-size: .65rem; font-weight: 600; letter-spacing: .2em;
+    text-transform: uppercase; color: rgba(248,245,239,.25);
+    margin-bottom: .3rem;
+}
+.nf__link {
+    font-size: .8rem; color: rgba(248,245,239,.45); text-decoration: none;
+    transition: color .2s; display: flex; align-items: center; gap: .4rem;
+}
+.nf__link:hover { color: var(--nf-gold-lt); }
+.nf__link svg { flex-shrink: 0; }
+
+@keyframes nf-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+}
+
+@media (max-width: 768px) {
+    .nf__code { font-size: clamp(5rem, 22vw, 8rem); }
+    .nf__rule-v { display: none; }
+}
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div data-page="404">
+<div class="nf__page">
+
+    <div class="nf__bg" role="img" aria-label="Luxury chauffeur vehicle"></div>
+    <div class="nf__rule-h" aria-hidden="true"></div>
+    <div class="nf__rule-v" aria-hidden="true"></div>
+    <div class="nf__orb nf__orb-1" aria-hidden="true"></div>
+    <div class="nf__orb nf__orb-2" aria-hidden="true"></div>
+
+    <div class="nf__inner">
+
+        <div class="nf__code" aria-hidden="true">404</div>
+
+        <p class="nf__eyebrow">Page Not Found</p>
+
+        <h1 class="nf__title">Looks Like You've<br>Taken a <em>Wrong Turn</em></h1>
+
+        <p class="nf__sub">The page you're looking for doesn't exist or may have been moved. Let us get you back on the right road.</p>
+
+        <div class="nf__actions">
+            <a href="{% url 'home' %}" class="nf__btn-gold">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Back to Home
+            </a>
+            <a href="{% url 'contact' %}" class="nf__btn-ghost">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Contact Us
+            </a>
+        </div>
+
+        <nav class="nf__links" aria-label="Quick links">
+            <div class="nf__links-label">Or try one of these</div>
+            <a href="{% url 'services' %}" class="nf__link">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                Services
+            </a>
+            <a href="{% url 'fleet' %}" class="nf__link">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                Our Fleet
+            </a>
+            <a href="{% url 'about' %}" class="nf__link">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                About Us
+            </a>
+            <a href="{% url 'booking' %}" class="nf__link">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                Book a Transfer
+            </a>
+        </nav>
+
+    </div>
+</div>
+</div><!-- /data-page="404" -->
+{% endblock %}

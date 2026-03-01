@@ -1,0 +1,863 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block meta_description %}Meet the team behind Melbourne's most trusted chauffeur service. Family-owned, CPV-accredited, operating 24/7 across Melbourne and Victoria since 2010.{% endblock %}
+{% block meta_keywords %}about Melbourne chauffeur, Melbourne limo company, luxury transfer Melbourne, CPV accredited chauffeur{% endblock %}
+{% block canonical_url %}https://www.yourdomain.com.au/about/{% endblock %}
+{% block og_title %}About Us | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block og_description %}Family-owned, CPV-accredited chauffeur service operating 24/7 across Melbourne and Victoria since 2010.{% endblock %}
+{% block twitter_title %}About Melbourne Chauffeur & Limo{% endblock %}
+{% block twitter_description %}Family-owned, CPV-accredited chauffeur service. Available 24/7 across Melbourne and Victoria.{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Melbourne Chauffeur & Limo Service",
+    "url": "https://www.yourdomain.com.au/about/",
+    "description": "Family-owned, CPV-accredited Melbourne chauffeur and limousine service operating since 2010.",
+    "mainEntity": {
+        "@type": "LocalBusiness",
+        "name": "Melbourne Chauffeur & Limo Service",
+        "foundingDate": "2010",
+        "areaServed": "Melbourne, Victoria, Australia",
+        "telephone": "+61-3-XXXX-XXXX",
+        "email": "bookings@yourdomain.com.au"
+    }
+}
+</script>
+{% endblock %}
+
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   ABOUT PAGE — all classes ab__  ·  scoped to [data-page="about"]
+   No conflict with nav__ / ftr__ / hp__ / cp__ / tc__
+════════════════════════════════════════════════════════════════ */
+[data-page="about"] {
+    --ab-gold:      #b8902e;
+    --ab-gold-lt:   #d4aa4a;
+    --ab-gold-dk:   #9a7520;
+    --ab-gold-bg:   rgba(184,144,46,0.07);
+    --ab-gold-bg2:  rgba(184,144,46,0.04);
+    --ab-ink:       #1a1714;
+    --ab-ink-2:     #2e2a26;
+    --ab-muted:     #6b6560;
+    --ab-faint:     #a09890;
+    --ab-cream:     #faf8f3;
+    --ab-cream-2:   #f3efe6;
+    --ab-white:     #ffffff;
+    --ab-border:    #e8e2d6;
+    --ab-border-2:  #f0ece4;
+    --ab-serif:     'Cormorant Garamond', Georgia, serif;
+    --ab-sans:      'Jost', system-ui, sans-serif;
+    --ab-ease:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family: var(--ab-sans);
+    color: var(--ab-ink);
+    background: var(--ab-white);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+[data-page="about"] img { display: block; max-width: 100%; }
+
+/* ── Reveal ───────────────────────────────────────────────── */
+.ab__reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s var(--ab-ease), transform .65s var(--ab-ease); }
+.ab__reveal.ab__in { opacity: 1; transform: none; }
+.ab__d1 { transition-delay: .1s; } .ab__d2 { transition-delay: .2s; }
+.ab__d3 { transition-delay: .3s; } .ab__d4 { transition-delay: .4s; }
+
+/* ── Layout helpers ───────────────────────────────────────── */
+.ab__wrap    { max-width: 1160px; margin: 0 auto; }
+.ab__section { padding: 5.5rem 2rem; }
+.ab__section--cream { background: var(--ab-cream); }
+.ab__section--ink   { background: var(--ab-ink); }
+
+/* ── Eyebrow / title / sub ────────────────────────────────── */
+.ab__eyebrow {
+    font-size: .63rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--ab-gold); display: flex; align-items: center; gap: .7rem; margin-bottom: .8rem;
+}
+.ab__eyebrow::before { content: ''; width: 26px; height: 1px; background: var(--ab-gold); flex-shrink: 0; }
+.ab__eyebrow--lt { color: var(--ab-gold-lt); }
+.ab__eyebrow--lt::before { background: var(--ab-gold-lt); }
+
+.ab__title {
+    font-family: var(--ab-serif); font-size: clamp(2rem, 3.8vw, 3rem);
+    font-weight: 400; line-height: 1.15; color: var(--ab-ink); letter-spacing: -.01em;
+}
+.ab__title em { font-style: italic; color: var(--ab-gold); }
+.ab__title--lt { color: #f8f5ef; }
+.ab__title--lt em { color: var(--ab-gold-lt); }
+
+.ab__sub {
+    font-size: .96rem; line-height: 1.85; color: var(--ab-muted);
+    max-width: 520px; margin-top: .9rem; font-weight: 300;
+}
+.ab__sub--lt { color: rgba(248,245,239,.65); }
+
+/* ════════════════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════════════════ */
+.ab__hero {
+    background: var(--ab-ink);
+    padding: calc(36px + 68px + 4rem) 2rem 5.5rem;
+    position: relative; overflow: hidden;
+}
+.ab__hero-bg {
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(108deg, rgba(26,23,20,.96) 0%, rgba(26,23,20,.74) 55%, rgba(26,23,20,.38) 100%),
+        url("{% static 'imh/about-interior.jpg' %}") center / cover no-repeat;
+}
+.ab__hero-rule-h {
+    position: absolute; bottom: 0; left: 0;
+    width: 55%; height: 2px;
+    background: linear-gradient(to right, var(--ab-gold), transparent);
+}
+.ab__hero-rule-v {
+    position: absolute; top: 0; right: 200px;
+    width: 1px; height: 45%;
+    background: linear-gradient(to bottom, transparent, rgba(184,144,46,.28));
+}
+.ab__hero-inner { position: relative; z-index: 2; max-width: 1160px; margin: 0 auto; }
+
+.ab__hero-kicker {
+    font-size: .63rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--ab-gold-lt); display: flex; align-items: center; gap: .75rem;
+    margin-bottom: 1.4rem;
+    opacity: 0; animation: ab-up .8s .3s var(--ab-ease) forwards;
+}
+.ab__hero-kicker::before { content: ''; width: 28px; height: 1px; background: var(--ab-gold-lt); display: block; }
+
+.ab__hero-title {
+    font-family: var(--ab-serif); font-size: clamp(2.8rem, 6vw, 4.6rem);
+    font-weight: 300; line-height: 1.06; color: #f8f5ef; letter-spacing: -.02em; max-width: 640px;
+    opacity: 0; animation: ab-up .9s .5s var(--ab-ease) forwards;
+}
+.ab__hero-title em { font-style: italic; color: var(--ab-gold-lt); }
+
+.ab__hero-sub {
+    font-size: .98rem; line-height: 1.85; color: rgba(248,245,239,.62);
+    max-width: 440px; margin-top: 1.3rem; font-weight: 300;
+    opacity: 0; animation: ab-up .9s .7s var(--ab-ease) forwards;
+}
+
+.ab__hero-stats {
+    display: flex; flex-wrap: wrap; gap: 0;
+    margin-top: 3rem;
+    opacity: 0; animation: ab-up .9s .9s var(--ab-ease) forwards;
+    border: 1px solid rgba(248,245,239,.1);
+    border-radius: 10px; overflow: hidden;
+    backdrop-filter: blur(6px);
+    max-width: 560px;
+}
+.ab__hero-stat {
+    flex: 1; min-width: 120px;
+    padding: 1.2rem 1.6rem;
+    border-right: 1px solid rgba(248,245,239,.1);
+    background: rgba(255,255,255,.04);
+}
+.ab__hero-stat:last-child { border-right: none; }
+.ab__hero-stat-num {
+    font-family: var(--ab-serif); font-size: 2.2rem; font-weight: 300;
+    color: var(--ab-gold-lt); line-height: 1; margin-bottom: .2rem;
+}
+.ab__hero-stat-lbl {
+    font-size: .65rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: rgba(248,245,239,.5);
+}
+
+@keyframes ab-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   STORY SECTION
+════════════════════════════════════════════════════════════ */
+.ab__story-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+}
+.ab__story-img-wrap {
+    position: relative;
+}
+.ab__story-img {
+    width: 100%; aspect-ratio: 4/5;
+    border-radius: 14px; overflow: hidden;
+    background: var(--ab-cream-2);
+}
+.ab__story-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .6s var(--ab-ease);
+}
+.ab__story-img:hover img { transform: scale(1.03); }
+
+/* floating badge on the image */
+.ab__story-badge {
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    background: var(--ab-gold);
+    border-radius: 12px; padding: 1.2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 8px 28px rgba(184,144,46,.3);
+}
+.ab__story-badge-num {
+    font-family: var(--ab-serif); font-size: 2.4rem; font-weight: 300;
+    color: #fff; line-height: 1;
+}
+.ab__story-badge-lbl {
+    font-size: .62rem; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: rgba(255,255,255,.8);
+    margin-top: .2rem;
+}
+
+.ab__story-body { display: flex; flex-direction: column; gap: 1.1rem; }
+.ab__story-body p {
+    font-size: .93rem; color: var(--ab-muted); line-height: 1.87; font-weight: 300;
+}
+.ab__story-body strong { color: var(--ab-ink-2); font-weight: 500; }
+
+/* signature */
+.ab__signature {
+    display: flex; align-items: center; gap: 1rem;
+    margin-top: .5rem; padding-top: 1.4rem;
+    border-top: 1px solid var(--ab-border-2);
+}
+.ab__signature-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--ab-cream-2); border: 2px solid var(--ab-border);
+    overflow: hidden; flex-shrink: 0;
+}
+.ab__signature-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.ab__signature-name {
+    font-family: var(--ab-serif); font-size: 1.1rem; font-weight: 500;
+    color: var(--ab-ink); line-height: 1.2;
+}
+.ab__signature-role {
+    font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ab-gold); margin-top: .15rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   VALUES SECTION
+════════════════════════════════════════════════════════════ */
+.ab__values-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3.5rem;
+}
+.ab__value-card {
+    background: var(--ab-white);
+    border: 1px solid var(--ab-border);
+    border-radius: 14px; padding: 2rem 1.8rem;
+    transition: border-color .25s, box-shadow .25s, transform .25s;
+    position: relative; overflow: hidden;
+}
+.ab__value-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(to right, var(--ab-gold), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .35s var(--ab-ease);
+}
+.ab__value-card:hover { border-color: rgba(184,144,46,.3); box-shadow: 0 8px 32px rgba(0,0,0,.07); transform: translateY(-3px); }
+.ab__value-card:hover::before { transform: scaleX(1); }
+
+.ab__value-icon {
+    width: 44px; height: 44px; border-radius: 11px;
+    background: var(--ab-gold-bg); border: 1px solid rgba(184,144,46,.18);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ab-gold); margin-bottom: 1.3rem;
+}
+.ab__value-title {
+    font-family: var(--ab-serif); font-size: 1.2rem; font-weight: 500;
+    color: var(--ab-ink); margin-bottom: .6rem; line-height: 1.2;
+}
+.ab__value-body {
+    font-size: .84rem; color: var(--ab-muted); line-height: 1.78; font-weight: 300;
+}
+
+/* ════════════════════════════════════════════════════════════
+   TIMELINE SECTION
+════════════════════════════════════════════════════════════ */
+.ab__timeline { position: relative; padding-left: 2.5rem; margin-top: 3.5rem; }
+.ab__timeline::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: .85rem;
+    width: 1px; background: linear-gradient(to bottom, var(--ab-gold), transparent);
+}
+.ab__timeline-item {
+    position: relative; padding-bottom: 2.8rem;
+}
+.ab__timeline-item:last-child { padding-bottom: 0; }
+.ab__timeline-dot {
+    position: absolute; left: -2.5rem; top: .3rem;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ab-gold); border: 3px solid var(--ab-white);
+    box-shadow: 0 0 0 1px var(--ab-gold);
+}
+.ab__timeline-year {
+    font-size: .65rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--ab-gold); margin-bottom: .4rem;
+}
+.ab__timeline-event {
+    font-family: var(--ab-serif); font-size: 1.15rem; font-weight: 500;
+    color: var(--ab-ink); margin-bottom: .4rem; line-height: 1.25;
+}
+.ab__timeline-desc {
+    font-size: .86rem; color: var(--ab-muted); line-height: 1.75; font-weight: 300;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FLEET PREVIEW
+════════════════════════════════════════════════════════════ */
+.ab__fleet-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3.5rem;
+}
+.ab__fleet-card {
+    background: var(--ab-white);
+    border: 1px solid var(--ab-border); border-radius: 13px;
+    overflow: hidden;
+    transition: border-color .25s, box-shadow .25s, transform .25s;
+}
+.ab__fleet-card:hover { border-color: rgba(184,144,46,.3); box-shadow: 0 8px 32px rgba(0,0,0,.08); transform: translateY(-3px); }
+.ab__fleet-thumb {
+    aspect-ratio: 16/9; background: var(--ab-cream-2);
+    overflow: hidden;
+}
+.ab__fleet-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ab-ease); }
+.ab__fleet-card:hover .ab__fleet-thumb img { transform: scale(1.05); }
+.ab__fleet-body { padding: 1.4rem 1.5rem; }
+.ab__fleet-name {
+    font-family: var(--ab-serif); font-size: 1.15rem; font-weight: 500;
+    color: var(--ab-ink); margin-bottom: .35rem; line-height: 1.2;
+}
+.ab__fleet-desc { font-size: .82rem; color: var(--ab-muted); line-height: 1.7; }
+.ab__fleet-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .85rem; }
+.ab__fleet-chip {
+    font-size: .6rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ab-gold-dk); background: var(--ab-gold-bg);
+    border: 1px solid rgba(184,144,46,.2); border-radius: 4px;
+    padding: .28rem .7rem;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ACCREDITATIONS STRIP
+════════════════════════════════════════════════════════════ */
+.ab__accred {
+    background: var(--ab-cream-2);
+    border-top: 1px solid var(--ab-border);
+    border-bottom: 1px solid var(--ab-border);
+    padding: 2.8rem 2rem;
+}
+.ab__accred-inner {
+    max-width: 1160px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 2rem;
+}
+.ab__accred-label {
+    font-size: .63rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--ab-faint); white-space: nowrap;
+}
+.ab__accred-items {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+}
+.ab__accred-item {
+    display: flex; align-items: center; gap: .7rem;
+    font-size: .82rem; font-weight: 500; color: var(--ab-ink-2);
+}
+.ab__accred-item svg { color: var(--ab-gold); flex-shrink: 0; }
+
+/* ════════════════════════════════════════════════════════════
+   TEAM SECTION
+════════════════════════════════════════════════════════════ */
+.ab__team-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; margin-top: 3.5rem;
+}
+.ab__team-card {
+    background: var(--ab-white); border: 1px solid var(--ab-border);
+    border-radius: 14px; overflow: hidden;
+    transition: border-color .25s, box-shadow .25s, transform .25s;
+    text-align: center;
+}
+.ab__team-card:hover { border-color: rgba(184,144,46,.28); box-shadow: 0 8px 32px rgba(0,0,0,.07); transform: translateY(-3px); }
+.ab__team-photo {
+    aspect-ratio: 1/1; background: var(--ab-cream-2);
+    overflow: hidden;
+}
+.ab__team-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ab-ease); }
+.ab__team-card:hover .ab__team-photo img { transform: scale(1.04); }
+.ab__team-body { padding: 1.5rem 1.3rem 1.8rem; }
+.ab__team-name {
+    font-family: var(--ab-serif); font-size: 1.25rem; font-weight: 500;
+    color: var(--ab-ink); margin-bottom: .2rem;
+}
+.ab__team-role {
+    font-size: .68rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ab-gold); margin-bottom: .75rem;
+}
+.ab__team-bio { font-size: .82rem; color: var(--ab-muted); line-height: 1.72; }
+
+/* ════════════════════════════════════════════════════════════
+   CTA BANNER
+════════════════════════════════════════════════════════════ */
+.ab__cta {
+    background: var(--ab-ink); padding: 5rem 2rem; text-align: center;
+    position: relative; overflow: hidden;
+}
+.ab__cta-orb-1 {
+    position: absolute; top: -80px; left: -80px;
+    width: 320px; height: 320px; border-radius: 50%;
+    background: rgba(184,144,46,.06);
+}
+.ab__cta-orb-2 {
+    position: absolute; bottom: -100px; right: -60px;
+    width: 360px; height: 360px; border-radius: 50%;
+    background: rgba(184,144,46,.04);
+}
+.ab__cta-inner { position: relative; z-index: 1; }
+.ab__cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2.2rem; }
+
+.ab__btn-gold {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: var(--ab-gold); color: #fff;
+    font-family: var(--ab-sans); font-size: .74rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding: .95rem 1.9rem; border-radius: 8px; text-decoration: none;
+    transition: background .22s, transform .2s, box-shadow .22s;
+    box-shadow: 0 4px 20px rgba(184,144,46,.32);
+}
+.ab__btn-gold:hover { background: var(--ab-gold-dk); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(184,144,46,.42); }
+
+.ab__btn-ghost {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: rgba(255,255,255,.06); color: rgba(248,245,239,.85);
+    font-family: var(--ab-sans); font-size: .74rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding: .95rem 1.9rem; border-radius: 8px; text-decoration: none;
+    border: 1px solid rgba(248,245,239,.18);
+    transition: background .22s;
+}
+.ab__btn-ghost:hover { background: rgba(255,255,255,.12); }
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .ab__story-grid  { grid-template-columns: 1fr; gap: 3rem; }
+    .ab__story-badge { right: 0; }
+    .ab__values-grid { grid-template-columns: 1fr 1fr; }
+    .ab__fleet-grid  { grid-template-columns: 1fr 1fr; }
+    .ab__team-grid   { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+    .ab__section     { padding: 3.5rem 1.25rem; }
+    .ab__hero-stats  { max-width: 100%; }
+    .ab__values-grid { grid-template-columns: 1fr; }
+    .ab__fleet-grid  { grid-template-columns: 1fr; }
+    .ab__team-grid   { grid-template-columns: 1fr; }
+    .ab__accred-inner { flex-direction: column; align-items: flex-start; }
+    .ab__story-badge { position: static; margin-top: 1rem; display: inline-flex; gap: 1rem; align-items: center; border-radius: 10px; }
+}
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div data-page="about">
+
+<!-- ════════════════════════════════
+     HERO
+════════════════════════════════ -->
+<section class="ab__hero" aria-label="About Melbourne Chauffeur">
+    <div class="ab__hero-bg" role="img" aria-label="Luxury chauffeur vehicle interior"></div>
+    <div class="ab__hero-rule-h" aria-hidden="true"></div>
+    <div class="ab__hero-rule-v" aria-hidden="true"></div>
+    <div class="ab__hero-inner">
+        <p class="ab__hero-kicker">Our Story</p>
+        <h1 class="ab__hero-title">Melbourne's Most <em>Trusted</em><br>Chauffeur Service</h1>
+        <p class="ab__hero-sub">Family-owned and operated since 2010. CPV-accredited, fully insured, and dedicated to delivering the highest standard of luxury ground transport across Melbourne and Victoria.</p>
+        <div class="ab__hero-stats" role="list" aria-label="Company statistics">
+            <div class="ab__hero-stat" role="listitem">
+                <div class="ab__hero-stat-num">14+</div>
+                <div class="ab__hero-stat-lbl">Years in Service</div>
+            </div>
+            <div class="ab__hero-stat" role="listitem">
+                <div class="ab__hero-stat-num">12k+</div>
+                <div class="ab__hero-stat-lbl">Trips Completed</div>
+            </div>
+            <div class="ab__hero-stat" role="listitem">
+                <div class="ab__hero-stat-num">4.9★</div>
+                <div class="ab__hero-stat-lbl">Average Rating</div>
+            </div>
+            <div class="ab__hero-stat" role="listitem">
+                <div class="ab__hero-stat-num">24/7</div>
+                <div class="ab__hero-stat-lbl">Always Available</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     ACCREDITATIONS STRIP
+════════════════════════════════ -->
+<div class="ab__accred" role="region" aria-label="Accreditations and certifications">
+    <div class="ab__accred-inner">
+        <span class="ab__accred-label">Accredited &amp; Certified</span>
+        <div class="ab__accred-items">
+            <div class="ab__accred-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                CPV Accredited (VicRoads)
+            </div>
+            <div class="ab__accred-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Fully Insured — Public Liability
+            </div>
+            <div class="ab__accred-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Police-Checked Drivers
+            </div>
+            <div class="ab__accred-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                ABN Registered — XXXXXXXXXXX
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     OUR STORY
+════════════════════════════════ -->
+<section class="ab__section" aria-labelledby="ab-story-heading">
+    <div class="ab__wrap">
+        <div class="ab__story-grid">
+
+            <!-- Image -->
+            <div class="ab__story-img-wrap ab__reveal">
+                <div class="ab__story-img">
+                    <img src="{% static 'img/about-owner.jpg' %}" alt="Founder and owner of Melbourne Chauffeur & Limo Service" loading="lazy">
+                </div>
+                <div class="ab__story-badge" aria-label="14 years in business">
+                    <div class="ab__story-badge-num">14</div>
+                    <div class="ab__story-badge-lbl">Years of<br>Excellence</div>
+                </div>
+            </div>
+
+            <!-- Text -->
+            <div class="ab__reveal ab__d1">
+                <p class="ab__eyebrow">Who We Are</p>
+                <h2 class="ab__title" id="ab-story-heading">Built on <em>Trust,</em><br>Driven by Detail</h2>
+                <div class="ab__story-body" style="margin-top:1.4rem;">
+                    <p>Melbourne Chauffeur &amp; Limo Service was founded in 2010 with a single car and a simple belief: that every passenger deserves to travel with dignity, comfort and certainty. What began as a one-man operation from Melbourne's inner suburbs has grown into one of Victoria's most respected private transport services.</p>
+                    <p>We are a <strong>family-owned business</strong> — not a faceless rideshare platform. Every booking is handled by a real person, every driver is personally vetted, and every vehicle is maintained to the highest standard. When you travel with us, you are our only priority.</p>
+                    <p>Our client base spans corporate executives, interstate visitors, wedding parties, sporting delegations and everyday Melburnians who simply refuse to compromise on quality. We treat every journey — whether a 10-minute airport run or a full-day corporate schedule — with the same level of care and professionalism.</p>
+                    <p>We are fully CPV-accredited under VicRoads regulations, comprehensively insured, and all drivers undergo rigorous police checks and training before their first booking. Our fleet is refreshed regularly to ensure you always arrive in a late-model, immaculately presented vehicle.</p>
+
+                    <div class="ab__signature">
+                        <div class="ab__signature-avatar">
+                            <img src="{% static 'images/owner-avatar.jpg' %}" alt="Founder portrait" loading="lazy">
+                        </div>
+                        <div>
+                            <div class="ab__signature-name">James Hartley</div>
+                            <div class="ab__signature-role">Founder &amp; Director</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     OUR VALUES
+════════════════════════════════ -->
+<section class="ab__section ab__section--cream" aria-labelledby="ab-values-heading">
+    <div class="ab__wrap">
+        <div style="text-align:center;max-width:540px;margin:0 auto;" class="ab__reveal">
+            <p class="ab__eyebrow" style="justify-content:center;">What Drives Us</p>
+            <h2 class="ab__title" id="ab-values-heading">The Standards We <em>Never</em> Compromise</h2>
+            <p class="ab__sub" style="margin:0 auto;text-align:center;">Six principles that define every journey we operate — from the moment you book to the moment you arrive.</p>
+        </div>
+
+        <div class="ab__values-grid">
+
+            <div class="ab__value-card ab__reveal ab__d1">
+                <div class="ab__value-icon" aria-hidden="true">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="ab__value-title">Punctuality</div>
+                <p class="ab__value-body">Your time is not negotiable. We monitor traffic in real time and build buffer time into every journey so that late arrivals are not in our vocabulary.</p>
+            </div>
+
+            <div class="ab__value-card ab__reveal ab__d2">
+                <div class="ab__value-icon" aria-hidden="true">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="ab__value-title">Safety First</div>
+                <p class="ab__value-body">Every driver holds a current CPV accreditation, has passed comprehensive police checks, and maintains a clean driving record. Your safety is our primary obligation.</p>
+            </div>
+
+            <div class="ab__value-card ab__reveal ab__d3">
+                <div class="ab__value-icon" aria-hidden="true">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </div>
+                <div class="ab__value-title">Genuine Hospitality</div>
+                <p class="ab__value-body">We open doors — literally and figuratively. Our drivers are courteous, discreet and attentive. We remember preferences and go out of our way to make you feel valued.</p>
+            </div>
+
+            <div class="ab__value-card ab__reveal ab__d1">
+                <div class="ab__value-icon" aria-hidden="true">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div class="ab__value-title">Transparent Pricing</div>
+                <p class="ab__value-body">The price we quote is the price you pay. No surge pricing, no hidden airport fees, no post-trip surprises. Fixed fares, always.</p>
+            </div>
+
+            <div class="ab__value-card ab__reveal ab__d2">
+                <div class="ab__value-icon" aria-hidden="true">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <div class="ab__value-title">Absolute Discretion</div>
+                <p class="ab__value-body">What happens in our vehicles stays in our vehicles. We serve high-profile clients, executives and VIPs who depend on complete confidentiality — and we take that responsibility seriously.</p>
+            </div>
+
+            <div class="ab__value-card ab__reveal ab__d3">
+                <div class="ab__value-icon" aria-hidden="true">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div class="ab__value-title">Reliability</div>
+                <p class="ab__value-body">In 14 years of operation we have never left a client stranded. If something unexpected occurs, we have contingency protocols and backup vehicles to ensure you are never let down.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     TIMELINE / MILESTONES
+════════════════════════════════ -->
+<section class="ab__section" aria-labelledby="ab-timeline-heading">
+    <div class="ab__wrap">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+
+            <div class="ab__reveal">
+                <p class="ab__eyebrow">Our Journey</p>
+                <h2 class="ab__title" id="ab-timeline-heading">14 Years of <em>Milestones</em></h2>
+                <p class="ab__sub">From a single vehicle to one of Victoria's most respected chauffeur services — here are the moments that shaped us.</p>
+            </div>
+
+            <div class="ab__timeline ab__reveal ab__d1">
+                <div class="ab__timeline-item">
+                    <div class="ab__timeline-dot" aria-hidden="true"></div>
+                    <div class="ab__timeline-year">2010</div>
+                    <div class="ab__timeline-event">Founded in Melbourne</div>
+                    <p class="ab__timeline-desc">Launched with a single Mercedes-Benz E-Class and a commitment to premium service for corporate clients in the CBD.</p>
+                </div>
+                <div class="ab__timeline-item">
+                    <div class="ab__timeline-dot" aria-hidden="true"></div>
+                    <div class="ab__timeline-year">2013</div>
+                    <div class="ab__timeline-event">Airport Transfer Partnership</div>
+                    <p class="ab__timeline-desc">Established formal corporate contracts with Melbourne Airport meet-and-greet services, expanding fleet to five vehicles.</p>
+                </div>
+                <div class="ab__timeline-item">
+                    <div class="ab__timeline-dot" aria-hidden="true"></div>
+                    <div class="ab__timeline-year">2016</div>
+                    <div class="ab__timeline-event">Fleet Reaches Ten Vehicles</div>
+                    <p class="ab__timeline-desc">Introduced wedding and special events packages. Added Mercedes-Benz S-Class and the first stretch limousine to the fleet.</p>
+                </div>
+                <div class="ab__timeline-item">
+                    <div class="ab__timeline-dot" aria-hidden="true"></div>
+                    <div class="ab__timeline-year">2020</div>
+                    <div class="ab__timeline-event">COVID Response &amp; Recovery</div>
+                    <p class="ab__timeline-desc">Pivoted to essential worker transfers, deep-clean protocols, and retained every member of our team throughout the pandemic.</p>
+                </div>
+                <div class="ab__timeline-item">
+                    <div class="ab__timeline-dot" aria-hidden="true"></div>
+                    <div class="ab__timeline-year">2024</div>
+                    <div class="ab__timeline-event">Hybrid &amp; EV Fleet Expansion</div>
+                    <p class="ab__timeline-desc">Added Mercedes-Benz EQS and Tesla Model S to the fleet, reducing our carbon footprint without compromising on luxury.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     FLEET PREVIEW
+════════════════════════════════ -->
+<section class="ab__section ab__section--cream" aria-labelledby="ab-fleet-heading">
+    <div class="ab__wrap">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;" class="ab__reveal">
+            <div>
+                <p class="ab__eyebrow">The Fleet</p>
+                <h2 class="ab__title" id="ab-fleet-heading">Every Vehicle, <em>Immaculate</em></h2>
+            </div>
+            <a href="{% url 'home' %}" style="display:inline-flex;align-items:center;gap:.55rem;font-size:.75rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ab-gold);text-decoration:none;transition:gap .2s;" onmouseover="this.style.gap='.9rem'" onmouseout="this.style.gap='.55rem'">
+                View Full Fleet
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+
+        <div class="ab__fleet-grid">
+
+            <div class="ab__fleet-card ab__reveal ab__d1">
+                <div class="ab__fleet-thumb">
+                    <img src="{% static 'images/fleet-eclass.jpg' %}" alt="Mercedes-Benz E-Class Sedan" loading="lazy">
+                </div>
+                <div class="ab__fleet-body">
+                    <div class="ab__fleet-name">Mercedes-Benz E-Class</div>
+                    <p class="ab__fleet-desc">Our most popular executive sedan. Perfect for airport transfers and corporate travel with up to 3 passengers.</p>
+                    <div class="ab__fleet-chips">
+                        <span class="ab__fleet-chip">1–3 Pax</span>
+                        <span class="ab__fleet-chip">3 Bags</span>
+                        <span class="ab__fleet-chip">WiFi</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ab__fleet-card ab__reveal ab__d2">
+                <div class="ab__fleet-thumb">
+                    <img src="{% static 'images/fleet-sclass.jpg' %}" alt="Mercedes-Benz S-Class" loading="lazy">
+                </div>
+                <div class="ab__fleet-body">
+                    <div class="ab__fleet-name">Mercedes-Benz S-Class</div>
+                    <p class="ab__fleet-desc">The pinnacle of executive luxury. Heated and cooled massage seats, ambient lighting and the finest cabin in the segment.</p>
+                    <div class="ab__fleet-chips">
+                        <span class="ab__fleet-chip">1–3 Pax</span>
+                        <span class="ab__fleet-chip">Massage Seats</span>
+                        <span class="ab__fleet-chip">WiFi</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ab__fleet-card ab__reveal ab__d3">
+                <div class="ab__fleet-thumb">
+                    <img src="{% static 'images/fleet-vclass.jpg' %}" alt="Mercedes-Benz V-Class MPV" loading="lazy">
+                </div>
+                <div class="ab__fleet-body">
+                    <div class="ab__fleet-name">Mercedes-Benz V-Class</div>
+                    <p class="ab__fleet-desc">Our premium people-mover for families, groups and road shows. Seats up to 7 in absolute comfort with ample luggage space.</p>
+                    <div class="ab__fleet-chips">
+                        <span class="ab__fleet-chip">1–7 Pax</span>
+                        <span class="ab__fleet-chip">7 Bags</span>
+                        <span class="ab__fleet-chip">WiFi</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     TEAM
+════════════════════════════════ -->
+<section class="ab__section" aria-labelledby="ab-team-heading">
+    <div class="ab__wrap">
+        <div style="text-align:center;max-width:500px;margin:0 auto;" class="ab__reveal">
+            <p class="ab__eyebrow" style="justify-content:center;">The Team</p>
+            <h2 class="ab__title" id="ab-team-heading">The People Behind <em>Every Journey</em></h2>
+            <p class="ab__sub" style="margin:0 auto;text-align:center;">Every driver is hand-selected, CPV-accredited and trained in the art of discreet, attentive hospitality.</p>
+        </div>
+
+        <div class="ab__team-grid">
+
+            <div class="ab__team-card ab__reveal ab__d1">
+                <div class="ab__team-photo">
+                    <img src="{% static 'images/team-james.jpg' %}" alt="James Hartley — Founder and Director" loading="lazy">
+                </div>
+                <div class="ab__team-body">
+                    <div class="ab__team-name">James Hartley</div>
+                    <div class="ab__team-role">Founder &amp; Director</div>
+                    <p class="ab__team-bio">14 years behind the wheel and in the boardroom. James personally oversees every aspect of the business and still drives for select clients who prefer continuity.</p>
+                </div>
+            </div>
+
+            <div class="ab__team-card ab__reveal ab__d2">
+                <div class="ab__team-photo">
+                    <img src="{% static 'images/team-sarah.jpg' %}" alt="Sarah Chen — Operations Manager" loading="lazy">
+                </div>
+                <div class="ab__team-body">
+                    <div class="ab__team-name">Sarah Chen</div>
+                    <div class="ab__team-role">Operations Manager</div>
+                    <p class="ab__team-bio">Sarah runs the control room — managing dispatching, flight monitoring and client communications with an obsessive attention to detail.</p>
+                </div>
+            </div>
+
+            <div class="ab__team-card ab__reveal ab__d3">
+                <div class="ab__team-photo">
+                    <img src="{% static 'images/team-michael.jpg' %}" alt="Michael Torres — Senior Chauffeur" loading="lazy">
+                </div>
+                <div class="ab__team-body">
+                    <div class="ab__team-name">Michael Torres</div>
+                    <div class="ab__team-role">Senior Chauffeur</div>
+                    <p class="ab__team-bio">With a decade of professional driving experience and an encyclopaedic knowledge of Melbourne's roads, Michael is a favourite among our corporate clientele.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     CTA BANNER
+════════════════════════════════ -->
+<section class="ab__cta" aria-labelledby="ab-cta-heading">
+    <div class="ab__cta-orb-1" aria-hidden="true"></div>
+    <div class="ab__cta-orb-2" aria-hidden="true"></div>
+    <div class="ab__cta-inner ab__reveal">
+        <p class="ab__eyebrow ab__eyebrow--lt" style="justify-content:center;">Ready to Experience the Difference?</p>
+        <h2 class="ab__title ab__title--lt" id="ab-cta-heading" style="margin:0 auto;text-align:center;max-width:560px;">Travel the Way You <em>Deserve</em></h2>
+        <p class="ab__sub ab__sub--lt" style="margin:1rem auto 0;text-align:center;">Book your next transfer online in under 60 seconds, or call us any time — day or night.</p>
+        <div class="ab__cta-actions">
+            <a href="{% url 'orders' %}" class="ab__btn-gold">
+                Book a Transfer
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="{% url 'contact' %}" class="ab__btn-ghost">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/></svg>
+                Get in Touch
+            </a>
+        </div>
+    </div>
+</section>
+
+</div><!-- /data-page="about" -->
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+(function () {
+    'use strict';
+
+    /* ── Scroll reveal ─────────────────────────────────────── */
+    var els = document.querySelectorAll('.ab__reveal');
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('ab__in'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.1 });
+        els.forEach(function (el) { obs.observe(el); });
+    } else {
+        els.forEach(function (el) { el.classList.add('ab__in'); });
+    }
+
+}());
+</script>
+{% endblock %}

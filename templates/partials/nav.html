@@ -1,0 +1,912 @@
+{% load static %}
+
+<nav class="nav" id="main-nav" role="navigation" aria-label="Primary navigation">
+
+    <!-- ── Top bar ─────────────────────────────────────────────── -->
+    <div class="nav__topbar">
+        <span class="nav__tagline">Melbourne's Premier Chauffeur &amp; Limo Service</span>
+        <a class="nav__phone" href="tel:+61XXXXXXXXX" aria-label="Call us">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/>
+            </svg>
+            +61 3 XXXX XXXX
+        </a>
+    </div>
+
+    <!-- ── Main bar ─────────────────────────────────────────────── -->
+    <div class="nav__bar">
+
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="nav__logo" aria-label="Melbourne Chauffeur & Limo — Home">
+            <img src="{% static 'img/logo.png' %}" alt="Melbourne Chauffeur & Limo Service" width="44" height="44" loading="eager">
+            <div class="nav__logo-text">
+                Melbourne <span>Chauffeur</span>
+            </div>
+        </a>
+
+        <!-- Desktop Links -->
+        <ul class="nav__links" role="list">
+
+            <!-- Home -->
+            <li class="nav__item">
+                <a href="{% url 'home' %}" class="nav__link">Home</a>
+            </li>
+
+            <!-- About -->
+            <li class="nav__item">
+                <a href="{% url 'about' %}" class="nav__link">About</a>
+            </li>
+
+            <!-- Booking Dropdown -->
+            <li class="nav__item nav__item--dropdown" aria-haspopup="true">
+                <button class="nav__link nav__link--drop" aria-expanded="false" aria-controls="booking-menu">
+                    Booking
+                    <svg class="nav__chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </button>
+                <ul class="nav__dropdown" id="booking-menu" role="menu">
+                    <li role="none">
+                        <a href="{% url 'home' %}" class="nav__drop-item" role="menuitem">
+                            <span class="nav__drop-icon" aria-hidden="true">✈</span>
+                            <span>
+                                <strong>To Airport</strong>
+                                <small>Drop-off at Melbourne Airport</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a href="{% url 'home' %}" class="nav__drop-item" role="menuitem">
+                            <span class="nav__drop-icon" aria-hidden="true">🛬</span>
+                            <span>
+                                <strong>From Airport</strong>
+                                <small>Pick-up from Melbourne Airport</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a href="{% url 'home' %}" class="nav__drop-item" role="menuitem">
+                            <span class="nav__drop-icon" aria-hidden="true">↔</span>
+                            <span>
+                                <strong>Point to Point</strong>
+                                <small>Any suburb, anywhere in Victoria</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a href="{% url 'home' %}" class="nav__drop-item" role="menuitem">
+                            <span class="nav__drop-icon" aria-hidden="true">⏱</span>
+                            <span>
+                                <strong>Hourly / As Directed</strong>
+                                <small>Flexible chauffeur, your schedule</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a href="{% url 'home' %}" class="nav__drop-item nav__drop-item--highlight" role="menuitem">
+                            <span class="nav__drop-icon" aria-hidden="true">★</span>
+                            <span>
+                                <strong>2-Hour Package</strong>
+                                <small>Perfect for events &amp; occasions</small>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Contact Dropdown -->
+            <li class="nav__item nav__item--dropdown" aria-haspopup="true">
+                <button class="nav__link nav__link--drop" aria-expanded="false" aria-controls="contact-menu">
+                    Contact
+                    <svg class="nav__chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </button>
+                <ul class="nav__dropdown" id="contact-menu" role="menu">
+                    <li role="none">
+                        <a href="{% url 'contact' %}" class="nav__drop-item" role="menuitem">
+                            <span class="nav__drop-icon" aria-hidden="true">✉</span>
+                            <span>
+                                <strong>Contact Us</strong>
+                                <small>Get in touch with our team</small>
+                            </span>
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a href="{% url 'terms' %}" class="nav__drop-item" role="menuitem">
+                            <span class="nav__drop-icon" aria-hidden="true">📄</span>
+                            <span>
+                                <strong>Terms &amp; Conditions</strong>
+                                <small>Booking &amp; cancellation policy</small>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Auth — desktop -->
+            {% if user.is_authenticated %}
+                <!-- Logged in: show name + logout -->
+                <li class="nav__item nav__item--dropdown" aria-haspopup="true">
+                    <button class="nav__link nav__link--drop nav__link--auth" aria-expanded="false" aria-controls="auth-menu">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        {{ user.first_name|default:user.username }}
+                        <svg class="nav__chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                    <ul class="nav__dropdown nav__dropdown--auth" id="auth-menu" role="menu">
+                        <li role="none">
+                            <a href="{% url 'home' %}" class="nav__drop-item" role="menuitem">
+                                <span class="nav__drop-icon" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                                        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                                    </svg>
+                                </span>
+                                <span>
+                                    <strong>My Account</strong>
+                                    <small>Bookings &amp; profile</small>
+                                </span>
+                            </a>
+                        </li>
+                        <li role="none">
+                            <form method="POST" action="{% url 'logout' %}" style="margin:0;">
+                                {% csrf_token %}
+                                <button type="submit" class="nav__drop-item nav__drop-item--logout" role="menuitem">
+                                    <span class="nav__drop-icon" aria-hidden="true">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                            <polyline points="16 17 21 12 16 7"/>
+                                            <line x1="21" y1="12" x2="9" y2="12"/>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <strong>Log Out</strong>
+                                        <small>Log out of your account</small>
+                                    </span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            {% else %}
+                <!-- Guest: show Sign In dropdown -->
+                <li class="nav__item nav__item--dropdown" aria-haspopup="true">
+                    <button class="nav__link nav__link--drop nav__link--auth" aria-expanded="false" aria-controls="auth-menu">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Sign In
+                        <svg class="nav__chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                    <ul class="nav__dropdown nav__dropdown--auth" id="auth-menu" role="menu">
+                        <li role="none">
+                            <a href="{% url 'signup' %}" class="nav__drop-item" role="menuitem">
+                                <span class="nav__drop-icon" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="9" cy="7" r="4"/>
+                                        <line x1="19" y1="8" x2="19" y2="14"/>
+                                        <line x1="22" y1="11" x2="16" y2="11"/>
+                                    </svg>
+                                </span>
+                                <span>
+                                    <strong>Sign Up</strong>
+                                    <small>Create a new account</small>
+                                </span>
+                            </a>
+                        </li>
+                        <li role="none">
+                            <a href="{% url 'login' %}" class="nav__drop-item" role="menuitem">
+                                <span class="nav__drop-icon" aria-hidden="true">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                        <polyline points="10 17 15 12 10 7"/>
+                                        <line x1="15" y1="12" x2="3" y2="12"/>
+                                    </svg>
+                                </span>
+                                <span>
+                                    <strong>Log In</strong>
+                                    <small>Access your account</small>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+        </ul><!-- /nav__links -->
+
+        <!-- Book Now CTA -->
+        <a href="{% url 'orders' %}" class="nav__cta" aria-label="Book your chauffeur now">
+            Book Now
+        </a>
+
+        <!-- Hamburger -->
+        <button class="nav__burger" id="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-mobile">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </div><!-- /nav__bar -->
+
+    <!-- ── Mobile Drawer ────────────────────────────────────────── -->
+    <div class="nav__mobile" id="nav-mobile" aria-hidden="true">
+        <div class="nav__mobile-inner">
+
+            <ul class="nav__mobile-links" role="list">
+
+                <li><a href="{% url 'home' %}" class="nav__mob-link">Home</a></li>
+                <li><a href="{% url 'about' %}" class="nav__mob-link">About</a></li>
+
+                <!-- Mobile Booking Accordion -->
+                <li class="nav__mob-acc">
+                    <button class="nav__mob-acc-btn" aria-expanded="false">
+                        Booking
+                        <svg class="nav__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                    <ul class="nav__mob-sub" aria-hidden="true">
+                        <li><a href="{% url 'home' %}">✈&nbsp; To Airport</a></li>
+                        <li><a href="{% url 'home' %}">🛬&nbsp; From Airport</a></li>
+                        <li><a href="{% url 'home' %}">↔&nbsp; Point to Point</a></li>
+                        <li><a href="{% url 'home' %}">⏱&nbsp; Hourly / As Directed</a></li>
+                        <li><a href="{% url 'home' %}">★&nbsp; 2-Hour Package</a></li>
+                    </ul>
+                </li>
+
+                <!-- Mobile Contact Accordion -->
+                <li class="nav__mob-acc">
+                    <button class="nav__mob-acc-btn" aria-expanded="false">
+                        Contact
+                        <svg class="nav__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                    <ul class="nav__mob-sub" aria-hidden="true">
+                        <li><a href="{% url 'contact' %}">✉&nbsp; Contact Us</a></li>
+                        <li><a href="{% url 'terms' %}">📄&nbsp; Terms &amp; Conditions</a></li>
+                    </ul>
+                </li>
+
+                <!-- Auth — mobile -->
+                {% if user.is_authenticated %}
+                    <!-- Logged in: show name + logout -->
+                    <li class="nav__mob-acc">
+                        <button class="nav__mob-acc-btn" aria-expanded="false">
+                            {{ user.first_name|default:user.username }}
+                            <svg class="nav__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <ul class="nav__mob-sub" aria-hidden="true">
+                            <li><a href="{% url 'profile' %}">🗂&nbsp; My Account</a></li>
+                            <li>
+                                <form method="POST" action="{% url 'logout' %}" style="margin:0;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="nav__mob-logout">
+                                        🚪&nbsp; Log Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <!-- Guest: show Sign In accordion -->
+                    <li class="nav__mob-acc">
+                        <button class="nav__mob-acc-btn" aria-expanded="false">
+                            Sign In
+                            <svg class="nav__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <ul class="nav__mob-sub" aria-hidden="true">
+                            <li><a href="{% url 'signup' %}">👤&nbsp; Sign Up</a></li>
+                            <li><a href="{% url 'login' %}">🔑&nbsp; Log In</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+
+            </ul>
+
+            <a href="{% url 'orders' %}" class="nav__mob-cta">Book Now</a>
+
+            <a href="tel:+61XXXXXXXXX" class="nav__mob-phone">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.61 5.61l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.27 16z"/>
+                </svg>
+                +61 3 XXXX XXXX
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Mobile backdrop -->
+    <div class="nav__backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+</nav>
+
+<!-- ================================================================
+     STYLES  — Light theme
+================================================================ -->
+<style>
+/* ── Variables (Light Theme) ───────────────────────────────────── */
+:root {
+    --gold:         #b8902e;
+    --gold-hover:   #9a7520;
+    --gold-bg:      rgba(184,144,46,0.09);
+    --nav-bg:       #ffffff;
+    --nav-bg-blur:  rgba(255,255,255,0.97);
+    --topbar-bg:    #f5f2eb;
+    --topbar-border:#e8e2d4;
+    --bar-border:   #e4ddd0;
+    --text-primary: #1a1a1a;
+    --text-muted:   #6b6560;
+    --text-faint:   #999190;
+    --drop-bg:      #ffffff;
+    --drop-border:  #e8e2d4;
+    --drop-hover:   #faf7f2;
+    --mob-bg:       #faf8f4;
+    --mob-border:   #ece7dd;
+    --mob-link:     #2c2825;
+    --mob-sub:      #5a5450;
+    --font-serif:   'Cormorant Garamond', Georgia, serif;
+    --font-sans:    'Jost', system-ui, sans-serif;
+    --ease:         cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --topbar-h:     36px;
+    --nav-h:        68px;
+    --shadow-drop:  0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ── Nav shell ─────────────────────────────────────────────────── */
+.nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    z-index: 1000;
+    font-family: var(--font-sans);
+}
+
+/* ── Top bar ───────────────────────────────────────────────────── */
+.nav__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--topbar-bg);
+    border-bottom: 1px solid var(--topbar-border);
+    padding: 0 2.5rem;
+    height: var(--topbar-h);
+    font-size: 0.7rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    transition: height 0.4s var(--ease), opacity 0.3s;
+}
+.nav.scrolled .nav__topbar {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.nav__tagline { font-weight: 400; }
+.nav__phone {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+}
+.nav__phone:hover { color: var(--gold-hover); }
+
+/* ── Main bar ──────────────────────────────────────────────────── */
+.nav__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--nav-bg-blur);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--bar-border);
+    padding: 0 2.5rem;
+    height: var(--nav-h);
+    transition: height 0.4s var(--ease), box-shadow 0.3s;
+}
+.nav.scrolled .nav__bar {
+    height: 58px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+
+/* ── Logo ──────────────────────────────────────────────────────── */
+.nav__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    flex-shrink: 0;
+}
+.nav__logo img { width: 38px; height: 38px; object-fit: contain; }
+.nav__logo-text {
+    font-family: var(--font-serif);
+    font-size: 1.12rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    line-height: 1;
+}
+.nav__logo-text span {
+    display: block;
+    font-size: 0.52rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 4px;
+}
+
+/* ── Desktop links ─────────────────────────────────────────────── */
+.nav__links {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.nav__item { position: relative; }
+
+.nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 0.5rem 0.85rem;
+    border-radius: 5px;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+}
+.nav__link:hover { color: var(--text-primary); background: var(--gold-bg); }
+.nav__link.active { color: var(--gold); background: var(--gold-bg); }
+
+.nav__chevron { transition: transform 0.28s var(--ease); flex-shrink: 0; }
+
+/* Auth link subtle styling */
+/* Logout button — desktop dropdown: matches nav__drop-item exactly */
+.nav__drop-item--logout {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    text-align: left;
+    color: var(--text-muted);
+}
+.nav__drop-item--logout:hover { color: var(--gold); background: var(--drop-hover); }
+
+/* Logout button — mobile drawer */
+.nav__mob-logout {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    text-align: left;
+    padding: 0.6rem 0 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--mob-sub);
+    border-bottom: 1px solid #ede8df;
+    transition: color 0.2s, padding-left 0.2s;
+}
+.nav__mob-logout:hover { color: var(--gold); padding-left: 1.35rem; }
+.nav__link--auth { color: var(--text-primary); }
+.nav__link--auth:hover { color: var(--gold); }
+
+/* ── Dropdown ──────────────────────────────────────────────────── */
+.nav__dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    min-width: 255px;
+    background: var(--drop-bg);
+    border: 1px solid var(--drop-border);
+    border-radius: 10px;
+    padding: 0.45rem;
+    list-style: none;
+    box-shadow: var(--shadow-drop);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
+    z-index: 200;
+}
+/* Arrow pip */
+.nav__dropdown::before {
+    content: '';
+    position: absolute;
+    top: -5px; left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 9px; height: 9px;
+    background: var(--drop-bg);
+    border-left: 1px solid var(--drop-border);
+    border-top: 1px solid var(--drop-border);
+}
+
+/* Open state — hover */
+.nav__item--dropdown:hover .nav__dropdown,
+.nav__item--dropdown:focus-within .nav__dropdown {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+}
+.nav__item--dropdown:hover > button,
+.nav__item--dropdown:focus-within > button {
+    color: var(--text-primary);
+    background: var(--gold-bg);
+}
+.nav__item--dropdown:hover > button .nav__chevron,
+.nav__item--dropdown:focus-within > button .nav__chevron {
+    transform: rotate(180deg);
+}
+
+/* Drop items */
+.nav__drop-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 7px;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: background 0.18s, color 0.18s;
+    font-size: 0.875rem;
+}
+.nav__drop-item:hover { background: var(--drop-hover); color: var(--text-primary); }
+.nav__drop-item strong {
+    display: block;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
+.nav__drop-item small {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    margin-top: 1px;
+    font-weight: 400;
+}
+.nav__drop-icon {
+    font-size: 1rem;
+    min-width: 20px;
+    text-align: center;
+    margin-top: 1px;
+    opacity: 0.75;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+/* Highlight — 2-hour package */
+.nav__drop-item--highlight strong { color: var(--gold); }
+
+/* Thin dividers between items */
+.nav__dropdown li + li { border-top: 1px solid #f0ece5; }
+
+/* Auth dropdown — narrower */
+.nav__dropdown--auth { min-width: 200px; }
+
+/* ── Book Now CTA ──────────────────────────────────────────────── */
+.nav__cta {
+    display: inline-flex;
+    align-items: center;
+    background: var(--gold);
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.62rem 1.4rem;
+    border-radius: 5px;
+    margin-left: 0.6rem;
+    flex-shrink: 0;
+    transition: background 0.22s, transform 0.18s, box-shadow 0.22s;
+    box-shadow: 0 2px 10px rgba(184,144,46,0.22);
+}
+.nav__cta:hover {
+    background: var(--gold-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(184,144,46,0.3);
+}
+.nav__cta:active { transform: translateY(0); }
+
+/* ── Hamburger ─────────────────────────────────────────────────── */
+.nav__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid var(--bar-border);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 7px 8px;
+    transition: background 0.2s, border-color 0.2s;
+}
+.nav__burger:hover { background: var(--gold-bg); border-color: var(--gold); }
+.nav__burger span {
+    display: block;
+    width: 20px; height: 1.5px;
+    background: var(--text-primary);
+    transform-origin: center;
+    transition: transform 0.32s var(--ease), opacity 0.22s, width 0.22s;
+}
+.nav__burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav__burger.open span:nth-child(2) { opacity: 0; width: 0; }
+.nav__burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── Backdrop ──────────────────────────────────────────────────── */
+.nav__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,24,18,0.35);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 998;
+    transition: opacity 0.32s var(--ease);
+}
+.nav__backdrop.open { opacity: 1; pointer-events: all; }
+
+/* ── Mobile Drawer ─────────────────────────────────────────────── */
+.nav__mobile {
+    position: fixed;
+    top: 0; right: 0;
+    width: min(340px, 90vw);
+    height: 100dvh;
+    background: var(--mob-bg);
+    border-left: 1px solid var(--mob-border);
+    box-shadow: -8px 0 40px rgba(0,0,0,0.10);
+    transform: translateX(100%);
+    transition: transform 0.38s var(--ease);
+    z-index: 999;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.nav__mobile.open { transform: translateX(0); }
+
+.nav__mobile-inner {
+    padding: 5.5rem 1.6rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+.nav__mobile-links { list-style: none; padding: 0; margin: 0; }
+
+/* Flat mobile links */
+.nav__mob-link {
+    display: block;
+    padding: 0.85rem 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mob-link);
+    text-decoration: none;
+    border-bottom: 1px solid var(--mob-border);
+    transition: color 0.2s, padding-left 0.2s;
+}
+.nav__mob-link:hover { color: var(--gold); padding-left: 5px; }
+.nav__mob-link.active { color: var(--gold); }
+
+/* Mobile accordion */
+.nav__mob-acc-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--mob-border);
+    cursor: pointer;
+    padding: 0.85rem 0;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mob-link);
+    transition: color 0.2s;
+}
+.nav__mob-acc-btn:hover { color: var(--gold); }
+.nav__mob-acc-btn[aria-expanded="true"] { color: var(--gold); }
+.nav__mob-acc-btn[aria-expanded="true"] .nav__chevron { transform: rotate(180deg); }
+.nav__chevron { transition: transform 0.28s var(--ease); }
+
+.nav__mob-sub {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.38s var(--ease);
+}
+.nav__mob-sub.open { max-height: 400px; }
+.nav__mob-sub a {
+    display: block;
+    padding: 0.6rem 0 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--mob-sub);
+    text-decoration: none;
+    border-bottom: 1px solid #ede8df;
+    transition: color 0.2s, padding-left 0.2s;
+}
+.nav__mob-sub a:hover { color: var(--gold); padding-left: 1.35rem; }
+
+/* Mobile CTA */
+.nav__mob-cta {
+    display: block;
+    background: var(--gold);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.95rem;
+    border-radius: 6px;
+    margin-top: 2rem;
+    box-shadow: 0 3px 12px rgba(184,144,46,0.25);
+    transition: background 0.22s, box-shadow 0.22s;
+}
+.nav__mob-cta:hover { background: var(--gold-hover); }
+
+/* Mobile phone */
+.nav__mob-phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-faint);
+    text-decoration: none;
+    font-size: 0.8rem;
+    margin-top: 1.1rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+}
+.nav__mob-phone:hover { color: var(--gold); }
+
+/* ── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+    .nav__links, .nav__cta { display: none; }
+    .nav__burger { display: flex; }
+    .nav__topbar, .nav__bar { padding: 0 1.25rem; }
+}
+
+/* ── Scroll lock ───────────────────────────────────────────────── */
+body.nav-open { overflow: hidden; }
+</style>
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+(function () {
+    'use strict';
+
+    var nav      = document.getElementById('main-nav');
+    var burger   = document.getElementById('nav-burger');
+    var drawer   = document.getElementById('nav-mobile');
+    var backdrop = document.getElementById('nav-backdrop');
+
+    /* ── Sticky scroll ─────────────────────────────────────────── */
+    window.addEventListener('scroll', function () {
+        nav.classList.toggle('scrolled', window.scrollY > 48);
+    }, { passive: true });
+
+    /* ── Mobile drawer ─────────────────────────────────────────── */
+    function openDrawer() {
+        drawer.classList.add('open');
+        backdrop.classList.add('open');
+        burger.classList.add('open');
+        burger.setAttribute('aria-expanded', 'true');
+        burger.setAttribute('aria-label', 'Close menu');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('nav-open');
+    }
+    function closeDrawer() {
+        drawer.classList.remove('open');
+        backdrop.classList.remove('open');
+        burger.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.setAttribute('aria-label', 'Open menu');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('nav-open');
+    }
+    burger.addEventListener('click', function () {
+        drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+    backdrop.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeDrawer();
+    });
+
+    /* ── Mobile accordions ─────────────────────────────────────── */
+    document.querySelectorAll('.nav__mob-acc-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var sub    = btn.nextElementSibling;
+            var isOpen = sub.classList.contains('open');
+
+            document.querySelectorAll('.nav__mob-sub.open').forEach(function (s) {
+                s.classList.remove('open');
+                s.setAttribute('aria-hidden', 'true');
+                s.previousElementSibling.setAttribute('aria-expanded', 'false');
+            });
+
+            if (!isOpen) {
+                sub.classList.add('open');
+                sub.setAttribute('aria-hidden', 'false');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
+    /* ── Desktop dropdown (click-to-open for keyboard users) ───── */
+    document.querySelectorAll('.nav__link--drop').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var expanded = btn.getAttribute('aria-expanded') === 'true';
+            document.querySelectorAll('.nav__link--drop').forEach(function (b) {
+                b.setAttribute('aria-expanded', 'false');
+            });
+            btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        });
+    });
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.nav__item--dropdown')) {
+            document.querySelectorAll('.nav__link--drop').forEach(function (b) {
+                b.setAttribute('aria-expanded', 'false');
+            });
+        }
+    });
+
+    /* ── Active link ───────────────────────────────────────────── */
+    var path = window.location.pathname;
+    document.querySelectorAll('.nav__link, .nav__mob-link').forEach(function (a) {
+        if (a.tagName === 'A') {
+            try {
+                var href = new URL(a.href, location.origin).pathname;
+                if (href === path || (href !== '/' && path.startsWith(href))) {
+                    a.classList.add('active');
+                    a.setAttribute('aria-current', 'page');
+                }
+            } catch (_) {}
+        }
+    });
+
+}());
+</script>

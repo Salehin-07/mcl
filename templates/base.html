@@ -1,0 +1,184 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en-AU" itemscope itemtype="https://schema.org/LocalBusiness">
+<head>
+    <!-- ============================================================
+         CHARACTER SET & VIEWPORT
+    ============================================================ -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ============================================================
+         PRIMARY SEO META TAGS
+    ============================================================ -->
+    <title>{% block title %}Melbourne Chauffeur & Limo Service | Luxury Car Hire Melbourne{% endblock %}</title>
+
+    <meta name="description"    content="{% block meta_description %}Melbourne's premier chauffeur and limousine service. Airport transfers, corporate car hire, weddings & special events. Available 24/7 across Melbourne, Mornington Peninsula & surrounds. Book online or call now.{% endblock %}">
+    <meta name="keywords"       content="{% block meta_keywords %}chauffeur Melbourne, limo hire Melbourne, limousine service Melbourne, airport transfer Melbourne, corporate car hire Melbourne, luxury car hire Melbourne, wedding car Melbourne, chauffeur driven car Melbourne{% endblock %}">
+    <meta name="author"         content="Melbourne Chauffeur & Limo Service">
+    <meta name="robots"         content="{% block meta_robots %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endblock %}">
+    <meta name="googlebot"      content="index, follow">
+    <meta name="revisit-after"  content="7 days">
+    <meta name="language"       content="en-AU">
+    <meta name="rating"         content="general">
+    <meta name="theme-color"    content="#0a0a0a">
+
+    <!-- Geo targeting — Melbourne, Victoria -->
+    <meta name="geo.region"     content="AU-VIC">
+    <meta name="geo.placename"  content="Melbourne, Victoria, Australia">
+    <meta name="geo.position"   content="-37.8136;144.9631">
+    <meta name="ICBM"           content="-37.8136, 144.9631">
+
+    <!-- ============================================================
+         CANONICAL URL
+    ============================================================ -->
+    <link rel="canonical" href="{% block canonical_url %}https://www.yourdomain.com.au/{% endblock %}">
+
+    <!-- ============================================================
+         OPEN GRAPH
+    ============================================================ -->
+    <meta property="og:type"         content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name"    content="Melbourne Chauffeur & Limo Service">
+    <meta property="og:title"        content="{% block og_title %}Melbourne Chauffeur & Limo Service | Luxury Car Hire{% endblock %}">
+    <meta property="og:description"  content="{% block og_description %}Melbourne's premier chauffeur and limousine service for airport transfers, corporate travel, weddings and special occasions.{% endblock %}">
+    <meta property="og:image"        content="{% block og_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt"    content="{% block og_image_alt %}Melbourne luxury chauffeur service{% endblock %}">
+    <meta property="og:url"          content="{% block og_url %}https://www.yourdomain.com.au/{% endblock %}">
+    <meta property="og:locale"       content="en_AU">
+
+    <!-- ============================================================
+         TWITTER CARD
+    ============================================================ -->
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:site"        content="@YourTwitterHandle">
+    <meta name="twitter:title"       content="{% block twitter_title %}Melbourne Chauffeur & Limo Service{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Premium chauffeur-driven limo hire across Melbourne. Airport transfers, corporate & events. Book 24/7.{% endblock %}">
+    <meta name="twitter:image"       content="{% block twitter_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+
+    <!-- ============================================================
+         STRUCTURED DATA — LocalBusiness + TaxiService (JSON-LD)
+    ============================================================ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": ["LocalBusiness", "TaxiService"],
+        "@id": "https://www.yourdomain.com.au/#business",
+        "name": "Melbourne Chauffeur & Limo Service",
+        "alternateName": ["Melbourne Limo Hire", "Melbourne Chauffeur Car"],
+        "description": "Melbourne's premier chauffeur and limousine service offering airport transfers, corporate car hire, wedding cars and special event transportation across Melbourne and Victoria.",
+        "url": "https://www.yourdomain.com.au",
+        "telephone": "+61-3-XXXX-XXXX",
+        "email": "bookings@yourdomain.com.au",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.yourdomain.com.au/static/images/logo.png",
+            "width": 400,
+            "height": 100
+        },
+        "image": "https://www.yourdomain.com.au/static/images/og-image.jpg",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Your Street Address",
+            "addressLocality": "Melbourne",
+            "addressRegion": "VIC",
+            "postalCode": "3000",
+            "addressCountry": "AU"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -37.8136,
+            "longitude": 144.9631
+        },
+        "areaServed": [
+            { "@type": "City",    "name": "Melbourne" },
+            { "@type": "State",   "name": "Victoria" },
+            { "@type": "Place",   "name": "Mornington Peninsula" },
+            { "@type": "Place",   "name": "Yarra Valley" },
+            { "@type": "Airport", "name": "Melbourne Airport (Tullamarine)" },
+            { "@type": "Airport", "name": "Avalon Airport" }
+        ],
+        "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+            "opens": "00:00",
+            "closes": "23:59"
+        },
+        "priceRange": "$$",
+        "currenciesAccepted": "AUD",
+        "paymentAccepted": "Credit Card, Cash, Bank Transfer",
+        "sameAs": [
+            "https://www.facebook.com/YourPage",
+            "https://www.instagram.com/YourProfile",
+            "https://www.linkedin.com/company/YourCompany"
+        ]
+    }
+    </script>
+
+    <!-- Per-page schema (FAQPage, BreadcrumbList, Review, etc.) -->
+    {% block extra_schema %}{% endblock %}
+
+    <!-- ============================================================
+         FAVICONS
+    ============================================================ -->
+    <link rel="icon"             type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon"             type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon"             type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180"  href="{% static 'images/apple-touch-icon.png' %}">
+    <link rel="manifest"                           href="{% static 'site.webmanifest' %}">
+
+    <!-- ============================================================
+         PRECONNECT — critical for Core Web Vitals
+    ============================================================ -->
+    <link rel="preconnect"   href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect"   href="https://fonts.gstatic.com"    crossorigin>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+
+    <!-- ============================================================
+         GOOGLE TAG MANAGER  (replace GTM-XXXXXXX with your ID)
+    ============================================================ -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+    <!-- ============================================================
+         EXTRA CSS — injected by child templates
+    ============================================================ -->
+    {% block extra_css %}{% endblock %}
+
+</head>
+<body>
+
+    <!-- GTM noscript fallback -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+                height="0" width="0" style="display:none;visibility:hidden"
+                title="Google Tag Manager"></iframe>
+    </noscript>
+
+    <!-- Accessibility: skip to main content -->
+    <a href="#main-content"
+       style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999"
+       onfocus="this.style.cssText='position:fixed;top:0;left:0;width:auto;height:auto;padding:.75rem 1.5rem;background:#c9a84c;color:#000;font-weight:600;text-decoration:none;z-index:9999'">
+        Skip to main content
+    </a>
+
+    {% include "partials/nav.html" %}
+
+    <main id="main-content" role="main" tabindex="-1">
+        {% block body %}{% endblock %}
+    </main>
+
+    {% include "partials/footer.html" %}
+
+    <!-- ============================================================
+         EXTRA JS — injected by child templates
+    ============================================================ -->
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

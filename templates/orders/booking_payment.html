@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Payment — Melbourne Chauffeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+  :root {
+    --ink: #1a1a2e; --ink-soft: #3d3d5c; --ink-muted: #8888aa;
+    --cream: #faf9f6; --white: #ffffff;
+    --gold: #c9a84c; --gold-light: #e8d08a; --gold-bg: #fdf8ec;
+    --border: #e4e0d8; --green: #2e7d52; --green-bg: #f0faf5;
+    --red: #c0392b; --red-bg: #fff5f5;
+    --shadow-card: 0 2px 24px rgba(26,26,46,0.07);
+    --shadow-hover: 0 8px 40px rgba(26,26,46,0.13);
+    --radius: 14px; --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+  .page-hero {
+    background: var(--ink); padding: 48px 32px 0;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,168,76,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; position: relative; z-index: 1; }
+  .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(24px,5vw,40px); font-weight: 700; color: #fff; line-height: 1.18; position: relative; z-index: 1; }
+  .page-hero p  { margin-top: 10px; color: rgba(255,255,255,0.5); font-size: 15px; font-weight: 300; position: relative; z-index: 1; }
+
+  .progress-wrap { display: flex; align-items: center; justify-content: center; margin-top: 28px; padding-bottom: 24px; position: relative; z-index: 1; }
+  .p-step { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+  .p-line { width: 56px; height: 1px; margin-bottom: 20px; flex-shrink: 0; }
+  .p-line.done { background: var(--gold); }
+  .p-line.pending { background: rgba(255,255,255,0.2); }
+  .p-circle { width: 30px; height: 30px; border-radius: 50%; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .p-step.done .p-circle  { border: 2px solid var(--gold); background: var(--gold); color: var(--ink); }
+  .p-step.active .p-circle { border: 2px solid var(--gold); color: var(--gold); background: rgba(201,168,76,0.15); }
+  .p-lbl { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 600; }
+  .p-step.done .p-lbl, .p-step.active .p-lbl { color: var(--gold); }
+  .p-step:not(.done):not(.active) .p-lbl { color: rgba(255,255,255,0.3); }
+  .p-step:not(.done):not(.active) .p-circle { border: 2px solid rgba(255,255,255,0.22); color: rgba(255,255,255,0.35); }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+  @media(max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-card);
+    padding: 28px 28px 24px; margin-bottom: 20px;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .card:nth-child(1){animation-delay:.05s}
+  .card:nth-child(2){animation-delay:.12s}
+
+  .card-title {
+    font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600;
+    margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #f5f3ee; font-size: 14px; }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label { color: var(--ink-muted); font-weight: 400; flex-shrink: 0; margin-right: 16px; }
+  .detail-value { color: var(--ink); font-weight: 500; text-align: right; }
+
+  /* Stripe Elements container */
+  .stripe-wrap { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); padding: 28px; animation: fadeUp 0.4s ease 0.08s both; }
+  .stripe-wrap .card-title { margin-bottom: 20px; }
+
+  #payment-element { margin-bottom: 20px; }
+
+  .pay-btn {
+    width: 100%; padding: 17px 24px;
+    background: var(--gold); color: var(--ink); border: none;
+    border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 4px 18px rgba(201,168,76,0.4);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  }
+  .pay-btn:hover:not(:disabled) { background: #b8922e; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.5); }
+  .pay-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+  .spinner { width: 18px; height: 18px; border: 2px solid rgba(26,26,46,0.3); border-top-color: var(--ink); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #payment-message {
+    display: none; margin-top: 14px; padding: 12px 16px;
+    background: var(--red-bg); border: 1.5px solid #fdb8b8;
+    color: var(--red); border-radius: var(--radius-sm); font-size: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #payment-message:empty { display: none !important; }
+
+  .secure-note { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 14px; font-size: 12px; color: var(--ink-muted); }
+
+  /* Right panel */
+  .price-panel {
+    background: var(--ink); border-radius: var(--radius); padding: 28px;
+    position: sticky; top: 24px; overflow: hidden;
+    animation: fadeUp 0.4s ease 0.15s both;
+  }
+  .price-panel::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 90% 70% at 110% 110%, rgba(201,168,76,0.22) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .ps-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 6px; position: relative; }
+  .ps-amount { font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 700; color: #fff; position: relative; }
+  .ps-amount .aud { font-size: 20px; font-weight: 400; opacity: 0.6; margin-right: 4px; vertical-align: top; line-height: 2.1; }
+  .ps-note { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 5px; position: relative; }
+
+  .breakdown { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; }
+  .b-row { display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.6); padding: 6px 0; }
+  .b-row.total { color: #fff; font-weight: 700; font-size: 15px; border-top: 1px solid rgba(255,255,255,0.15); margin-top: 8px; padding-top: 14px; }
+  .b-row.total .bv { color: var(--gold); }
+  .b-row.discount { color: #a8d5be; }
+  .b-badge { background: rgba(201,168,76,0.18); color: var(--gold-light); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+
+  .ref-pill {
+    margin-top: 20px; padding: 10px 14px; position: relative;
+    background: rgba(255,255,255,0.06); border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 12px; color: rgba(255,255,255,0.45); text-align: center;
+  }
+  .ref-pill strong { color: var(--gold); font-size: 14px; letter-spacing: 1px; font-family: 'Playfair Display', serif; }
+
+  @media(max-width: 620px){
+    .stripe-wrap, .price-panel { padding: 20px 18px; }
+    .ps-amount { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-hero">
+  <p class="eyebrow">Melbourne Chauffeur Service</p>
+  <h1>Secure Payment</h1>
+  <p>Your booking is reserved — complete payment to confirm</p>
+
+  <div class="progress-wrap">
+    <div class="p-step done"><div class="p-circle">✓</div><div class="p-lbl">Details</div></div>
+    <div class="p-line done"></div>
+    <div class="p-step done"><div class="p-circle">✓</div><div class="p-lbl">Price</div></div>
+    <div class="p-line done"></div>
+    <div class="p-step active"><div class="p-circle">3</div><div class="p-lbl">Pay</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="two-col">
+
+    <!-- Left: journey recap + Stripe -->
+    <div>
+
+      <div class="card">
+        <div class="card-title">🗺️ Journey Summary</div>
+        <div class="detail-row"><span class="detail-label">From</span><span class="detail-value">{{ order.pickup_address }}</span></div>
+        {% if order.additional_stop %}
+        <div class="detail-row"><span class="detail-label">Via</span><span class="detail-value">{{ order.additional_stop }}</span></div>
+        {% endif %}
+        <div class="detail-row"><span class="detail-label">To</span><span class="detail-value">{{ order.destination_address }}</span></div>
+        <div class="detail-row"><span class="detail-label">Date & Time</span><span class="detail-value">{{ order.pickup_date }} at {{ order.pickup_time }}</span></div>
+        <div class="detail-row"><span class="detail-label">Vehicle</span><span class="detail-value">{{ order.limo_service_type }}</span></div>
+        <div class="detail-row"><span class="detail-label">Passenger</span><span class="detail-value">{{ order.passenger_name }}</span></div>
+      </div>
+
+      <!-- Stripe Payment Element -->
+      <div class="stripe-wrap">
+        <div class="card-title">💳 Payment Details</div>
+        <div id="payment-element"></div>
+        <div id="payment-message"></div>
+        <button id="pay-btn" class="pay-btn">
+          <span id="btn-text">Pay AUD ${{ order.total_price }}</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+        <div class="secure-note">
+          <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><rect x="1" y="6" width="10" height="8" rx="1.5" stroke="#8888aa" stroke-width="1.2"/><path d="M3.5 6V4a2.5 2.5 0 015 0v2" stroke="#8888aa" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Secured by Stripe — your card details are never stored on our servers
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right: price panel -->
+    <div>
+      <div class="price-panel">
+        <div class="ps-label">Amount Due</div>
+        <div class="ps-amount"><span class="aud">AUD</span>{{ order.total_price }}</div>
+        <div class="ps-note">Charged once payment is confirmed</div>
+
+        {% if breakdown %}
+        <div class="breakdown">
+          <div class="b-row"><span>Base fare</span><span>${{ breakdown.base }}</span></div>
+          <div class="b-row"><span>{{ breakdown.distance_km }} km</span><span>${{ breakdown.distance_cost }}</span></div>
+          {% if breakdown.stop_cost %}<div class="b-row"><span>Extra stop</span><span>${{ breakdown.stop_cost }}</span></div>{% endif %}
+          {% if breakdown.toll_cost %}<div class="b-row"><span>Toll charge</span><span>${{ breakdown.toll_cost }}</span></div>{% endif %}
+          {% if breakdown.baby_cost %}<div class="b-row"><span>Baby seat</span><span>${{ breakdown.baby_cost }}</span></div>{% endif %}
+          {% if breakdown.return_multiplier %}
+          <div class="b-row"><span>Return × 2</span><span>${{ breakdown.subtotal_before_return|floatformat:2 }} × 2</span></div>
+          <div class="b-row discount"><span>5% return discount</span><span>−${{ breakdown.return_discount }}</span></div>
+          {% endif %}
+          <div class="b-row total"><span>Total</span><span class="bv">${{ order.total_price }}</span></div>
+        </div>
+        {% endif %}
+
+        <div class="ref-pill">
+          Booking ref<br>
+          <strong>#{{ order.id|stringformat:"06d" }}</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const stripe = Stripe('{{ stripe_public_key }}');
+
+  const elements = stripe.elements({
+    clientSecret: '{{ client_secret }}',
+    appearance: {
+      theme: 'stripe',
+      variables: {
+        colorPrimary:       '#c9a84c',
+        colorBackground:    '#ffffff',
+        colorText:          '#1a1a2e',
+        colorDanger:        '#c0392b',
+        fontFamily:         'DM Sans, sans-serif',
+        borderRadius:       '8px',
+        spacingUnit:        '4px',
+      },
+    },
+  });
+
+  const paymentElement = elements.create('payment');
+  paymentElement.mount('#payment-element');
+
+  const btn     = document.getElementById('pay-btn');
+  const spinner = document.getElementById('spinner');
+  const btnText = document.getElementById('btn-text');
+  const msgEl   = document.getElementById('payment-message');
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent   = 'Processing…';
+    msgEl.textContent     = '';
+    msgEl.style.display   = 'none';
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.origin + '{% url "status" order.id %}',
+        receipt_email: '{{ order.passenger_email }}',
+      },
+    });
+
+    // Only reached if confirmPayment doesn't redirect (i.e. an error)
+    if (error) {
+      msgEl.textContent   = error.message;
+      msgEl.style.display = 'flex';
+      btn.disabled        = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Try Again';
+    }
+  });
+</script>
+</body>
+</html>

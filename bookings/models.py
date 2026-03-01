@@ -29,3 +29,11 @@ class Bookings(models.Model):
     card_number = models.CharField()
     #booking_date = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class CarRate(models.Model):
+    car_name = models.CharField(default='SUV')
+    passenger_limit = models.IntegerField(default=2)
+    bag_limit = models.IntegerField(default=2)
+    base_rate = models.DecimalField(max_digits=10, decimal_places=2)
+    per_km_rate = models.DecimalField(max_digits=10, decimal_places=2)

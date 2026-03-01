@@ -1,0 +1,635 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Privacy Policy | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block meta_description %}Read the Privacy Policy for Melbourne Chauffeur & Limo Service. Learn how we collect, use and protect your personal information in accordance with Australian Privacy Law.{% endblock %}
+{% block meta_keywords %}Melbourne chauffeur privacy policy, limo service data policy, personal information chauffeur Melbourne{% endblock %}
+{% block canonical_url %}https://www.yourdomain.com.au/privacy/{% endblock %}
+{% block og_title %}Privacy Policy | Melbourne Chauffeur & Limo Service{% endblock %}
+{% block og_description %}How we collect, use and protect your personal information. Compliant with the Australian Privacy Act 1988.{% endblock %}
+{% block twitter_title %}Privacy Policy | Melbourne Chauffeur & Limo{% endblock %}
+{% block twitter_description %}Our commitment to protecting your personal information. Compliant with Australian Privacy Law.{% endblock %}
+
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   PRIVACY POLICY PAGE — all classes pp__  ·  scoped to [data-page="privacy"]
+   No conflict with nav__ / ftr__ / hp__ / cp__ / tc__ / ab__ / su__ / li__ / pr__
+════════════════════════════════════════════════════════════════ */
+[data-page="privacy"] {
+    --pp-gold:      #b8902e;
+    --pp-gold-lt:   #d4aa4a;
+    --pp-gold-dk:   #9a7520;
+    --pp-gold-bg:   rgba(184,144,46,0.07);
+    --pp-ink:       #1a1714;
+    --pp-ink-2:     #2e2a26;
+    --pp-muted:     #6b6560;
+    --pp-faint:     #a09890;
+    --pp-cream:     #faf8f3;
+    --pp-cream-2:   #f3efe6;
+    --pp-white:     #ffffff;
+    --pp-border:    #e8e2d6;
+    --pp-border-2:  #f0ece4;
+    --pp-serif:     'Cormorant Garamond', Georgia, serif;
+    --pp-sans:      'Jost', system-ui, sans-serif;
+    --pp-ease:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    font-family: var(--pp-sans);
+    color: var(--pp-ink);
+    background: var(--pp-white);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* ── Reveal ───────────────────────────────────────────────── */
+.pp__reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s var(--pp-ease), transform .6s var(--pp-ease); }
+.pp__reveal.pp__in { opacity: 1; transform: none; }
+.pp__d1 { transition-delay: .1s; } .pp__d2 { transition-delay: .2s; }
+.pp__d3 { transition-delay: .3s; } .pp__d4 { transition-delay: .4s; }
+
+/* ── Layout ───────────────────────────────────────────────── */
+.pp__wrap    { max-width: 1160px; margin: 0 auto; }
+.pp__section { padding: 5.5rem 2rem; }
+
+/* ════════════════════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════════════════════ */
+.pp__hero {
+    background: var(--pp-ink);
+    padding: calc(36px + 68px + 3.5rem) 2rem 4.5rem;
+    position: relative; overflow: hidden;
+}
+.pp__hero-bg {
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(108deg, rgba(26,23,20,.97) 0%, rgba(26,23,20,.8) 60%, rgba(26,23,20,.5) 100%),
+        url("{% static 'img/hero-car.jpg' %}") center / cover no-repeat;
+}
+.pp__hero-rule-h {
+    position: absolute; bottom: 0; left: 0;
+    width: 45%; height: 2px;
+    background: linear-gradient(to right, var(--pp-gold), transparent);
+}
+.pp__hero-rule-v {
+    position: absolute; top: 0; right: 220px;
+    width: 1px; height: 40%;
+    background: linear-gradient(to bottom, transparent, rgba(184,144,46,.22));
+}
+.pp__hero-inner { position: relative; z-index: 2; max-width: 1160px; margin: 0 auto; }
+
+.pp__hero-kicker {
+    font-size: .63rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--pp-gold-lt); display: flex; align-items: center; gap: .75rem;
+    margin-bottom: 1.2rem;
+    opacity: 0; animation: pp-up .8s .3s var(--pp-ease) forwards;
+}
+.pp__hero-kicker::before { content: ''; width: 28px; height: 1px; background: var(--pp-gold-lt); display: block; }
+
+.pp__hero-title {
+    font-family: var(--pp-serif); font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+    font-weight: 300; line-height: 1.08; color: #f8f5ef; letter-spacing: -.02em; max-width: 580px;
+    opacity: 0; animation: pp-up .9s .5s var(--pp-ease) forwards;
+}
+.pp__hero-title em { font-style: italic; color: var(--pp-gold-lt); }
+
+.pp__hero-meta {
+    display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+    margin-top: 2rem;
+    opacity: 0; animation: pp-up .9s .7s var(--pp-ease) forwards;
+}
+.pp__hero-meta-item {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .72rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(248,245,239,.5);
+}
+.pp__hero-meta-item svg { color: var(--pp-gold-lt); flex-shrink: 0; }
+.pp__hero-meta-sep { width: 1px; height: 16px; background: rgba(248,245,239,.15); }
+
+@keyframes pp-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   BODY — TOC + CONTENT
+════════════════════════════════════════════════════════════ */
+.pp__body-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+/* ── TABLE OF CONTENTS ───────────────────────────────────── */
+.pp__toc {
+    position: sticky; top: 120px;
+    background: var(--pp-white);
+    border: 1px solid var(--pp-border);
+    border-radius: 13px;
+    overflow: hidden;
+}
+.pp__toc-head {
+    padding: 1.2rem 1.6rem;
+    background: var(--pp-cream);
+    border-bottom: 1px solid var(--pp-border);
+    font-size: .65rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--pp-gold);
+    display: flex; align-items: center; gap: .6rem;
+}
+.pp__toc-head svg { flex-shrink: 0; }
+.pp__toc-list { list-style: none; padding: .6rem 0; margin: 0; }
+.pp__toc-item { border-bottom: 1px solid var(--pp-border-2); }
+.pp__toc-item:last-child { border-bottom: none; }
+.pp__toc-link {
+    display: flex; align-items: center; gap: .65rem;
+    padding: .72rem 1.6rem;
+    font-size: .78rem; font-weight: 400; color: var(--pp-muted);
+    text-decoration: none;
+    transition: color .2s, background .2s, padding-left .2s;
+    position: relative;
+}
+.pp__toc-link::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: var(--pp-gold);
+    transform: scaleY(0); transition: transform .2s var(--pp-ease);
+}
+.pp__toc-link:hover { color: var(--pp-gold); background: var(--pp-gold-bg); padding-left: 2rem; }
+.pp__toc-link:hover::before { transform: scaleY(1); }
+.pp__toc-link.pp__active { color: var(--pp-gold); font-weight: 500; }
+.pp__toc-link.pp__active::before { transform: scaleY(1); }
+.pp__toc-num {
+    font-size: .6rem; font-weight: 600; letter-spacing: .08em;
+    color: var(--pp-faint); min-width: 18px; flex-shrink: 0;
+}
+
+.pp__toc-cta {
+    margin: .8rem 1.6rem 1.4rem;
+    display: flex; align-items: center; justify-content: center; gap: .55rem;
+    background: var(--pp-gold); color: #fff;
+    font-size: .68rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    padding: .75rem 1rem; border-radius: 8px; text-decoration: none;
+    transition: background .22s, transform .2s, box-shadow .22s;
+    box-shadow: 0 3px 14px rgba(184,144,46,.28);
+}
+.pp__toc-cta:hover { background: var(--pp-gold-dk); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(184,144,46,.36); }
+
+/* ── CONTENT ─────────────────────────────────────────────── */
+.pp__content { min-width: 0; }
+
+/* intro blurb */
+.pp__intro {
+    background: var(--pp-cream);
+    border: 1px solid var(--pp-border);
+    border-left: 3px solid var(--pp-gold);
+    border-radius: 0 10px 10px 0;
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 3rem;
+    font-size: .9rem; color: var(--pp-muted); line-height: 1.82;
+}
+.pp__intro strong { color: var(--pp-ink-2); font-weight: 500; }
+
+/* section block */
+.pp__clause {
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--pp-border-2);
+    scroll-margin-top: 110px;
+}
+.pp__clause:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.pp__clause-head {
+    display: flex; align-items: flex-start; gap: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+.pp__clause-num {
+    font-family: var(--pp-serif);
+    font-size: 1.9rem; font-weight: 300; color: rgba(184,144,46,.25);
+    line-height: 1; flex-shrink: 0; min-width: 36px;
+    transition: color .3s;
+}
+.pp__clause:hover .pp__clause-num { color: rgba(184,144,46,.55); }
+
+.pp__clause-title {
+    font-family: var(--pp-serif);
+    font-size: 1.5rem; font-weight: 500; color: var(--pp-ink); line-height: 1.2;
+    padding-top: .25rem;
+}
+
+/* body text */
+.pp__clause p {
+    font-size: .9rem; color: var(--pp-muted); line-height: 1.85;
+    margin-bottom: 1rem;
+}
+.pp__clause p:last-child { margin-bottom: 0; }
+.pp__clause strong { color: var(--pp-ink-2); font-weight: 500; }
+.pp__clause a { color: var(--pp-gold); text-decoration: none; }
+.pp__clause a:hover { text-decoration: underline; }
+
+/* list inside clause */
+.pp__list {
+    list-style: none; padding: 0; margin: 1rem 0;
+    display: flex; flex-direction: column; gap: .55rem;
+}
+.pp__list li {
+    display: flex; align-items: flex-start; gap: .75rem;
+    font-size: .9rem; color: var(--pp-muted); line-height: 1.75;
+}
+.pp__list li::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--pp-gold); flex-shrink: 0; margin-top: .6rem; opacity: .7;
+}
+.pp__list strong { color: var(--pp-ink-2); font-weight: 500; }
+
+/* highlight / callout box */
+.pp__highlight {
+    background: var(--pp-gold-bg);
+    border: 1px solid rgba(184,144,46,.2);
+    border-radius: 9px; padding: 1.2rem 1.4rem;
+    font-size: .88rem; color: var(--pp-ink-2); line-height: 1.75;
+    margin: 1.2rem 0;
+}
+.pp__highlight strong { color: var(--pp-gold-dk); }
+
+/* ════════════════════════════════════════════════════════════
+   CTA BANNER
+════════════════════════════════════════════════════════════ */
+.pp__cta-banner {
+    background: var(--pp-gold); padding: 4rem 2rem; text-align: center; position: relative; overflow: hidden;
+}
+.pp__cta-banner::before {
+    content: ''; position: absolute; top: -60px; left: -60px;
+    width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,.05);
+}
+.pp__cta-banner::after {
+    content: ''; position: absolute; bottom: -70px; right: -40px;
+    width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,.04);
+}
+.pp__cta-inner { position: relative; z-index: 1; }
+.pp__cta-label { font-size: .65rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-bottom: .75rem; }
+.pp__cta-title {
+    font-family: var(--pp-serif); font-size: clamp(1.9rem,3.5vw,2.8rem);
+    font-weight: 400; color: #fff; line-height: 1.2; margin-bottom: .75rem;
+}
+.pp__cta-sub { font-size: .95rem; color: rgba(255,255,255,.8); margin-bottom: 2rem; font-weight: 300; }
+.pp__cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.pp__btn-white {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: #fff; color: var(--pp-gold-dk);
+    font-family: var(--pp-sans); font-size: .74rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding: .9rem 1.8rem; border-radius: 8px; text-decoration: none;
+    transition: background .22s, transform .2s, box-shadow .22s, color .22s;
+    box-shadow: 0 4px 16px rgba(0,0,0,.16);
+}
+.pp__btn-white:hover { background: var(--pp-ink); color: var(--pp-gold-lt); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.26); }
+
+.pp__btn-outline {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: rgba(255,255,255,.12); color: #fff;
+    font-family: var(--pp-sans); font-size: .74rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    padding: .9rem 1.8rem; border-radius: 8px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,.35);
+    transition: background .22s;
+}
+.pp__btn-outline:hover { background: rgba(255,255,255,.22); }
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .pp__body-grid { grid-template-columns: 220px 1fr; gap: 2.5rem; }
+}
+@media (max-width: 768px) {
+    .pp__section { padding: 3.5rem 1.25rem; }
+    .pp__body-grid { grid-template-columns: 1fr; }
+    .pp__toc { position: static; }
+    .pp__clause-num { font-size: 1.5rem; }
+}
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div data-page="privacy">
+
+<!-- ════════════════════════════════
+     HERO
+════════════════════════════════ -->
+<section class="pp__hero" aria-label="Privacy Policy">
+    <div class="pp__hero-bg" role="img" aria-label="Luxury chauffeur vehicle"></div>
+    <div class="pp__hero-rule-h" aria-hidden="true"></div>
+    <div class="pp__hero-rule-v" aria-hidden="true"></div>
+    <div class="pp__hero-inner">
+        <p class="pp__hero-kicker">Legal &amp; Compliance</p>
+        <h1 class="pp__hero-title">Privacy <em>Policy</em></h1>
+        <div class="pp__hero-meta">
+            <span class="pp__hero-meta-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Last updated: January 2025
+            </span>
+            <span class="pp__hero-meta-sep" aria-hidden="true"></span>
+            <span class="pp__hero-meta-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Australian Privacy Act 1988
+            </span>
+            <span class="pp__hero-meta-sep" aria-hidden="true"></span>
+            <span class="pp__hero-meta-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 14 8 14s8-8.75 8-14a8 8 0 0 0-8-8z"/></svg>
+                Melbourne, Victoria, Australia
+            </span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     TOC + CONTENT
+════════════════════════════════ -->
+<section class="pp__section" aria-label="Privacy Policy content">
+    <div class="pp__wrap">
+        <div class="pp__body-grid">
+
+            <!-- ── TABLE OF CONTENTS ──────────────────── -->
+            <nav class="pp__toc pp__reveal" aria-label="Table of contents">
+                <div class="pp__toc-head">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    Contents
+                </div>
+                <ol class="pp__toc-list">
+                    <li class="pp__toc-item"><a href="#pp-1"  class="pp__toc-link"><span class="pp__toc-num">01</span>Who We Are</a></li>
+                    <li class="pp__toc-item"><a href="#pp-2"  class="pp__toc-link"><span class="pp__toc-num">02</span>Information We Collect</a></li>
+                    <li class="pp__toc-item"><a href="#pp-3"  class="pp__toc-link"><span class="pp__toc-num">03</span>How We Collect It</a></li>
+                    <li class="pp__toc-item"><a href="#pp-4"  class="pp__toc-link"><span class="pp__toc-num">04</span>How We Use It</a></li>
+                    <li class="pp__toc-item"><a href="#pp-5"  class="pp__toc-link"><span class="pp__toc-num">05</span>Disclosure to Third Parties</a></li>
+                    <li class="pp__toc-item"><a href="#pp-6"  class="pp__toc-link"><span class="pp__toc-num">06</span>Storage &amp; Security</a></li>
+                    <li class="pp__toc-item"><a href="#pp-7"  class="pp__toc-link"><span class="pp__toc-num">07</span>Cookies &amp; Tracking</a></li>
+                    <li class="pp__toc-item"><a href="#pp-8"  class="pp__toc-link"><span class="pp__toc-num">08</span>Your Rights</a></li>
+                    <li class="pp__toc-item"><a href="#pp-9"  class="pp__toc-link"><span class="pp__toc-num">09</span>Retention</a></li>
+                    <li class="pp__toc-item"><a href="#pp-10" class="pp__toc-link"><span class="pp__toc-num">10</span>Contact &amp; Complaints</a></li>
+                </ol>
+                <a href="{% url 'contact' %}" class="pp__toc-cta">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Privacy Enquiry
+                </a>
+            </nav>
+
+            <!-- ── CONTENT ────────────────────────────── -->
+            <div class="pp__content">
+
+                <div class="pp__intro pp__reveal">
+                    <strong>Your privacy matters to us.</strong> This Privacy Policy explains how Melbourne Chauffeur &amp; Limo Service ("we", "us", "our") collects, uses, stores and discloses your personal information. We are committed to handling your information in accordance with the <strong>Australian Privacy Act 1988 (Cth)</strong> and the Australian Privacy Principles (APPs). By using our services or website, you consent to the practices described in this policy.
+                </div>
+
+                <!-- 1. Who We Are -->
+                <div class="pp__clause pp__reveal" id="pp-1">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">01</span>
+                        <h2 class="pp__clause-title">Who We Are</h2>
+                    </div>
+                    <p>Melbourne Chauffeur &amp; Limo Service is a private ground transport operator registered and operating in Victoria, Australia. We provide chauffeur, limousine and passenger transfer services to individuals, corporations and event organisers throughout Melbourne and Victoria.</p>
+                    <p><strong>Business name:</strong> Melbourne Chauffeur &amp; Limo Service<br>
+                    <strong>ABN:</strong> XX XXX XXX XXX<br>
+                    <strong>Address:</strong> Melbourne, Victoria, Australia<br>
+                    <strong>Email:</strong> <a href="mailto:privacy@yourdomain.com.au">privacy@yourdomain.com.au</a><br>
+                    <strong>Phone:</strong> <a href="tel:+61XXXXXXXXX">+61 3 XXXX XXXX</a></p>
+                </div>
+
+                <!-- 2. Information We Collect -->
+                <div class="pp__clause pp__reveal" id="pp-2">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">02</span>
+                        <h2 class="pp__clause-title">Information We Collect</h2>
+                    </div>
+                    <p>We collect only the personal information that is necessary to provide our services, process bookings and communicate with you. The types of personal information we may collect include:</p>
+                    <ul class="pp__list">
+                        <li><span><strong>Identity information:</strong> Your first name, last name and, where applicable, the name of your organisation.</span></li>
+                        <li><span><strong>Contact information:</strong> Email address, phone number and postal address where provided.</span></li>
+                        <li><span><strong>Booking information:</strong> Pickup and drop-off locations, travel dates and times, flight numbers, passenger count and any special requests or requirements.</span></li>
+                        <li><span><strong>Payment information:</strong> Credit or debit card details processed securely through our payment provider. We do not store full card numbers on our systems.</span></li>
+                        <li><span><strong>Account information:</strong> Username and hashed password if you create an account on our website.</span></li>
+                        <li><span><strong>Communication records:</strong> Emails, SMS messages and phone call notes where relevant to your booking or enquiry.</span></li>
+                        <li><span><strong>Technical information:</strong> IP address, browser type, device information and website usage data collected automatically when you visit our website.</span></li>
+                    </ul>
+                    <div class="pp__highlight">
+                        <strong>Sensitive information:</strong> We do not intentionally collect sensitive information such as health, racial, political or religious information. Please do not provide this to us unless it is strictly necessary for your booking (for example, accessibility requirements).
+                    </div>
+                </div>
+
+                <!-- 3. How We Collect It -->
+                <div class="pp__clause pp__reveal" id="pp-3">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">03</span>
+                        <h2 class="pp__clause-title">How We Collect It</h2>
+                    </div>
+                    <p>We collect personal information through the following means:</p>
+                    <ul class="pp__list">
+                        <li><span><strong>Directly from you</strong> when you make a booking online, by phone or email, create an account, submit a contact form or communicate with us.</span></li>
+                        <li><span><strong>Automatically</strong> through cookies and similar tracking technologies when you visit our website. See Section 7 for details.</span></li>
+                        <li><span><strong>From third parties</strong> such as corporate accounts who book on behalf of passengers, travel agents or event coordinators acting as your representative.</span></li>
+                        <li><span><strong>From publicly available sources</strong> such as flight tracking services used to monitor arrival times for airport pickups.</span></li>
+                    </ul>
+                    <p>Where practicable, we collect personal information directly from you. If we collect your information from a third party, we will take reasonable steps to inform you that this has occurred.</p>
+                </div>
+
+                <!-- 4. How We Use It -->
+                <div class="pp__clause pp__reveal" id="pp-4">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">04</span>
+                        <h2 class="pp__clause-title">How We Use It</h2>
+                    </div>
+                    <p>We use your personal information only for the purposes for which it was collected, or for directly related purposes. These include:</p>
+                    <ul class="pp__list">
+                        <li><span>Processing, confirming and managing your booking.</span></li>
+                        <li><span>Contacting you about your booking, including sending confirmations, driver details and journey reminders.</span></li>
+                        <li><span>Providing and improving our services.</span></li>
+                        <li><span>Processing payments and issuing invoices or receipts.</span></li>
+                        <li><span>Responding to enquiries, complaints or feedback.</span></li>
+                        <li><span>Sending service-related communications and, with your consent, promotional information about our offerings.</span></li>
+                        <li><span>Complying with our legal obligations under Victorian and Australian law.</span></li>
+                        <li><span>Analysing website usage to improve the user experience.</span></li>
+                    </ul>
+                    <div class="pp__highlight">
+                        We will never use your personal information to send you marketing communications from third parties, or sell it to advertisers or data brokers. <strong>Your data is not for sale.</strong>
+                    </div>
+                </div>
+
+                <!-- 5. Disclosure to Third Parties -->
+                <div class="pp__clause pp__reveal" id="pp-5">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">05</span>
+                        <h2 class="pp__clause-title">Disclosure to Third Parties</h2>
+                    </div>
+                    <p>We do not sell, rent or trade your personal information. We may disclose your information to third parties only in the following limited circumstances:</p>
+                    <ul class="pp__list">
+                        <li><span><strong>Assigned drivers:</strong> Your name, phone number, pickup location and relevant booking details are shared with your assigned driver to fulfil the booking.</span></li>
+                        <li><span><strong>Payment processors:</strong> Your payment details are passed securely to our payment gateway provider (e.g. Stripe) for transaction processing. These providers are bound by their own privacy policies and industry-standard PCI-DSS security requirements.</span></li>
+                        <li><span><strong>IT and hosting providers:</strong> Our website and booking system are hosted by third-party infrastructure providers under data processing agreements that require them to protect your information.</span></li>
+                        <li><span><strong>Legal requirements:</strong> We may disclose your information if required to do so by law, court order, or a regulatory authority.</span></li>
+                        <li><span><strong>Corporate bookings:</strong> If your booking was made by a corporate account holder, relevant booking details may be shared with that account holder for billing and reconciliation purposes.</span></li>
+                    </ul>
+                    <p>We do not disclose personal information to overseas recipients except where our hosting or processing infrastructure operates overseas, in which case we take reasonable steps to ensure equivalent privacy protections are in place.</p>
+                </div>
+
+                <!-- 6. Storage & Security -->
+                <div class="pp__clause pp__reveal" id="pp-6">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">06</span>
+                        <h2 class="pp__clause-title">Storage &amp; Security</h2>
+                    </div>
+                    <p>We take reasonable steps to protect the personal information we hold from misuse, interference, loss, and unauthorised access, modification or disclosure. Our security measures include:</p>
+                    <ul class="pp__list">
+                        <li><span>HTTPS encryption for all data transmitted through our website.</span></li>
+                        <li><span>Hashed and salted password storage — we never store passwords in plain text.</span></li>
+                        <li><span>Payment card data is handled entirely by our PCI-DSS compliant payment processor and is not stored on our servers.</span></li>
+                        <li><span>Access to personal information is restricted to staff who need it to perform their duties.</span></li>
+                        <li><span>Regular security reviews of our website and booking systems.</span></li>
+                    </ul>
+                    <p>Despite these measures, no method of data transmission or storage is completely secure. If you have reason to believe your information has been compromised, please contact us immediately at <a href="mailto:privacy@yourdomain.com.au">privacy@yourdomain.com.au</a>.</p>
+                    <div class="pp__highlight">
+                        <strong>Data breach notification:</strong> In the event of a serious data breach that is likely to cause harm, we will notify affected individuals and the Office of the Australian Information Commissioner (OAIC) as required by the Notifiable Data Breaches scheme.
+                    </div>
+                </div>
+
+                <!-- 7. Cookies & Tracking -->
+                <div class="pp__clause pp__reveal" id="pp-7">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">07</span>
+                        <h2 class="pp__clause-title">Cookies &amp; Tracking</h2>
+                    </div>
+                    <p>Our website uses cookies and similar technologies to improve your browsing experience and analyse how the site is used. A cookie is a small text file stored on your device by your browser.</p>
+                    <ul class="pp__list">
+                        <li><span><strong>Essential cookies:</strong> Required for the website to function, including session management and CSRF protection for forms. These cannot be disabled.</span></li>
+                        <li><span><strong>Analytics cookies:</strong> Used to understand how visitors interact with our site (e.g. pages visited, time on site). We use anonymised, aggregated data only.</span></li>
+                        <li><span><strong>Preference cookies:</strong> Store your settings and preferences to improve your experience on return visits.</span></li>
+                    </ul>
+                    <p>You can control or disable non-essential cookies through your browser settings at any time. Disabling cookies may affect some functionality of the website. We do not use advertising or third-party tracking cookies.</p>
+                </div>
+
+                <!-- 8. Your Rights -->
+                <div class="pp__clause pp__reveal" id="pp-8">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">08</span>
+                        <h2 class="pp__clause-title">Your Rights</h2>
+                    </div>
+                    <p>Under the Australian Privacy Act 1988, you have the following rights in relation to your personal information:</p>
+                    <ul class="pp__list">
+                        <li><span><strong>Access:</strong> You may request a copy of the personal information we hold about you.</span></li>
+                        <li><span><strong>Correction:</strong> If you believe information we hold is inaccurate, incomplete or out of date, you may request we correct it. You can also update your details directly through your account profile.</span></li>
+                        <li><span><strong>Deletion:</strong> You may request that we delete your personal information, subject to our legal and contractual retention obligations.</span></li>
+                        <li><span><strong>Opt-out of marketing:</strong> You may unsubscribe from marketing communications at any time by clicking "unsubscribe" in any email we send, or by contacting us directly.</span></li>
+                        <li><span><strong>Complaints:</strong> You may lodge a complaint about how we have handled your information. See Section 10.</span></li>
+                    </ul>
+                    <p>To exercise any of these rights, please contact us at <a href="mailto:privacy@yourdomain.com.au">privacy@yourdomain.com.au</a>. We will respond within 30 days. In some cases we may need to verify your identity before processing a request.</p>
+                </div>
+
+                <!-- 9. Retention -->
+                <div class="pp__clause pp__reveal" id="pp-9">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">09</span>
+                        <h2 class="pp__clause-title">Retention</h2>
+                    </div>
+                    <p>We retain personal information only for as long as necessary to fulfil the purposes for which it was collected, or as required by law. Our general retention periods are:</p>
+                    <ul class="pp__list">
+                        <li><span><strong>Booking and transaction records:</strong> 7 years, as required for tax and financial record-keeping under Australian law.</span></li>
+                        <li><span><strong>Account information:</strong> For the duration your account is active. If you delete your account, your personal data is removed within 30 days, except where retention is required by law.</span></li>
+                        <li><span><strong>Communication records:</strong> 2 years from the date of last contact, unless the communication relates to a booking or dispute.</span></li>
+                        <li><span><strong>Website analytics data:</strong> Anonymised and aggregated. Not subject to individual retention limits.</span></li>
+                    </ul>
+                    <p>When personal information is no longer required, we take reasonable steps to destroy or de-identify it securely.</p>
+                </div>
+
+                <!-- 10. Contact & Complaints -->
+                <div class="pp__clause pp__reveal" id="pp-10">
+                    <div class="pp__clause-head">
+                        <span class="pp__clause-num" aria-hidden="true">10</span>
+                        <h2 class="pp__clause-title">Contact &amp; Complaints</h2>
+                    </div>
+                    <p>If you have a question, concern or complaint about how we handle your personal information, please contact us in the first instance:</p>
+                    <p>
+                        <strong>Email:</strong> <a href="mailto:privacy@yourdomain.com.au">privacy@yourdomain.com.au</a><br>
+                        <strong>Phone:</strong> <a href="tel:+61XXXXXXXXX">+61 3 XXXX XXXX</a><br>
+                        <strong>Post:</strong> Privacy Officer, Melbourne Chauffeur &amp; Limo Service, Melbourne VIC, Australia
+                    </p>
+                    <p>We will acknowledge your complaint within 5 business days and aim to resolve it within 30 days. If you are not satisfied with our response, you may escalate your complaint to the <strong>Office of the Australian Information Commissioner (OAIC)</strong>:</p>
+                    <ul class="pp__list">
+                        <li><span>Website: <a href="https://www.oaic.gov.au" target="_blank" rel="noopener noreferrer">www.oaic.gov.au</a></span></li>
+                        <li><span>Phone: 1300 363 992</span></li>
+                        <li><span>Post: GPO Box 5218, Sydney NSW 2001</span></li>
+                    </ul>
+                    <p>This Privacy Policy was last updated in January 2025. We reserve the right to update it at any time. The current version will always be available at <a href="{% url 'privacy_policy' %}">yourdomain.com.au/privacy/</a>. Continued use of our services after a policy update constitutes acceptance of the revised policy.</p>
+                </div>
+
+            </div><!-- /pp__content -->
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     CTA BANNER
+════════════════════════════════ -->
+<section class="pp__cta-banner" aria-labelledby="pp-cta-heading">
+    <div class="pp__cta-inner">
+        <p class="pp__cta-label">Questions About Your Data?</p>
+        <h2 class="pp__cta-title" id="pp-cta-heading">We're Open,<br>Transparent &amp; Here to Help</h2>
+        <p class="pp__cta-sub">If you have any questions about this Privacy Policy or how we handle your information, get in touch with us directly.</p>
+        <div class="pp__cta-actions">
+            <a href="{% url 'contact' %}" class="pp__btn-white">
+                Contact Us
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="{% url 'terms' %}" class="pp__btn-outline">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Terms &amp; Conditions
+            </a>
+        </div>
+    </div>
+</section>
+
+</div><!-- /data-page="privacy" -->
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+(function () {
+    'use strict';
+
+    /* ── Scroll reveal ─────────────────────────────────────── */
+    var els = document.querySelectorAll('.pp__reveal');
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('pp__in'); obs.unobserve(e.target); }
+            });
+        }, { threshold: 0.08 });
+        els.forEach(function (el) { obs.observe(el); });
+    } else {
+        els.forEach(function (el) { el.classList.add('pp__in'); });
+    }
+
+    /* ── TOC active highlight on scroll ───────────────────── */
+    var links   = document.querySelectorAll('.pp__toc-link');
+    var clauses = document.querySelectorAll('.pp__clause');
+    if (!links.length || !clauses.length) return;
+
+    var scrollObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                links.forEach(function (l) { l.classList.remove('pp__active'); });
+                var active = document.querySelector('.pp__toc-link[href="#' + entry.target.id + '"]');
+                if (active) active.classList.add('pp__active');
+            }
+        });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+
+    clauses.forEach(function (c) { if (c.id) scrollObs.observe(c); });
+
+}());
+</script>
+{% endblock %}
