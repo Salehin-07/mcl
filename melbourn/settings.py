@@ -19,7 +19,7 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyAyWVxTeHcQOpZ6UvPI50zMWHKPM4WhpqE'
+GOOGLE_MAPS_API_KEY = 'google_maps_api_key_here'
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY','')
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY','') 
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
@@ -27,7 +27,7 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)18j#ch3(0&a5c2%vp6gu%e$&h*i!9#ve68hi-1j1jj$yc3^so'
+SECRET_KEY = 'django_secret_key_here'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
