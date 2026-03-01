@@ -278,24 +278,18 @@
       <div class="bf__vehicle-group" id="bf__vehicleGroup"
            style="grid-template-columns: repeat({{ rates|length }}, 1fr);">
         {% for r in rates %}
-        {# Pick icon by position: first=sedan, second=suv, rest=stretch/bus #}
-        {% if forloop.first %}{% with icon="🚗" %}
-        {% elif forloop.counter == 2 %}{% with icon="🚙" %}
-        {% else %}{% with icon="🚐" %}
-        {% endif %}
-        <div class="bf__vehicle-card {% if form_data.limo_service_type == r.name or forloop.first and not form_data.limo_service_type %}bf__selected{% endif %}"
+        <div class="bf__vehicle-card {% if form_data.limo_service_type == r.name %}bf__selected{% elif forloop.first and not form_data.limo_service_type %}bf__selected{% endif %}"
              data-value="{{ r.name }}"
              data-max-p="{{ r.max_passengers }}"
              data-max-b="{{ r.max_bags }}"
              onclick="bfSelectVehicle(this)">
           <input type="radio" name="_v" value="{{ r.name }}">
           <div class="bf__vehicle-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <span class="bf__vehicle-icon">{{ icon }}</span>
+          <span class="bf__vehicle-icon">{% if forloop.first %}🚗{% elif forloop.counter == 2 %}🚙{% else %}🚐{% endif %}</span>
           <div class="bf__vehicle-name">{{ r.name }}</div>
           <div class="bf__vehicle-meta">Up to {{ r.max_passengers }} passengers</div>
           <div class="bf__vehicle-price" id="bf__price-{{ forloop.counter }}">—</div>
         </div>
-        {% endwith %}{% endwith %}{% endwith %}
         {% endfor %}
       </div>
 
