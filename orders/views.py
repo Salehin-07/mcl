@@ -1,3 +1,4 @@
+import time 
 import datetime
 import logging
 import requests
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 # Service type configuration  (structure is static, prices come from DB)
 # ─────────────────────────────────────────────────────────────────────────────
 
-MELBOURNE_AIRPORT = "Melbourne Airport (Tullamarine), Departure Dr, Tullamarine VIC 3043"
+MELBOURNE_AIRPORT = "Melbourne Airport"
 
 SERVICE_TYPES = {
     "ptp": {
@@ -156,34 +157,64 @@ def _find_rate(rates, vehicle_name):
 #     }
 
 
+
+
 def calculate_distance(pickup: str, destination: str, extra_stop: str | None) -> dict:
     def geocode(address):
+        # Nominatim requires a delay to avoid 429 (Too Many Requests)
+        time.sleep(1.1) 
+        
+        headers = {"User-Agent": "LimoBookingApp/1.0 (your-email@example.com)"}
         resp = requests.get(
             "https://nominatim.openstreetmap.org/search",
             params={"q": address, "format": "json", "limit": 1},
-            headers={"User-Agent": "LimoBookingApp/1.0"},
+            headers=headers,
         )
-        data = resp.json()
+        
+        # Check if we actually got a 200 OK
+        if resp.status_code != 200:
+            raise ValueError(f"Geocoding server returned error {resp.status_code}")
+
+        try:
+            data = resp.json()
+        except requests.exceptions.JSONDecodeError:
+            logger.error(f"Failed to decode JSON from Nominatim. Content: {resp.text[:100]}")
+            raise ValueError("Geocoding service returned an invalid response.")
+
         if not data:
             raise ValueError(f"Could not find address: {address}")
         return f"{data[0]['lon']},{data[0]['lat']}"
 
     try:
-        loc1, loc2 = geocode(pickup), geocode(destination)
-        coords = f"{loc1};{geocode(extra_stop)};{loc2}" if extra_stop else f"{loc1};{loc2}"
+        # Get coordinates
+        loc1 = geocode(pickup)
+        loc2 = geocode(destination)
+        
+        if extra_stop:
+            loc_stop = geocode(extra_stop)
+            coords = f"{loc1};{loc_stop};{loc2}"
+        else:
+            coords = f"{loc1};{loc2}"
+
+        # Call OSRM
         route_resp = requests.get(
             f"https://router.project-osrm.org/route/v1/driving/{coords}",
             params={"overview": "false"},
-        ).json()
-        if route_resp.get("code") != "Ok":
+        )
+        
+        route_data = route_resp.json()
+        if route_data.get("code") != "Ok":
             raise ValueError("OSRM could not calculate a route.")
+            
         return {
-            "distance_km": round(route_resp["routes"][0]["distance"] / 1000, 2),
+            "distance_km": round(route_data["routes"][0]["distance"] / 1000, 2),
             "has_tolls": True,
         }
     except Exception as e:
         logger.error(f"Routing error: {e}")
-        raise ValueError(f"Route calculation failed: {str(e)}")
+        # Re-raise with a cleaner message for the UI
+        raise ValueError(str(e))
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
