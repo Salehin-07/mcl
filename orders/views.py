@@ -120,6 +120,7 @@ def _find_rate(rates, vehicle_name):
 # ─────────────────────────────────────────────────────────────────────────────
 # Helper 1 – Distance (OSRM + Nominatim)
 # ─────────────────────────────────────────────────────────────────────────────
+
 # def calculate_distance(pickup: str, destination: str, extra_stop: str | None) -> dict:
 #     """
 #     Uses Google Maps Directions API to calculate driving distance.
@@ -153,8 +154,6 @@ def _find_rate(rates, vehicle_name):
 #         "distance_km": distance_km,
 #         "has_tolls":   has_tolls,
 #     }
-
-
 
 
 def calculate_distance(pickup: str, destination: str, extra_stop: str | None) -> dict:
