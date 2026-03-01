@@ -158,63 +158,56 @@ def _find_rate(rates, vehicle_name):
 
 
 
-
 def calculate_distance(pickup: str, destination: str, extra_stop: str | None) -> dict:
-    def geocode(address):
-        # Nominatim requires a delay to avoid 429 (Too Many Requests)
-        time.sleep(1.1) 
+    MAPBOX_KEY = "your_mapbox_access_token_here"
+    
+    def get_coords(address):
+        url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{address}.json"
+        resp = requests.get(url, params={"access_token": MAPBOX_KEY, "limit": 1})
         
-        headers = {"User-Agent": "LimoBookingApp/1.0 (your-email@example.com)"}
-        resp = requests.get(
-            "https://nominatim.openstreetmap.org/search",
-            params={"q": address, "format": "json", "limit": 1},
-            headers=headers,
-        )
-        
-        # Check if we actually got a 200 OK
         if resp.status_code != 200:
-            raise ValueError(f"Geocoding server returned error {resp.status_code}")
-
-        try:
-            data = resp.json()
-        except requests.exceptions.JSONDecodeError:
-            logger.error(f"Failed to decode JSON from Nominatim. Content: {resp.text[:100]}")
-            raise ValueError("Geocoding service returned an invalid response.")
-
-        if not data:
-            raise ValueError(f"Could not find address: {address}")
-        return f"{data[0]['lon']},{data[0]['lat']}"
+            raise ValueError(f"Mapbox Geocode Error: {resp.status_code}")
+            
+        data = resp.json()
+        if not data.get("features"):
+            raise ValueError(f"Address not found: {address}")
+            
+        # Mapbox returns [longitude, latitude]
+        return data["features"][0]["center"]
 
     try:
-        # Get coordinates
-        loc1 = geocode(pickup)
-        loc2 = geocode(destination)
+        # 1. Geocode all points
+        p1 = get_coords(pickup)
+        p2 = get_coords(destination)
         
+        coordinates = f"{p1[0]},{p1[1]};{p2[0]},{p2[1]}"
         if extra_stop:
-            loc_stop = geocode(extra_stop)
-            coords = f"{loc1};{loc_stop};{loc2}"
-        else:
-            coords = f"{loc1};{loc2}"
+            ps = get_coords(extra_stop)
+            # Format: pickup -> stop -> destination
+            coordinates = f"{p1[0]},{p1[1]};{ps[0]},{ps[1]};{p2[0]},{p2[1]}"
 
-        # Call OSRM
-        route_resp = requests.get(
-            f"https://router.project-osrm.org/route/v1/driving/{coords}",
-            params={"overview": "false"},
-        )
+        # 2. Get Directions
+        route_url = f"https://api.mapbox.com/directions/v5/mapbox/driving/{coordinates}"
+        route_resp = requests.get(route_url, params={
+            "access_token": MAPBOX_KEY,
+            "overview": "false"
+        })
         
         route_data = route_resp.json()
         if route_data.get("code") != "Ok":
-            raise ValueError("OSRM could not calculate a route.")
-            
+            raise ValueError("Mapbox could not calculate route.")
+
+        # Distance is in meters, convert to km
+        distance_meters = route_data["routes"][0]["distance"]
+        
         return {
-            "distance_km": round(route_data["routes"][0]["distance"] / 1000, 2),
-            "has_tolls": True,
+            "distance_km": round(distance_meters / 1000, 2),
+            "has_tolls": True, # Mapbox doesn't always flag tolls in the basic response
         }
+
     except Exception as e:
         logger.error(f"Routing error: {e}")
-        # Re-raise with a cleaner message for the UI
-        raise ValueError(str(e))
-
+        raise ValueError(f"Route calculation failed: {str(e)}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
