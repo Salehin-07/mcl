@@ -73,12 +73,12 @@ class Rates(models.Model):
     name = models.CharField(default='Sedan 1-5')
     max_passangers = models.IntegerField(default=5)
     max_bags = models.IntegerField(default=5)
-    base_price = models.DecimalField(default=30)
-    per_km_rate = models.DecimalField(default=3.50
-    stop = models.DecimalField(default=15)
-    th_rate = models.DecimalField(default=200)
-    oh_rate = models.DecimalField(default=100)
+    base_price = models.DecimalField(max_digits=6,decimal_places=2,default=30)
+    per_km_rate = models.DecimalField(max_digits=6,decimal_places=2,default=3.50)
+    stop = models.DecimalField(max_digits=6,decimal_places=2,default=15)
+    th_rate = models.DecimalField(max_digits=6,decimal_places=2,default=200)
+    oh_rate = models.DecimalField(max_digits=6,decimal_places=2,default=100)
 
 class Discount(models.Model):
-    th_discount = models.DecimalField(default=0.025)
-    return_discount = models.DecimalField(default=0.05)
+    th_discount = models.DecimalField(max_digits=6,decimal_places=2,default=0.025)
+    return_discount = models.DecimalField(max_digits=6,decimal_places=2,default=0.05)
