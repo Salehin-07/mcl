@@ -30,7 +30,7 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 SECRET_KEY = 'django-insecure-)18j#ch3(0&a5c2%vp6gu%e$&h*i!9#ve68hi-1j1jj$yc3^so'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = [
 #     'localhost',
@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # my apps 
-    #'pwa',
+    'pwa',
     'core',
     'orders',
     'bookings',
@@ -195,42 +195,43 @@ JAZZMIN_SETTINGS = {
     "show_sidebar": True,
 }
 
-# PWA_APP_NAME = 'Melbourn'
-# PWA_APP_DESCRIPTION = "Melbourn"
-# PWA_APP_THEME_COLOR = '#0A0302'
-# PWA_APP_BACKGROUND_COLOR = '#ffffff'
-# PWA_APP_DISPLAY = 'standalone'
-# PWA_APP_SCOPE = '/'
-# PWA_APP_ORIENTATION = 'any'
-# PWA_APP_START_URL = '/'
-# PWA_APP_STATUS_BAR_COLOR = 'default'
-# PWA_APP_ICONS = [
-#     {
-#         'src': '/static/img/logo.png',
-#         'sizes': '160x160'
-#     }
-# ]
-# PWA_APP_ICONS_APPLE = [
-#     {
-#         'src': '/static/img/logo.png',
-#         'sizes': '160x160'
-#     }
-# ]
-# PWA_APP_SPLASH_SCREEN = [
-#     {
-#         'src': '/static/img/logo.png',
-#         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
-#     }
-# ]
-# PWA_APP_DIR = 'ltr'
-# PWA_APP_LANG = 'en-US'
-# PWA_APP_SHORTCUTS = []
-# PWA_APP_SCREENSHOTS = [
-#     {
-#       'src': '/static/img/logo.png',
-#       'sizes': '750x1334',
-#       "type": "image/png"
-#     }
-# ]
+PWA_APP_NAME = 'Melbourn'
+PWA_APP_DESCRIPTION = "Melbourn"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/img/logo.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/img/logo.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/img/logo.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
+PWA_APP_SHORTCUTS = []
+PWA_APP_SCREENSHOTS = [
+    {
+      'src': '/static/img/logo.png',
+      'sizes': '750x1334',
+      "type": "image/png"
+    }
+]
+
+PWA_SERVICE_WORKER_PATH = BASE_DIR / 'sw.js'
 # 
-# PWA_SERVICE_WORKER_PATH = BASE_DIR / 'sw.js'

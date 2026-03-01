@@ -1,6 +1,7 @@
 django
 django-jazzmin
 django-compressor
+django-pwa
 whitenoise
 dj-database-url
 requests
