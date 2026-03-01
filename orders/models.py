@@ -67,3 +67,18 @@ class Order(models.Model):
     @property
     def service_type_display(self):
         return dict(self.SERVICE_TYPE_CHOICES).get(self.service_type, self.service_type)
+
+
+class Rates(models.Model):
+    name = models.CharField(default='Sedan 1-5')
+    max_passangers = models.IntegerField(default=5)
+    max_bags = models.IntegerField(default=5)
+    base_price = models.DecimalField(default=30)
+    per_km_rate = models.DecimalField(default=3.50
+    stop = models.DecimalField(default=15)
+    th_rate = models.DecimalField(default=200)
+    oh_rate = models.DecimalField(default=100)
+
+class Discount(models.Model):
+    th_discount = models.DecimalField(default=0.025)
+    return_discount = models.DecimalField(default=0.05)

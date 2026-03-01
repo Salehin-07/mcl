@@ -10,16 +10,17 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
-from .models import Order
+from .models import Order, Rates, Discount
 
 logger = logging.getLogger(__name__)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Service type configuration
 # ─────────────────────────────────────────────────────────────────────────────
+DISCOUNT = Discount.objects.all().first()
 
-MELBOURNE_AIRPORT = "Melbourne Airport (Tullamarine), Departure Dr, Tullamarine VIC 3043"
+
+MELBOURNE_AIRPORT = "Melbourne Airport"
 
 SERVICE_TYPES = {
     # ?type=ptp  — Point to Point
@@ -73,27 +74,45 @@ SERVICE_TYPES = {
 # th  = 2 Hour Hire:  Sedan $200, SUV $250 (+$50), Stretch $300 (+$50)  | 2.5% discount
 # oh  = 1 Hour Hire:  Sedan $100, SUV $125 (+$25), Stretch $150 (+$25)  | no discount
 
-TH_RATES = {
-    "Sedan 1-5":    200.00,
-    "SUV 1-7":      250.00,
-    "Stretch 1-13": 300.00,
-}
-TH_DISCOUNT = 0.025  # 2.5%
+# TH_RATES = {
+#     "Sedan 1-5":    200.00,
+#     "SUV 1-7":      250.00,
+#     "Stretch 1-13": 300.00,
+# }
 
-OH_RATES = {
-    "Sedan 1-5":    100.00,
-    "SUV 1-7":      125.00,
-    "Stretch 1-13": 150.00,
-}
+TH_RATES = {}
+
+TH_DISCOUNT = DISCOUNT.th_discount if DISCOUNT else 0.025  # 2.5%
+
+# OH_RATES = {
+#     "Sedan 1-5":    100.00,
+#     "SUV 1-7":      125.00,
+#     "Stretch 1-13": 150.00,
+# }
+
+OH_RATES = {}
+
 
 # ── Per-km rates (ptp / fair / tair) ─────────────────────────────────────────
-RATES = {
-    "Sedan 1-5":    {"base": 30.00,  "per_km": 3.50, "stop": 15.00},
-    "SUV 1-7":      {"base": 55.00,  "per_km": 5.50, "stop": 25.00},
-    "Stretch 1-13": {"base": 135.00, "per_km": 9.50, "stop": 65.00},
-}
+# RATES = {
+#     "Sedan 1-5":    {"base": 30.00,  "per_km": 3.50, "stop": 15.00},
+#     "SUV 1-7":      {"base": 55.00,  "per_km": 5.50, "stop": 25.00},
+#     "Stretch 1-13": {"base": 135.00, "per_km": 9.50, "stop": 65.00},
+# }
 
-RETURN_DISCOUNT = 0.05  # 5% for return rides on per-km types
+RATES = {}
+
+RETURN_DISCOUNT = DISCOUNT.return_discount if DISCOUNT else 0.05  # 5% for return rides on per-km types
+
+for r in Rates.objects.all():
+    RATES[r.name] = {
+        'base':r.base_price,
+        'per_km':r.per_km_rate,
+        'stop':r.stop,
+    }
+    OH_RATES[r.name] = r.oh_rate
+    TH_RATES[r.name] = r.th_rate
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
