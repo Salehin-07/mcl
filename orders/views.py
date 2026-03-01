@@ -122,93 +122,93 @@ def _find_rate(rates, vehicle_name):
 # Helper 1 – Distance (OSRM + Nominatim)
 # ─────────────────────────────────────────────────────────────────────────────
 
-# def calculate_distance(pickup: str, destination: str, extra_stop: str | None) -> dict:
-#     """
-#     Uses Google Maps Directions API to calculate driving distance.
-#     Returns distance_km and has_tolls.
-#     """
-#     gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-# 
-#     waypoints = [extra_stop] if extra_stop else None
-# 
-#     directions = gmaps.directions(
-#         origin=pickup,
-#         destination=destination,
-#         waypoints=waypoints,
-#         mode="driving",
-#         optimize_waypoints=False,
-#     )
-# 
-#     if not directions:
-#         raise ValueError("Google Maps returned no route for the given addresses.")
-# 
-#     total_meters = sum(leg["distance"]["value"] for leg in directions[0]["legs"])
-#     distance_km  = round(total_meters / 1000, 2)
-# 
-#     has_tolls = any(
-#         "toll" in step.get("html_instructions", "").lower()
-#         for leg in directions[0]["legs"]
-#         for step in leg["steps"]
-#     )
-# 
-#     return {
-#         "distance_km": distance_km,
-#         "has_tolls":   has_tolls,
-#     }
-
-
-
 def calculate_distance(pickup: str, destination: str, extra_stop: str | None) -> dict:
-    MAPBOX_KEY = "your_mapbox_access_token_here"
-    
-    def get_coords(address):
-        url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{address}.json"
-        resp = requests.get(url, params={"access_token": MAPBOX_KEY, "limit": 1})
-        
-        if resp.status_code != 200:
-            raise ValueError(f"Mapbox Geocode Error: {resp.status_code}")
-            
-        data = resp.json()
-        if not data.get("features"):
-            raise ValueError(f"Address not found: {address}")
-            
-        # Mapbox returns [longitude, latitude]
-        return data["features"][0]["center"]
+    """
+    Uses Google Maps Directions API to calculate driving distance.
+    Returns distance_km and has_tolls.
+    """
+    gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
-    try:
-        # 1. Geocode all points
-        p1 = get_coords(pickup)
-        p2 = get_coords(destination)
-        
-        coordinates = f"{p1[0]},{p1[1]};{p2[0]},{p2[1]}"
-        if extra_stop:
-            ps = get_coords(extra_stop)
-            # Format: pickup -> stop -> destination
-            coordinates = f"{p1[0]},{p1[1]};{ps[0]},{ps[1]};{p2[0]},{p2[1]}"
+    waypoints = [extra_stop] if extra_stop else None
 
-        # 2. Get Directions
-        route_url = f"https://api.mapbox.com/directions/v5/mapbox/driving/{coordinates}"
-        route_resp = requests.get(route_url, params={
-            "access_token": MAPBOX_KEY,
-            "overview": "false"
-        })
-        
-        route_data = route_resp.json()
-        if route_data.get("code") != "Ok":
-            raise ValueError("Mapbox could not calculate route.")
+    directions = gmaps.directions(
+        origin=pickup,
+        destination=destination,
+        waypoints=waypoints,
+        mode="driving",
+        optimize_waypoints=False,
+    )
 
-        # Distance is in meters, convert to km
-        distance_meters = route_data["routes"][0]["distance"]
-        
-        return {
-            "distance_km": round(distance_meters / 1000, 2),
-            "has_tolls": True, # Mapbox doesn't always flag tolls in the basic response
-        }
+    if not directions:
+        raise ValueError("Google Maps returned no route for the given addresses.")
 
-    except Exception as e:
-        logger.error(f"Routing error: {e}")
-        raise ValueError(f"Route calculation failed: {str(e)}")
+    total_meters = sum(leg["distance"]["value"] for leg in directions[0]["legs"])
+    distance_km  = round(total_meters / 1000, 2)
 
+    has_tolls = any(
+        "toll" in step.get("html_instructions", "").lower()
+        for leg in directions[0]["legs"]
+        for step in leg["steps"]
+    )
+
+    return {
+        "distance_km": distance_km,
+        "has_tolls":   has_tolls,
+    }
+# 
+
+
+# def calculate_distance(pickup: str, destination: str, extra_stop: str | None) -> dict:
+#     MAPBOX_KEY = "your_mapbox_access_token_here"
+#     
+#     def get_coords(address):
+#         url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{address}.json"
+#         resp = requests.get(url, params={"access_token": MAPBOX_KEY, "limit": 1})
+#         
+#         if resp.status_code != 200:
+#             raise ValueError(f"Mapbox Geocode Error: {resp.status_code}")
+#             
+#         data = resp.json()
+#         if not data.get("features"):
+#             raise ValueError(f"Address not found: {address}")
+#             
+#        Mapbox returns [longitude, latitude]
+#         return data["features"][0]["center"]
+# 
+#     try:
+#        1. Geocode all points
+#         p1 = get_coords(pickup)
+#         p2 = get_coords(destination)
+#         
+#         coordinates = f"{p1[0]},{p1[1]};{p2[0]},{p2[1]}"
+#         if extra_stop:
+#             ps = get_coords(extra_stop)
+#            Format: pickup -> stop -> destination
+#             coordinates = f"{p1[0]},{p1[1]};{ps[0]},{ps[1]};{p2[0]},{p2[1]}"
+# 
+#        2. Get Directions
+#         route_url = f"https://api.mapbox.com/directions/v5/mapbox/driving/{coordinates}"
+#         route_resp = requests.get(route_url, params={
+#             "access_token": MAPBOX_KEY,
+#             "overview": "false"
+#         })
+#         
+#         route_data = route_resp.json()
+#         if route_data.get("code") != "Ok":
+#             raise ValueError("Mapbox could not calculate route.")
+# 
+#        Distance is in meters, convert to km
+#         distance_meters = route_data["routes"][0]["distance"]
+#         
+#         return {
+#             "distance_km": round(distance_meters / 1000, 2),
+#             "has_tolls": True, # Mapbox doesn't always flag tolls in the basic response
+#         }
+# 
+#     except Exception as e:
+#         logger.error(f"Routing error: {e}")
+#         raise ValueError(f"Route calculation failed: {str(e)}")
+# 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helper 2 – Pricing  (fully DB-driven)
